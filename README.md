@@ -27,19 +27,23 @@ Nama Anggota Kelompok B03:
 Aplikasi **Bukoo** merupakan platform yang dirancang untuk pecinta buku yang ingin menjelajahi lebih koleksi-koleksi buku yang ada di dunia. Meskipun pengguna tidak dapat membaca buku secara langsung di aplikasi ini, mereka dapat menemukan informasi rinci tentang berbagai koleksi buku, mencari koleksi buku berdasarkan judul, kategori, dan genre, membuat daftar favorit, dan membuat review mengenai suatu buku, melihat leaderboards buku favorit dan leaderboard user aktif, dan melihat rekomendasi buku berdasarkan preferensi pengguna.
 
 ## Daftar Modul
-- Modul Koleksi Buku
-    Dalam modul koleksi buku, pengguna dapat melihat berbagai data koleksi buku. Selain itu, user juga dapat melihat detail masing-masing buku yang berisi data       seperti judul, author, foto cover buku, sinopsis, dan review. User nantinya juga dapat mencari buku berdasarkan author, tahun buku rilis, judul, dan kategori     seperti genre. Pada modul ini, role author dapat mengajukan buku baru dan mengelola buku yang telah ditambahkan.
-- Modul Review
-    Kami berencana untuk membuat sebuah kolom untuk user memberikan pendapat tentang sebuah buku yang sudah mereka baca dan ditampilkan dalam data bukunya
-- Modul Profile User
-    - Profile
-        Dalam modul ini, pengguna dapat melihat data dirinya dalam aplikasi ini dan dapat mengubahnya. 
-    - Bookmark
-        Selain itu, modul ini akan berfungsi untuk user ketika ada sebuah buku yang menarik untuk dibaca atau dibeli dari sumber lain nantinya. User dapat                 menandai buku yang menarik tersebut untuk dapat dilihat nanti jadi tidak perlu untuk mencarinya lagi.
-- Modul Leaderboard
-    Modul leaderboard berkaitan dengan modul review dimana akan menampilkan data buku-buku yang paling banyak di review (Recommended atau Not Recommended)             berdasarkan total akumulasi review yang diberikan oleh user. 
-- Modul Dashboard Admin
-    Pada modul ini Admin dapat melakukan verifikasi terhadap buku yang diajukan oleh Author. Admin dapat menyetujui atau menolak pengajuan buku tersebut.
+### 1. Modul Koleksi Buku
+ Dalam modul koleksi buku, pengguna dapat melihat berbagai data koleksi buku. Selain itu, user juga dapat melihat detail masing-masing buku yang berisi data       seperti judul, author, foto cover buku, sinopsis, dan review. User nantinya juga dapat mencari buku berdasarkan author, tahun buku rilis, judul, dan kategori     seperti genre. Pada modul ini, role author dapat mengajukan buku baru dan mengelola buku yang telah ditambahkan.
+
+### 2. Modul Review
+Kami berencana untuk membuat sebuah kolom untuk user memberikan pendapat tentang sebuah buku yang sudah mereka baca dan ditampilkan dalam data bukunya.
+
+### 3. Modul Profile User
+  - Profile
+      Dalam modul ini, pengguna dapat melihat data dirinya dalam aplikasi ini dan dapat mengubahnya. 
+  - Bookmark
+      Selain itu, modul ini akan berfungsi untuk user ketika ada sebuah buku yang menarik untuk dibaca atau dibeli dari sumber lain nantinya. User dapat                 menandai buku yang menarik tersebut untuk dapat dilihat nanti jadi tidak perlu untuk mencarinya lagi.
+
+### 4. Modul Leaderboard
+Modul leaderboard berkaitan dengan modul review dimana akan menampilkan data buku-buku yang paling banyak di review (Recommended atau Not Recommended)             berdasarkan total akumulasi review yang diberikan oleh user. 
+
+### 5. Modul Dashboard Admin
+Pada modul ini Admin dapat melakukan verifikasi terhadap buku yang diajukan oleh Author. Admin dapat menyetujui atau menolak pengajuan buku tersebut.
 
 
 ## Sumber Dataset
@@ -55,26 +59,27 @@ Modul koleksi buku kami datanya diambil dari tiga sumber yang telah dicantumkan 
 
   
 ## Role Pengguna dan Deskripsinya
-- Author (Penulis)
-    - Mengajukan karya buku
-      Penulis mempromosikan karya ke dalam aplikasi Bukoo serta memberikan informasi lengkap mengenai buku, seperti judul, sinopsis, dan genre.
-    - Mengelola karya buku
-      Penulis dapat memperbarui dan mengelola informasi buku, termasuk sinopsis, sampul buku, atau detail lainnya.
-- Readers (Pembaca)
-    - Memberikan penilaian 
-        Pembaca dapat memberikan penilaian buku tersebut dapat direkomendasikan (Recommended) atau tidak (Not Recommended). 
-    - Berpartisipasi dalam memberi ulasan
-        Pembaca mampu untuk memberikan ulasan terhadap buku-buku yang mereka baca. Ulasan dapat membantu calon pembaca lainnya memutuskan apakah ingin membaca             buku tersebut atau tidak. Pembaca juga dapat melakukan diskusi terkait buku-buku tertentu dan dapat membahas tentang cerita, karakter, tema, atau aspek           lain dari buku tersebut secara satu arah.
-- Guest (Pengguna umum / logout user)
-    - Melihat koleksi buku
-        Guest dapat menjelajahi koleksi buku dalam aplikasi Bukoo. Mereka dapat mecari buku berdasarkan judul, penulis, dan genre. Selain itu, mereka dapat               melihat detail buku seperti, sinopsis, penulis, dan tahun rilis. 
-    - Melihat ulasan buku
-        Guest dapat melihat ulasan yang telah diberikan oleh readers terhadap buku-buku dalam koleksi. Dengan ini, guest mendapatkan wawasan tambahan tentang buku         sebelum memutuskan apakah akan membacanya atau tidak. Namun, pengguna ini tidak dapat mem-bookmarks dan tidak bisa mengulas buku.
-- Admin (Pengembang Aplikasi Bukoo)
-    - Mengelola pengajuan buku
-      Memiliki tanggung jawab untuk meninjau pengajuan buku yang diajukan oleh penulis. Selanjutnya melakukan pengecekan apakah sudah sesuai pedoman aplikasi.
-    - Menjaga keamanan aplikasi
-        Admin memastikan bahwa aplikasi tetap aman dan terhindar dari potensi masalah keamanan atau pelanggaran data.
+
+### Author (Penulis)
+ - Mengajukan karya buku
+   Penulis mempromosikan karya ke dalam aplikasi Bukoo serta memberikan informasi lengkap mengenai buku, seperti judul, sinopsis, dan genre.
+ - Mengelola karya buku
+   Penulis dapat memperbarui dan mengelola informasi buku, termasuk sinopsis, sampul buku, atau detail lainnya.
+### Readers (Pembaca)
+  - Memberikan penilaian 
+      Pembaca dapat memberikan penilaian buku tersebut dapat direkomendasikan (Recommended) atau tidak (Not Recommended). 
+  - Berpartisipasi dalam memberi ulasan
+      Pembaca mampu untuk memberikan ulasan terhadap buku-buku yang mereka baca. Ulasan dapat membantu calon pembaca lainnya memutuskan apakah ingin membaca             buku tersebut atau tidak. Pembaca juga dapat melakukan diskusi terkait buku-buku tertentu dan dapat membahas tentang cerita, karakter, tema, atau aspek           lain dari buku tersebut secara satu arah.
+### Guest (Pengguna Umum / _Logout User_)
+  - Melihat koleksi buku
+      Guest dapat menjelajahi koleksi buku dalam aplikasi Bukoo. Mereka dapat mecari buku berdasarkan judul, penulis, dan genre. Selain itu, mereka dapat               melihat detail buku seperti, sinopsis, penulis, dan tahun rilis. 
+  - Melihat ulasan buku
+      Guest dapat melihat ulasan yang telah diberikan oleh readers terhadap buku-buku dalam koleksi. Dengan ini, guest mendapatkan wawasan tambahan tentang buku         sebelum memutuskan apakah akan membacanya atau tidak. Namun, pengguna ini tidak dapat mem-bookmarks dan tidak bisa mengulas buku.
+### Admin (Pengembang Aplikasi Bukoo)
+  - Mengelola pengajuan buku
+    Memiliki tanggung jawab untuk meninjau pengajuan buku yang diajukan oleh penulis. Selanjutnya melakukan pengecekan apakah sudah sesuai pedoman aplikasi.
+  - Menjaga keamanan aplikasi
+      Admin memastikan bahwa aplikasi tetap aman dan terhindar dari potensi masalah keamanan atau pelanggaran data.
 
 
 
