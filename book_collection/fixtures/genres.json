@@ -1,0 +1,765 @@
+[
+  {
+    "pk": 1,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "19th Century"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "20th Century"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Action"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Adult"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Adult Fiction"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Adventure"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "American"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Animals"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Anthologies"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Asia"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Asian Literature"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Audiobook"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Autistic Spectrum Disorder"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Autobiography"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "BDSM"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Biography"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Biography Memoir"
+    }
+  },
+  {
+    "pk": 18,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Book Club"
+    }
+  },
+  {
+    "pk": 19,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Chapter Books"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Chick Lit"
+    }
+  },
+  {
+    "pk": 21,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Childrens"
+    }
+  },
+  {
+    "pk": 22,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Classic Literature"
+    }
+  },
+  {
+    "pk": 23,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Classics"
+    }
+  },
+  {
+    "pk": 24,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Collections"
+    }
+  },
+  {
+    "pk": 25,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Comedy"
+    }
+  },
+  {
+    "pk": 26,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Coming Of Age"
+    }
+  },
+  {
+    "pk": 27,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Contemporary"
+    }
+  },
+  {
+    "pk": 28,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Contemporary Romance"
+    }
+  },
+  {
+    "pk": 29,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Crime"
+    }
+  },
+  {
+    "pk": 30,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Dragons"
+    }
+  },
+  {
+    "pk": 31,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Drama"
+    }
+  },
+  {
+    "pk": 32,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Dutch Literature"
+    }
+  },
+  {
+    "pk": 33,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Dystopia"
+    }
+  },
+  {
+    "pk": 34,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Education"
+    }
+  },
+  {
+    "pk": 35,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Epic Fantasy"
+    }
+  },
+  {
+    "pk": 36,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Erotic Romance"
+    }
+  },
+  {
+    "pk": 37,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Erotica"
+    }
+  },
+  {
+    "pk": 38,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Fae"
+    }
+  },
+  {
+    "pk": 39,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Family"
+    }
+  },
+  {
+    "pk": 40,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Fantasy"
+    }
+  },
+  {
+    "pk": 41,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Fantasy Romance"
+    }
+  },
+  {
+    "pk": 42,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Fiction"
+    }
+  },
+  {
+    "pk": 43,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "France"
+    }
+  },
+  {
+    "pk": 44,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Gothic"
+    }
+  },
+  {
+    "pk": 45,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "High Fantasy"
+    }
+  },
+  {
+    "pk": 46,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "High School"
+    }
+  },
+  {
+    "pk": 47,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Historical"
+    }
+  },
+  {
+    "pk": 48,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Historical Fiction"
+    }
+  },
+  {
+    "pk": 49,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "History"
+    }
+  },
+  {
+    "pk": 50,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Horror"
+    }
+  },
+  {
+    "pk": 51,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Humor"
+    }
+  },
+  {
+    "pk": 52,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "India"
+    }
+  },
+  {
+    "pk": 53,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Indonesian Literature"
+    }
+  },
+  {
+    "pk": 54,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Inspirational"
+    }
+  },
+  {
+    "pk": 55,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Islam"
+    }
+  },
+  {
+    "pk": 56,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Japan"
+    }
+  },
+  {
+    "pk": 57,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Juvenile"
+    }
+  },
+  {
+    "pk": 58,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Literary Fiction"
+    }
+  },
+  {
+    "pk": 59,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Literature"
+    }
+  },
+  {
+    "pk": 60,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Love"
+    }
+  },
+  {
+    "pk": 61,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Magic"
+    }
+  },
+  {
+    "pk": 62,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Magical Realism"
+    }
+  },
+  {
+    "pk": 63,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Memoir"
+    }
+  },
+  {
+    "pk": 64,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Middle Grade"
+    }
+  },
+  {
+    "pk": 65,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Mystery"
+    }
+  },
+  {
+    "pk": 66,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Mystery Thriller"
+    }
+  },
+  {
+    "pk": 67,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "New Adult"
+    }
+  },
+  {
+    "pk": 68,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Nonfiction"
+    }
+  },
+  {
+    "pk": 69,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Novels"
+    }
+  },
+  {
+    "pk": 70,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Paranormal"
+    }
+  },
+  {
+    "pk": 71,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Paranormal Romance"
+    }
+  },
+  {
+    "pk": 72,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Philosophy"
+    }
+  },
+  {
+    "pk": 73,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Poetry"
+    }
+  },
+  {
+    "pk": 74,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Politics"
+    }
+  },
+  {
+    "pk": 75,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Post Apocalyptic"
+    }
+  },
+  {
+    "pk": 76,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Psychology"
+    }
+  },
+  {
+    "pk": 77,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Read For School"
+    }
+  },
+  {
+    "pk": 78,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Realistic Fiction"
+    }
+  },
+  {
+    "pk": 79,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Religion"
+    }
+  },
+  {
+    "pk": 80,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Retellings"
+    }
+  },
+  {
+    "pk": 81,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Roman"
+    }
+  },
+  {
+    "pk": 82,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Romance"
+    }
+  },
+  {
+    "pk": 83,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "School"
+    }
+  },
+  {
+    "pk": 84,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Science Fiction"
+    }
+  },
+  {
+    "pk": 85,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Science Fiction Fantasy"
+    }
+  },
+  {
+    "pk": 86,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Self Help"
+    }
+  },
+  {
+    "pk": 87,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Short Stories"
+    }
+  },
+  {
+    "pk": 88,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Slice Of Life"
+    }
+  },
+  {
+    "pk": 89,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Space Opera"
+    }
+  },
+  {
+    "pk": 90,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Spirituality"
+    }
+  },
+  {
+    "pk": 91,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Steampunk"
+    }
+  },
+  {
+    "pk": 92,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Supernatural"
+    }
+  },
+  {
+    "pk": 93,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Suspense"
+    }
+  },
+  {
+    "pk": 94,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Sweden"
+    }
+  },
+  {
+    "pk": 95,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Teen"
+    }
+  },
+  {
+    "pk": 96,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Thriller"
+    }
+  },
+  {
+    "pk": 97,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Time Travel"
+    }
+  },
+  {
+    "pk": 98,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Travel"
+    }
+  },
+  {
+    "pk": 99,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Travelogue"
+    }
+  },
+  {
+    "pk": 100,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "True Story"
+    }
+  },
+  {
+    "pk": 101,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Unfinished"
+    }
+  },
+  {
+    "pk": 102,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Urban Fantasy"
+    }
+  },
+  {
+    "pk": 103,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Vampires"
+    }
+  },
+  {
+    "pk": 104,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "War"
+    }
+  },
+  {
+    "pk": 105,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Witches"
+    }
+  },
+  {
+    "pk": 106,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "World War II"
+    }
+  },
+  {
+    "pk": 107,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Young Adult"
+    }
+  },
+  {
+    "pk": 108,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Young Adult Contemporary"
+    }
+  },
+  {
+    "pk": 109,
+    "model": "book_collection.genre",
+    "fields": {
+      "name": "Young Adult Fantasy"
+    }
+  }
+]
