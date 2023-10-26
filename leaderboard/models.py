@@ -7,7 +7,7 @@ from user_profile.models import Profile
 class Leaderboard(models.Model):
     book = models.OneToOneField(Book, on_delete=models.CASCADE)
     userProfile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    is_recommendation = models.BooleanField()
+    is_recommended = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
