@@ -90,32 +90,43 @@
         }
 
         .backbutton {
-            align-items: center;
-            background-color: #ccc;
-            border: 0;
-            border-radius: 100px;
+            background: #5E5DF0;
+            border-radius: 999px;
+            box-shadow: #5E5DF0 0 3px 8px -3px; 
             box-sizing: border-box;
-            color: #000000;
+            color: #FFFFFF;
             cursor: pointer;
-            display: inline-flex;
             font-family: 'Poppins', sans-serif;
             font-size: 10px;
-            font-weight: 600;
-            justify-content: center;
+            font-weight: 700;
             line-height: 16px;
-            max-width: 120px;
-            min-height: 30px; 
-            min-width: 60px;
-            overflow: hidden;
-            padding: 0px;
-            padding-left: 10px;
-            padding-right: 10px;
+            opacity: 1;
+            outline: 0 solid transparent;
+            padding: 8px 5px;
             text-align: center;
-            touch-action: manipulation;
-            transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
             user-select: none;
             -webkit-user-select: none;
-            vertical-align: middle;
+            touch-action: manipulation;
+            width: fit-content;
+            word-break: break-word;
+            border: 0;
+        }
+        
+        .backbutton:hover,
+        .backbutton:focus { 
+        background-color: #16437E;
+        color: #ffffff;
+        }
+
+        .backbutton:active {
+        background: #09223b;
+        color: rgb(255, 255, 255, .7);
+        }
+
+        .backbutton:disabled { 
+        cursor: not-allowed;
+        background: rgba(0, 0, 0, .08);
+        color: rgba(0, 0, 0, .3);
         }
         
     </style>
@@ -140,6 +151,7 @@
             <th>Genre</th>
             <th>Book Description</th>
             <th>Cover Image</th>
+            <th>Feedback</th>
             <th>Status</th>
         </tr>
         <tr>
@@ -148,8 +160,14 @@
             <td>{{ author }}</td>
             <td>{{ title }}</td>
             <td>{{ genre }}</td>
-            <td>{{ book_description }}</td>
+            <td>{{ description }}</td>
             <td><img src="{{ cover_image_url }}" alt="Cover Image" style="max-width: 100px; max-height: 100px;"></td>
+            <td>
+                <div style="display: flex; flex-direction: column;">
+                    <textarea style="font-family: 'Poppins', sans-serif; border-radius: 10px; background-color: #f2f2f2; padding: 10px; border: 1px solid #ccc;"></textarea>
+                    <button onclick="sendFeedback()" style="font-family: 'Poppins', sans-serif; border-radius: 10px; background-color: #5E5DF0; color: #ffffff; padding: 10px; border: 1px solid #ccc; margin-top: 10px;">Send</button>
+                </div>
+            </td>
             <td class="dropdown">
                 <select>
                     <option value="verified">Verified</option>
@@ -171,6 +189,7 @@
     </form> -->
 
     <script>
+        let rowNum = 1; 
         function addRow() {
             // Ambil referensi tabel
             var table = document.querySelector('table');
@@ -199,6 +218,22 @@
                     <option value="rejected">Rejected</option>
                     <option value="pending">Pending</option>
                 </select>`;
+            rowNum++;
+        }
+
+        function sendFeedback() {
+            var feedback = document.querySelector('textarea').value; // Mendapatkan isi textarea
+            var xhttp = new XMLHttpRequest(); // Membuat objek XMLHttpRequest
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("Feedback terkirim: " + feedback); // Tindakan setelah feedback terkirim
+                }
+            };
+
+            xhttp.open("POST", "url_anda_di_sini", true); // Ganti "url_anda_di_sini" dengan URL target Anda
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("feedback=" + feedback); // Mengirim feedback ke server
         }
     </script>
 
