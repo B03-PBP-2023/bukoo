@@ -8,3 +8,4 @@ django-environ
 Pillow
 cloudinary
 python-dotenv
+django-tailwind[reload]
