@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Book Information</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background-color: #283593;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        table {
+            font-family: 'Poppins', sans-serif;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 80%;
+            margin: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #283593;
+            color: #ffffff;
+            border-top: 1px solid #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:first-child {
+            background-color: #1a237e;
+            color: #ffffff;
+        }
+
+        tr:last-child {
+            border-bottom: 1px solid #ddd;
+        }
+
+        th:first-child,
+        td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        th:last-child,
+        td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown select:focus {
+            outline: none;
+            border-color: #719ECE;
+        }
+
+        .backbutton {
+            align-items: center;
+            background-color: #ccc;
+            border: 0;
+            border-radius: 100px;
+            box-sizing: border-box;
+            color: #000000;
+            cursor: pointer;
+            display: inline-flex;
+            font-family: 'Poppins', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            justify-content: center;
+            line-height: 16px;
+            max-width: 120px;
+            min-height: 30px; 
+            min-width: 60px;
+            overflow: hidden;
+            padding: 0px;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: center;
+            touch-action: manipulation;
+            transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+            user-select: none;
+            -webkit-user-select: none;
+            vertical-align: middle;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div style="flex: 1;">
+            <span style="color: white; font-size: 24px;">Admin Dashboard</span>
+        </div>
+        <div class="backbutton">
+            <a href="#" style="margin-right: 20px;">Back to Main</a>
+        </div>
+    </div>
+
+    <table>
+        <tr>
+            <th>Date Added</th>
+            <th>No.</th>
+            <th>Author</th>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Book Description</th>
+            <th>Cover Image</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>{{ date_added }}</td>
+            <td>1</td>
+            <td>{{ author }}</td>
+            <td>{{ title }}</td>
+            <td>{{ genre }}</td>
+            <td>{{ book_description }}</td>
+            <td><img src="{{ cover_image_url }}" alt="Cover Image" style="max-width: 100px; max-height: 100px;"></td>
+            <td class="dropdown">
+                <select>
+                    <option value="verified">Verified</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <!-- <form id="bookForm"> -->
+        <!-- Buat formulir untuk memasukkan data buku -->
+        <!-- <input type="text" id="dateAdded" placeholder="Date Added">
+        <input type="text" id="author" placeholder="Author">
+        <input type="text" id="title" placeholder="Title">
+        <input type="text" id="genre" placeholder="Genre">
+        <input type="text" id="description" placeholder="Book Description">
+        <input type="text" id="coverImageUrl" placeholder="Cover Image URL">
+        <button type="button" onclick="addRow()">Add Book</button>
+    </form> -->
+
+    <script>
+        function addRow() {
+            // Ambil referensi tabel
+            var table = document.querySelector('table');
+
+            // Ambil referensi data dari formulir
+            var dateAdded = document.getElementById('dateAdded').value;
+            var author = document.getElementById('author').value;
+            var title = document.getElementById('title').value;
+            var genre = document.getElementById('genre').value;
+            var description = document.getElementById('description').value;
+            var coverImageUrl = document.getElementById('coverImageUrl').value;
+
+            // Buat elemen baris baru
+            var row = table.insertRow(-1);
+
+            // Masukkan data ke dalam sel-sel baru
+            row.insertCell(0).innerHTML = dateAdded;
+            row.insertCell(1).innerHTML = table.rows.length - 1;
+            row.insertCell(2).innerHTML = author;
+            row.insertCell(3).innerHTML = title;
+            row.insertCell(4).innerHTML = genre;
+            row.insertCell(5).innerHTML = description;
+            row.insertCell(6).innerHTML = `<img src="${coverImageUrl}" alt="Cover Image" style="max-width: 100px; max-height: 100px;">`;
+            row.insertCell(7).innerHTML = `<select>
+                    <option value="verified">Verified</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="pending">Pending</option>
+                </select>`;
+        }
+    </script>
+
+</body>
+
+</html>
