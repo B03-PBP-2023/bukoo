@@ -15,7 +15,7 @@
         <button class="btn btn-danger recommend-button" data-book-id="{{ book.id }}" data-is-recommended="not_recommended">Not Recommended</button>
     </div>
 
-    <!-- jQuery Library (Pastikan Anda menyertakan jQuery) -->
+    <!-- jQuery Library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <script type="text/javascript">
@@ -27,14 +27,14 @@
 
                 // Lakukan permintaan AJAX untuk menambah rekomendasi
                 $.ajax({
-                    url: '{% url "create_rating" %}',  // Ganti dengan URL yang sesuai
+                    url: '{% url "create_rating" %}',  
                     method: 'POST',
                     data: {
                         book_id: bookId,
                         is_recommended: isRecommended
                     },
                     success: function(response) {
-                        alert(response.message);  // Tampilkan pesan sukses (atau perbarui tampilan jika perlu)
+                        alert(response.message);  // Tampilkan pesan sukses 
                     },
                     error: function(response) {
                         alert('Terjadi kesalahan saat menambahkan rekomendasi.');  // Tampilkan pesan kesalahan jika terjadi masalah

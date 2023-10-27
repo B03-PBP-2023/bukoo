@@ -16,8 +16,8 @@ def get_popular_books(request, book_id):
     for rate in popular:
         popular_books_data.append({
             'id': rate.id,
-            'title': rate.title,
-            'rating': rate.rating,
+            'title': rate.book.title,
+            'rating': rate.is_recommended,
             'userProfile': rate.userProfile.user.username,
             'created_at': rate.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
@@ -32,8 +32,8 @@ def get_best_books(request, book_id):
     for best in best_book:
         best_books_data.append({
             'id': best.id,
-            'title': best.title,
-            'best': best.best,
+            'title': best.book.title,
+            'best': best.is_recommended,
             'userProfile': best.userProfile.user.username,
             'created_at': best.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
