@@ -26,7 +26,6 @@ urlpatterns = [
     path('review/', include('review.urls')),
     path('profile/', include('user_profile.urls')),
     path('leaderboard/', include('leaderboard.urls')),
-    path('admin_dashboard/', include('admin_dashboard.urls')),
-    
-    # path('admin-dashboard/', include('admin_dashboard.urls')),
+    path('admin-dashboard/', include('admin_dashboard.urls')),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
