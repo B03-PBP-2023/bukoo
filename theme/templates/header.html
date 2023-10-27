@@ -1,0 +1,25 @@
+{% load static %}
+
+<header class="tw-fixed tw-top-0 tw-inset-x-0 tw-h-[64px]">
+  <div class="tw-container tw-max-w-screen-xl tw-mx-auto tw-flex tw-justify-between tw-items-center tw-px-4 tw-py-2 tw-gap-8">
+    <a href="/"><img src="{% static 'images/logo.svg'%}" alt="Bukoo Logo" width="180px"></a>
+    <div>Kategori</div>
+    <div class="tw-grow">
+      <input type="text" name="search" id="search-bar" placeholder="Search by Title, Author, or ISBN" class="tw-w-full">
+    </div>
+    <div class="tw-flex tw-gap-8">
+      <a href="/">Home</a>
+      <a href="/leaderboard/">Leaderboard</a>
+      {% if user.is_authenticated %}
+      <div>
+        <img src="{% static 'images/default-profile.svg'%}" alt="">
+        <a href="/profile">Profile</a>
+        <a href="/auth/logout">Logout</a>
+      </div>
+      {% else %}
+        <a href="/auth/login">Login</a>
+        <a href="/auth/register">Sign Up</a>
+      {% endif %}
+    </div>
+  </div>
+</header>

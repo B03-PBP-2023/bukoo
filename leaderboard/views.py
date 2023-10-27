@@ -16,8 +16,8 @@ def get_popular_books(request, book_id):
     for rate in popular:
         popular_books_data.append({
             'id': rate.id,
-            'title': rate.title,
-            'rating': rate.rating,
+            'title': rate.book.title,
+            'rating': rate.is_recommended,
             'userProfile': rate.userProfile.user.username,
             'created_at': rate.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
@@ -32,8 +32,8 @@ def get_best_books(request, book_id):
     for best in best_book:
         best_books_data.append({
             'id': best.id,
-            'title': best.title,
-            'best': best.best,
+            'title': best.book.title,
+            'best': best.is_recommended,
             'userProfile': best.userProfile.user.username,
             'created_at': best.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
@@ -49,8 +49,8 @@ def get_ratings_by_user(request, user_id):
     for rating in ratings:
         ratings_data.append({
             'id': rating.id,
-            'title': rating.title,
-            'rating': rating.rating,
+            'title': rating.book.title,
+            'rating': rating.is_recommended,
             'userProfile': rating.userProfile.user.username,
             'created_at': rating.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
@@ -96,7 +96,7 @@ def edit_rating(request, rating_id):
         if rating.userProfile.user == request.user:
             new_is_recommended = request.POST.get('is_recommended')
 
-            if new_is_recommended in ['recommend', 'not_recommend']:
+            if new_is_recommended in ['recommended', 'not_recommend']:
                 # Mengubah status rekomendasi berdasarkan nilai baru
                 rating.is_recommended = new_is_recommended == 'recommend'
                 rating.save()

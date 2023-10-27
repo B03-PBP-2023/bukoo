@@ -27,6 +27,6 @@ urlpatterns = [
     path('profile/', include('user_profile.urls')),
     path('leaderboard/', include('leaderboard.urls')),
     path('admin_dashboard/', include('admin_dashboard.urls')),
-    
+
     # path('admin-dashboard/', include('admin_dashboard.urls')),
 ]
