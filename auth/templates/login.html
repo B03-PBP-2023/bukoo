@@ -1,28 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-</head>
+{% block meta %}
+<title>Login</title>
+{% endblock meta %}
 
-<body>
-  <h1>Login Page</h1>
-  <form method="POST" id="login-form">
-    {% csrf_token %}
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username">
-    <br>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password">
-    <br>
-    <input type="submit" value="Submit" id="login-button">
-  </form>
-  {% if user.is_authenticated %}
-  <button type="button" id="logout-button">Logout</button>
-  {% endif %}
+{% block content%}
+<main>
+  <section class="tw-container tw-max-w-xl tw-mx-auto tw-p-8 tw-shadow-xl tw-rounded-xl">
+    <h1 class="tw-text-center tw-text-5xl tw-font-bold tw-text-[#197278]">LOG IN</h1>
+    <form method="POST" id="login-form">
+      {% csrf_token %}
+      <div class="tw-flex tw-flex-col">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username">
+      </div>
+      <div class="tw-flex tw-flex-col">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+      </div>
+      
+      <p></p>
+      <input type="submit" value="Submit" id="login-button">
+    </form>
+  </section>
+</main>
+{% endblock content %}
 
+{% block script %}
   <script type='text/javascript'>
     const form = document.getElementById('login-form')
     form.addEventListener('submit', async function(e){
@@ -47,6 +51,5 @@
       }
     })
   </script>
-</body>
 
-</html>
+{% endblock script %}

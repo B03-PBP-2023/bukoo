@@ -1,30 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-</head>
-<body>
-  <h1>Registration Page</h1>
-  <form method="POST" id="register-form">  
-    {% csrf_token %}  
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username">
-    <br>
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email">
-    <br>
-    <label for="password1">Password</label>
-    <input type="password" name="password1" id="password1">
-    <br>
-    <label for="password2">Confirmation Password</label>
-    <input type="password" name="password2" id="password2">
-    <br>
-    <input type="submit" value="Submit">
-  </form>
-  <ul id="error-messages"></ul>
+{% extends 'base.html' %}  
 
+{% block meta %}
+  <title>Registration</title>
+{% endblock meta %}
+
+{% block content %}
+<main>
+  <section class="tw-container tw-max-w-xl tw-mx-auto tw-p-8 tw-shadow-xl tw-rounded-xl">
+    <h1 class="tw-text-center tw-text-5xl tw-font-bold tw-text-[#197278]">SIGN UP</h1>
+    <form method="POST" id="register-form">
+      {% csrf_token %}
+      <div class="tw-flex tw-flex-col">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username">
+      </div>
+      <div class="tw-flex tw-flex-col">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email">
+      </div>
+      <div class="tw-flex tw-flex-col">
+        <label for="password1">Password</label>
+        <input type="password" name="password1" id="password1">
+      </div>
+      <div class="tw-flex tw-flex-col">
+        <label for="password2">Confirmation Password</label>
+        <input type="password" name="password2" id="password2">
+      </div>
+      <input type="submit" value="Submit">
+    </form>
+    <div id="error-messages"></div>
+  </section>
+</main>
+{% endblock content %}
+
+{% block script %}
   <script type='text/javascript'>
     const form = document.getElementById('register-form')
     form.addEventListener('submit', async function(e){
@@ -44,11 +53,14 @@
         }
         let errorElements = ''
         errors.forEach(error => {
-          errorElements += `<li>${error}</li>`
+          errorElements += `
+          <div class="alert alert-danger" role="alert">
+            ${error}
+          </div>
+          `
         })
         document.getElementById('error-messages').innerHTML = errorElements
       }
     })
   </script>
-</body>
-</html>
+{% endblock script%}
