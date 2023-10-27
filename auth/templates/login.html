@@ -8,7 +8,7 @@
 <main>
   <section class="tw-container tw-max-w-xl tw-mx-auto">
     <h1 class="tw-text-center tw-text-5xl tw-font-bold tw-text-[#197278]">LOG IN</h1>
-    <form method="POST">
+    <form method="POST" id="login-form">
       {% csrf_token %}
       <div class="tw-flex tw-flex-col">
         <label for="username">Username</label>
@@ -18,23 +18,39 @@
         <label for="password">Password</label>
         <input type="password" name="password" id="password">
       </div>
-      <input type="submit" value="Submit">
+      <input type="submit" value="Submit" id="login-button">
     </form>
     {% if user.is_authenticated %}
     <button type="button" id="logout-button">Logout</button>
     {% endif %}
   </section>
 </main>
-
-<script type='text/javascript'>
-  document.getElementById('logout-button').addEventListener('click', async function () {
-    const response = await fetch(`${window.location.origin}/auth/logout/`, {
-      method: "POST"
-    })
-    if (response.status === 200) {
-      location.href = window.location.origin
-    }
-  })
-</script>
-
 {% endblock content %}
+
+{% block script %}
+  <script type='text/javascript'>
+    const form = document.getElementById('login-form')
+    form.addEventListener('submit', async function(e){
+      console.log('event');
+      e.preventDefault()
+      let response = await fetch(`${window.location.origin}/auth/login/`, {
+        method: "POST",
+        body: new FormData(form),
+      })
+      if(response.status === 200) {
+        const urlParams = new URLSearchParams(window.location.search)
+        redirectUrl = urlParams.get('next') ? urlParams.get('next') : ''
+        location.href = window.location.origin + redirectUrl
+      }
+    })
+    document.getElementById('logout-button').addEventListener('click', async function () {
+      const response = await fetch(`${window.location.origin}/auth/logout/`, {
+        method: "POST"
+      })
+      if (response.status === 200) {
+        location.href = window.location.origin
+      }
+    })
+  </script>
+
+{% endblock script %}
