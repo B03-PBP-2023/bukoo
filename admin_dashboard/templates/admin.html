@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Book Information</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background-color: #283593;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        table {
+            font-family: 'Poppins', sans-serif;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 80%;
+            margin: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #283593;
+            color: #ffffff;
+            border-top: 1px solid #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:first-child {
+            background-color: #1a237e;
+            color: #ffffff;
+        }
+
+        tr:last-child {
+            border-bottom: 1px solid #ddd;
+        }
+
+        th:first-child,
+        td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        th:last-child,
+        td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown select:focus {
+            outline: none;
+            border-color: #719ECE;
+        }
+
+        .backbutton {
+            background: #5E5DF0;
+            border-radius: 999px;
+            box-shadow: #5E5DF0 0 3px 8px -3px; 
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 16px;
+            opacity: 1;
+            outline: 0 solid transparent;
+            padding: 8px 5px;
+            text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: fit-content;
+            word-break: break-word;
+            border: 0;
+        }
+        
+        .backbutton:hover,
+        .backbutton:focus { 
+        background-color: #16437E;
+        color: #ffffff;
+        }
+
+        .backbutton:active {
+        background: #09223b;
+        color: rgb(255, 255, 255, .7);
+        }
+
+        .backbutton:disabled { 
+        cursor: not-allowed;
+        background: rgba(0, 0, 0, .08);
+        color: rgba(0, 0, 0, .3);
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div style="flex: 1;">
+            <span style="color: white; font-size: 24px;">Admin Dashboard</span>
+        </div>
+        <div class="backbutton">
+            <a href="#" style="margin-right: 20px;">Back to Main</a>
+        </div>
+    </div>
+
+    <table>
+        <tr>
+            <th>Date Added</th>
+            <th>No.</th>
+            <th>Author</th>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Book Description</th>
+            <th>Cover Image</th>
+            <th>Feedback</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>{{ date_added }}</td>
+            <td>1</td>
+            <td>{{ author }}</td>
+            <td>{{ title }}</td>
+            <td>{{ genre }}</td>
+            <td>{{ description }}</td>
+            <td><img src="{{ cover_image_url }}" alt="Cover Image" style="max-width: 100px; max-height: 100px;"></td>
+            <td>
+                <div style="display: flex; flex-direction: column;">
+                    <textarea style="font-family: 'Poppins', sans-serif; border-radius: 10px; background-color: #f2f2f2; padding: 10px; border: 1px solid #ccc;"></textarea>
+                    <button onclick="sendFeedback()" style="font-family: 'Poppins', sans-serif; border-radius: 10px; background-color: #5E5DF0; color: #ffffff; padding: 10px; border: 1px solid #ccc; margin-top: 10px;">Send</button>
+                </div>
+            </td>
+            <td class="dropdown">
+                <select>
+                    <option value="verified">Verified</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <!-- <form id="bookForm"> -->
+        <!-- Buat formulir untuk memasukkan data buku -->
+        <!-- <input type="text" id="dateAdded" placeholder="Date Added">
+        <input type="text" id="author" placeholder="Author">
+        <input type="text" id="title" placeholder="Title">
+        <input type="text" id="genre" placeholder="Genre">
+        <input type="text" id="description" placeholder="Book Description">
+        <input type="text" id="coverImageUrl" placeholder="Cover Image URL">
+        <button type="button" onclick="addRow()">Add Book</button>
+    </form> -->
+
+    <script>
+        let rowNum = 1; 
+        function addRow() {
+            // Ambil referensi tabel
+            var table = document.querySelector('table');
+
+            // Ambil referensi data dari formulir
+            var dateAdded = document.getElementById('dateAdded').value;
+            var author = document.getElementById('author').value;
+            var title = document.getElementById('title').value;
+            var genre = document.getElementById('genre').value;
+            var description = document.getElementById('description').value;
+            var coverImageUrl = document.getElementById('coverImageUrl').value;
+
+            // Buat elemen baris baru
+            var row = table.insertRow(-1);
+
+            // Masukkan data ke dalam sel-sel baru
+            row.insertCell(0).innerHTML = dateAdded;
+            row.insertCell(1).innerHTML = table.rows.length - 1;
+            row.insertCell(2).innerHTML = author;
+            row.insertCell(3).innerHTML = title;
+            row.insertCell(4).innerHTML = genre;
+            row.insertCell(5).innerHTML = description;
+            row.insertCell(6).innerHTML = `<img src="${coverImageUrl}" alt="Cover Image" style="max-width: 100px; max-height: 100px;">`;
+            row.insertCell(7).innerHTML = `<select>
+                    <option value="verified">Verified</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="pending">Pending</option>
+                </select>`;
+            rowNum++;
+        }
+
+        function sendFeedback() {
+            var feedback = document.querySelector('textarea').value; // Mendapatkan isi textarea
+            var xhttp = new XMLHttpRequest(); // Membuat objek XMLHttpRequest
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("Feedback terkirim: " + feedback); // Tindakan setelah feedback terkirim
+                }
+            };
+
+            xhttp.open("POST", "url_anda_di_sini", true); // Ganti "url_anda_di_sini" dengan URL target Anda
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("feedback=" + feedback); // Mengirim feedback ke server
+        }
+    </script>
+
+</body>
+
+</html>
