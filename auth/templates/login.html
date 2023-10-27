@@ -9,7 +9,7 @@
 
 <body>
   <h1>Login Page</h1>
-  <form method="POST">
+  <form method="POST" id="login-form">
     {% csrf_token %}
     <label for="username">Username</label>
     <input type="text" name="username" id="username">
@@ -17,13 +17,27 @@
     <label for="password">Password</label>
     <input type="password" name="password" id="password">
     <br>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" id="login-button">
   </form>
   {% if user.is_authenticated %}
   <button type="button" id="logout-button">Logout</button>
   {% endif %}
 
   <script type='text/javascript'>
+    const form = document.getElementById('login-form')
+    form.addEventListener('submit', async function(e){
+      console.log('event');
+      e.preventDefault()
+      let response = await fetch(`${window.location.origin}/auth/login/`, {
+        method: "POST",
+        body: new FormData(form),
+      })
+      if(response.status === 200) {
+        const urlParams = new URLSearchParams(window.location.search)
+        redirectUrl = urlParams.get('next') ? urlParams.get('next') : ''
+        location.href = window.location.origin + redirectUrl
+      }
+    })
     document.getElementById('logout-button').addEventListener('click', async function () {
       const response = await fetch(`${window.location.origin}/auth/logout/`, {
         method: "POST"

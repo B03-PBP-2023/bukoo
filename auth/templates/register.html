@@ -7,10 +7,48 @@
 </head>
 <body>
   <h1>Registration Page</h1>
-  <form method="POST" >  
+  <form method="POST" id="register-form">  
     {% csrf_token %}  
-    {{ form.as_div }}
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username">
+    <br>
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+    <br>
+    <label for="password1">Password</label>
+    <input type="password" name="password1" id="password1">
+    <br>
+    <label for="password2">Confirmation Password</label>
+    <input type="password" name="password2" id="password2">
+    <br>
     <input type="submit" value="Submit">
   </form>
+  <ul id="error-messages"></ul>
+
+  <script type='text/javascript'>
+    const form = document.getElementById('register-form')
+    form.addEventListener('submit', async function(e){
+      e.preventDefault()
+      let response = await fetch(`${window.location.origin}/auth/register/`, {
+        method: "POST",
+        body: new FormData(form),
+      })
+
+      if(response.status === 201){
+        location.href = window.location.origin + '/auth/login/'
+      } else {
+        response = await response.json()
+        let errors = []
+        for(key in response.message){
+          errors = errors.concat(response.message[key])
+        }
+        let errorElements = ''
+        errors.forEach(error => {
+          errorElements += `<li>${error}</li>`
+        })
+        document.getElementById('error-messages').innerHTML = errorElements
+      }
+    })
+  </script>
 </body>
 </html>
