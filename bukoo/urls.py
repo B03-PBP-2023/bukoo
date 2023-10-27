@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-urlpatterns = [
+
+
+urlpatterns = [  
     path('admin/', admin.site.urls),
     path('auth/', include('auth.urls')),
     path('', include('book_collection.urls')),
@@ -25,4 +27,5 @@ urlpatterns = [
     path('profile/', include('user_profile.urls')),
     path('leaderboard/', include('leaderboard.urls')),
     path('admin-dashboard/', include('admin_dashboard.urls')),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]

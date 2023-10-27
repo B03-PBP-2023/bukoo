@@ -13,8 +13,3 @@ class Profile(models.Model):
 class Bookmark(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-
-
-
