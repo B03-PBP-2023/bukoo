@@ -6,7 +6,7 @@
 
 {% block content%}
 <main>
-  <section class="tw-container tw-max-w-xl tw-mx-auto">
+  <section class="tw-container tw-max-w-xl tw-mx-auto tw-p-8 tw-shadow-xl tw-rounded-xl">
     <h1 class="tw-text-center tw-text-5xl tw-font-bold tw-text-[#197278]">LOG IN</h1>
     <form method="POST" id="login-form">
       {% csrf_token %}
@@ -18,11 +18,10 @@
         <label for="password">Password</label>
         <input type="password" name="password" id="password">
       </div>
+      
+      <p></p>
       <input type="submit" value="Submit" id="login-button">
     </form>
-    {% if user.is_authenticated %}
-    <button type="button" id="logout-button">Logout</button>
-    {% endif %}
   </section>
 </main>
 {% endblock content %}
