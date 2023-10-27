@@ -1,10 +1,28 @@
 {% extends 'base.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Leaderboard Buku</title>
     <!-- Tambahkan tautan ke Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Ganti warna latar belakang halaman */
+        body {
+            background-color: #d1ccc0;
+        }
+        /* Ganti warna latar belakang header */
+        .my-4 {
+            background-color: #ff793f;
+            color: #f7f1e3;
+            padding: 10px;
+        }
+        /* Ganti warna latar belakang tabel */
+        .table {
+            background-color: #f3a683;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -58,5 +76,4 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
 {% endblock content %}
