@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detail Buku</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4">{{ book.title }}</h1>
+        <p class="mb-4">{{ book.description }}</p>
+
+        <!-- Tombol Rekomendasi -->
+        <button class="btn btn-primary recommend-button" data-book-id="{{ book.id }}" data-is-recommended="recommended">Recommended</button>
+        <button class="btn btn-danger recommend-button" data-book-id="{{ book.id }}" data-is-recommended="not_recommended">Not Recommended</button>
+    </div>
+
+    <!-- jQuery Library (Pastikan Anda menyertakan jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Ketika tombol "recommended" atau "not recommended" ditekan
+            $('.recommend-button').on('click', function() {
+                var bookId = $(this).data('book-id');
+                var isRecommended = $(this).data('is-recommended');
+
+                // Lakukan permintaan AJAX untuk menambah rekomendasi
+                $.ajax({
+                    url: '{% url "create_rating" %}',  // Ganti dengan URL yang sesuai
+                    method: 'POST',
+                    data: {
+                        book_id: bookId,
+                        is_recommended: isRecommended
+                    },
+                    success: function(response) {
+                        alert(response.message);  // Tampilkan pesan sukses (atau perbarui tampilan jika perlu)
+                    },
+                    error: function(response) {
+                        alert('Terjadi kesalahan saat menambahkan rekomendasi.');  // Tampilkan pesan kesalahan jika terjadi masalah
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+{% endblock content %}

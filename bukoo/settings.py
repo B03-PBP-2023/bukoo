@@ -62,7 +62,7 @@ ROOT_URLCONF = 'bukoo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], #new edit for base.html (sekar)
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,0 +1,716 @@
+[
+  {
+    "pk": 1,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Adept Widiarsa"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Adhitya Mulya"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Agatha Christie"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Ahmad Fuadi"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Ahmad Tohari"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Alaya Setya"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Aldous Huxley"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Alice Sebold"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Andrea Hirata"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Anthony Doerr"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Arthur Golden"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Audrey Niffenegger"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Bacharuddin Jusuf Habibie"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Bendung"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Benedict Anderson"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Bram Stoker"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "C.M. Woodhouse"
+    }
+  },
+  {
+    "pk": 18,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Cassandra Clare"
+    }
+  },
+  {
+    "pk": 19,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Chairil Anwar"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Charlotte Brontë"
+    }
+  },
+  {
+    "pk": 21,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Christopher Paolini"
+    }
+  },
+  {
+    "pk": 22,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Daniel \"Timbul\" Cahya Krisna"
+    }
+  },
+  {
+    "pk": 23,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "David J. Skal"
+    }
+  },
+  {
+    "pk": 24,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Dee Lestari"
+    }
+  },
+  {
+    "pk": 25,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Donny Dhirgantoro"
+    }
+  },
+  {
+    "pk": 26,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "E.B. White"
+    }
+  },
+  {
+    "pk": 27,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "E.L. James"
+    }
+  },
+  {
+    "pk": 28,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "E.W. Kemble"
+    }
+  },
+  {
+    "pk": 29,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Eduard Douwes Dekker"
+    }
+  },
+  {
+    "pk": 30,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Eka Kurniawan"
+    }
+  },
+  {
+    "pk": 31,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Elizabeth Gilbert"
+    }
+  },
+  {
+    "pk": 32,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Frances Hodgson Burnett"
+    }
+  },
+  {
+    "pk": 33,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Frank Herbert"
+    }
+  },
+  {
+    "pk": 34,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Garth Williams"
+    }
+  },
+  {
+    "pk": 35,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "George Orwell"
+    }
+  },
+  {
+    "pk": 36,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "George R.R. Martin"
+    }
+  },
+  {
+    "pk": 37,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Guy Cardwell"
+    }
+  },
+  {
+    "pk": 38,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Gázsity Mila"
+    }
+  },
+  {
+    "pk": 39,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Habiburrahman El-Shirazy"
+    }
+  },
+  {
+    "pk": 40,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Hamka"
+    }
+  },
+  {
+    "pk": 41,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Hanum Salsabiela Rais"
+    }
+  },
+  {
+    "pk": 42,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Ilana Tan"
+    }
+  },
+  {
+    "pk": 43,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Iman Hidajat"
+    }
+  },
+  {
+    "pk": 44,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "J.D. Salinger"
+    }
+  },
+  {
+    "pk": 45,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "J.K. Rowling"
+    }
+  },
+  {
+    "pk": 46,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "James Dashner"
+    }
+  },
+  {
+    "pk": 47,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Jodi Picoult"
+    }
+  },
+  {
+    "pk": 48,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "John Green"
+    }
+  },
+  {
+    "pk": 49,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "John Seelye"
+    }
+  },
+  {
+    "pk": 50,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "John Steinbeck"
+    }
+  },
+  {
+    "pk": 51,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Kathryn Stockett"
+    }
+  },
+  {
+    "pk": 52,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Khaled Hosseini"
+    }
+  },
+  {
+    "pk": 53,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Kiera Cass"
+    }
+  },
+  {
+    "pk": 54,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Kurt Vonnegut Jr."
+    }
+  },
+  {
+    "pk": 55,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Labodalih Sembiring"
+    }
+  },
+  {
+    "pk": 56,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Leila S. Chudori"
+    }
+  },
+  {
+    "pk": 57,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Lois Lowry"
+    }
+  },
+  {
+    "pk": 58,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Louis Sachar"
+    }
+  },
+  {
+    "pk": 59,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Madeleine L'Engle"
+    }
+  },
+  {
+    "pk": 60,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Mark Haddon"
+    }
+  },
+  {
+    "pk": 61,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Mark Twain"
+    }
+  },
+  {
+    "pk": 62,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Mary GrandPré"
+    }
+  },
+  {
+    "pk": 63,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Max Lane"
+    }
+  },
+  {
+    "pk": 64,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Michael Mason"
+    }
+  },
+  {
+    "pk": 65,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Multatuli"
+    }
+  },
+  {
+    "pk": 66,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Nina Auerbach"
+    }
+  },
+  {
+    "pk": 67,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Ninit Yunita"
+    }
+  },
+  {
+    "pk": 68,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Nisa Riyadi"
+    }
+  },
+  {
+    "pk": 69,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Orson Scott Card"
+    }
+  },
+  {
+    "pk": 70,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Pamusuk Eneste"
+    }
+  },
+  {
+    "pk": 71,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Paulo Coelho"
+    }
+  },
+  {
+    "pk": 72,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Philip Pullman"
+    }
+  },
+  {
+    "pk": 73,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Pramoedya Ananta Toer"
+    }
+  },
+  {
+    "pk": 74,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Raditya Dika"
+    }
+  },
+  {
+    "pk": 75,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Rainbow Rowell"
+    }
+  },
+  {
+    "pk": 76,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Rangga Almahendra"
+    }
+  },
+  {
+    "pk": 77,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Reg Keeland"
+    }
+  },
+  {
+    "pk": 78,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Rizki Pandu Permana"
+    }
+  },
+  {
+    "pk": 79,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Rosemary Wells"
+    }
+  },
+  {
+    "pk": 80,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Rubén Toledo"
+    }
+  },
+  {
+    "pk": 81,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Russell Baker"
+    }
+  },
+  {
+    "pk": 82,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Sara Gruen"
+    }
+  },
+  {
+    "pk": 83,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Sarah J. Maas"
+    }
+  },
+  {
+    "pk": 84,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Sitok Srengenge"
+    }
+  },
+  {
+    "pk": 85,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Soe Hok Gie"
+    }
+  },
+  {
+    "pk": 86,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Stephen King"
+    }
+  },
+  {
+    "pk": 87,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Stephenie Meyer"
+    }
+  },
+  {
+    "pk": 88,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Stieg Larsson"
+    }
+  },
+  {
+    "pk": 89,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Sue Monk Kidd"
+    }
+  },
+  {
+    "pk": 90,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Suzanne Collins"
+    }
+  },
+  {
+    "pk": 91,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Tasaro G.K."
+    }
+  },
+  {
+    "pk": 92,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Tere Liye"
+    }
+  },
+  {
+    "pk": 93,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Tom Wilson"
+    }
+  },
+  {
+    "pk": 94,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Trinity"
+    }
+  },
+  {
+    "pk": 95,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Veronica Roth"
+    }
+  },
+  {
+    "pk": 96,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Wahyuningrat"
+    }
+  },
+  {
+    "pk": 97,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Walter Trier"
+    }
+  },
+  {
+    "pk": 98,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "William Golding"
+    }
+  },
+  {
+    "pk": 99,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "William Little Hughes"
+    }
+  },
+  {
+    "pk": 100,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Winna Efendi"
+    }
+  },
+  {
+    "pk": 101,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Y.B. Mangunwijaya"
+    }
+  },
+  {
+    "pk": 102,
+    "model": "book_collection.mockauthorprofile",
+    "fields": {
+      "name": "Yann Martel"
+    }
+  }
+]
