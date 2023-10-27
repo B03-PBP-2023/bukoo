@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -15,9 +15,9 @@ def login_user(request):
     user = authenticate(request, username=username, password=password)
     if user is not None:
       login(request, user)
-      return HttpResponse('Logged In', status=200)
+      return JsonResponse({'message': 'Logged In'}, status=200)
     else:
-      return HttpResponse('Unauthorized', status=401)
+      return JsonResponse({'message': 'Invalid credential'}, status=401)
   
   return render(request, 'login.html')
   
@@ -29,8 +29,10 @@ def register(request):
   if request.method == "POST":
     if form.is_valid():
       form.save()
-      return HttpResponse('Registered', status=200)
-  
+      return JsonResponse({'message': 'Registered'}, status=201)
+    else:
+      return JsonResponse({'message': form.errors}, status=400)
+    
   context = {'form': form}
   return render(request, 'register.html', context)
 
@@ -39,4 +41,4 @@ def register(request):
 @require_http_methods(["POST"])  
 def logout_user(request):
   logout(request)
-  return HttpResponse('Logged out', status=200)
+  return JsonResponse({'message': 'Logged out'}, status=200)
