@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from book_collection.models import Book
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 @login_required
 def profile_data(request):
@@ -37,12 +38,18 @@ def edit_profile(request):
 @login_required
 def bookmarking_books(request, book_id):
     books = Book.objects.get(pk=book_id)
-    Bookmark.objects.create(user=request.user, book=books)
+    bookmark, created = Bookmark.objects.get_or_create(user=request.user, book=books)
 
-    return HttpResponse("CREATED", status=201)
+    if created:
+        messages.success(request, 'Bookmarked')
+
+        return HttpResponse("CREATED", status=201)
+    else:
+        messages.warning(request, 'Already Bookmarked!')
+
 
 @login_required
-def delet_bookmark(request, book_id):
+def delete_bookmark(request, book_id):
     bookmarks = Bookmark.objects.get(pk=book_id)
     bookmarks.delete()
 
