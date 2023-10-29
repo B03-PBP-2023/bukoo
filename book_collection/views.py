@@ -86,8 +86,18 @@ def add_book(request):
   
   new_book = form.save()
 
+  genres = request.POST.get('genres')
+  if genres != None:
+    genres = genres.split(',')
+    for genre in genres:
+      try:
+        genre_obj, created = Genre.objects.update_or_create(name=genre)
+        new_book.genres.add(genre_obj)
+      except:
+        pass
+
   # Author
-  new_book.author.add(request.user.mockauthorprofile) # TODO: integrate with user_profile module
+  new_book.author.add(request.user.profile)
 
   # Image upload
   if('image' in request.FILES):
@@ -115,6 +125,17 @@ def edit_book(request, id):
     return HttpResponseBadRequest('Invalid field')
   
   book = form.save(commit=False)
+
+  genres = request.POST.get('genres')
+  if genres != None:
+    book.genres.clear()
+    genres = genres.split(',')
+    for genre in genres:
+      try:
+        genre_obj, created = Genre.objects.update_or_create(name=genre)
+        book.genres.add(genre_obj)
+      except:
+        pass
 
   # Update image url
   if('image' in request.FILES):
@@ -151,3 +172,6 @@ def show_search(request):
 
 def show_book_detail(request, slug:str):
   return render(request, 'book-detail.html', {})
+
+def show_book_submission(request):
+  return render(request, 'book-submission.html', {})

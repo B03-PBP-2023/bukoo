@@ -5,12 +5,12 @@
 {% endblock meta %}
 
 {% block content %}
-<main>
-  <aside>
+<main class="tw-container tw-max-w-screen-xl tw-mx-auto tw-flex tw-gap-8 tw-px-8">
+  <aside class="tw-flex tw-flex-col tw-w-[30%] tw-gap-8 tw-sticky tw-top-0">
     <img src="" alt="" id="book-image">
-    <button>Bookmark</button>
+    <button id="bookmark" class="tw-bg-[#ADC4CE] tw-border-none tw-text-lg tw-p-2 tw-rounded-lg">Bookmark</button>
   </aside>
-  <section>
+  <section class="tw-flex tw-flex-col tw-gap-2">
     <h1 id="book-title">Title</h1>
     <p id="book-author">by Author</p>
     <div>Rating & Review</div>
@@ -19,30 +19,30 @@
       <p id="book-description">Description</p>
     </div>
     <div>
-      <p>Genres</p>
+      <h2 class="tw-mb-0">Categories</h2>
       <div id="book-genres">XXX</div>
     </div>
     <div>
       <h2>Detail</h2>
-      <div>
-        <div>
-          <p>Number of pages</p>
+      <div class="tw-flex tw-w-full tw-flex-wrap">
+        <div class="tw-w-1/2">
+          <p class="tw-mb-0">Number of pages</p>
           <p id="book-num-pages">XXX</p>
         </div>
-        <div>
-          <p>Publisher</p>
+        <div class="tw-w-1/2">
+          <p class="tw-mb-0">Publisher</p>
           <p id="book-publisher">XXX</p>
         </div>
-        <div>
-          <p>Date Published</p>
+        <div class="tw-w-1/2">
+          <p class="tw-mb-0">Date Published</p>
           <p id="book-publish-date">XXX</p>
         </div>
-        <div>
-          <p>ISBN</p>
+        <div class="tw-w-1/2">
+          <p class="tw-mb-0">ISBN</p>
           <p id="book-isbn">XXX</p>
         </div>
-        <div>
-          <p>Language</p>
+        <div class="tw-w-1/2">
+          <p class="tw-mb-0">Language</p>
           <p id="book-language">XXX</p>
         </div>
       </div>
@@ -77,12 +77,15 @@
     document.getElementById('book-isbn').innerText = book.fields.isbn
     document.getElementById('book-language').innerText = book.fields.language
     
-    const authors = book.fields.author.maps(author => `<a href="">${author.name}</a>`)
-    document.getElementById('book-author').innerText = authors
+    const authors = book.fields.author.map(author => `<a href="">${author.name}</a>`).join(', ')
+    console.log(authors);
+    document.getElementById('book-author').innerHTML = 'by ' + authors
 
-    const genres = book.fields.genre.maps(author => `<a href="">${author.name}</a>`)
-    document.getElementById('book-author').innerText = authors
+    const genres = book.fields.genres.map(genre => `<a href="">${genre.name}</a>`).join(', ')
+    document.getElementById('book-genres').innerHTML = genres
   }
+
+  
 
   refreshBook()
 </script>
