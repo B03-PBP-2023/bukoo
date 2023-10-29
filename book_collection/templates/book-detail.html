@@ -13,7 +13,6 @@
   <section class="tw-flex tw-flex-col tw-gap-2">
     <h1 id="book-title">Title</h1>
     <p id="book-author">by Author</p>
-    <div>Rating & Review</div>
     <div>
       <h2>Description</h2>
       <p id="book-description">Description</p>
@@ -67,6 +66,7 @@
 
   const refreshBook = async () => {
     const book = await fetchBook()
+    console.log(book);
     document.getElementById('book-image').src = book.fields.image_url
     document.getElementById('book-title').innerText = book.fields.title
     document.getElementById('book-description').innerText = book.fields.description
@@ -84,8 +84,6 @@
     const genres = book.fields.genres.map(genre => `<a href="">${genre.name}</a>`).join(', ')
     document.getElementById('book-genres').innerHTML = genres
   }
-
-  
 
   refreshBook()
 </script>
