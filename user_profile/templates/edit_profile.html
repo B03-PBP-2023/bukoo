@@ -1,4 +1,22 @@
-<!DOCTYPE html>
-<html>
-    
-</html>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h1>Edit Profile</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Save Changes"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

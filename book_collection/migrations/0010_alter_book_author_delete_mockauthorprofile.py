@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_profile', '__first__'),
+        # ('user_profile', '__first__'),
         ('book_collection', '0009_remove_book_average_ratings_and_more'),
     ]
 

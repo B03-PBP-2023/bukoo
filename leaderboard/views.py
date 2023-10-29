@@ -24,9 +24,6 @@ def get_popular_books(request, book_id):
             'author': author,
             'rating_count': rate.leaderboard_count,
         })
-
-    if request.GET.get('render_html'):
-        return render(request, 'leaderboard.html', {'popular_books_data': popular_books_data})
     
     return JsonResponse({'popular': popular_books_data})
     # return render(request, 'leaderboard.html', {'popular_books_data': get_popular_books})
@@ -47,8 +44,6 @@ def get_ratings_by_user(request):
             'created_at': rating.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
 
-    if request.GET.get('render_html'):
-        return render(request, 'leaderboard.html', {'ratings_data': ratings_data})
     
     return JsonResponse({'user_ratings': ratings_data})
     # return render(request, 'leaderboard.html', {'ratings_data': get_ratings_by_user})
@@ -61,21 +56,12 @@ def create_rating(request, book_id):
         user_profile = get_object_or_404(Profile, user=request.user)
         is_recommended = request.POST.get('is_recommended')
 
-        if is_recommended in ['recommended', 'not_recommended']:
             # Membuat objek Leaderboard baru dengan is_recommended yang sesuai
-            leaderboard, is_created = Leaderboard.objects.update_or_create(book=book, userProfile=user_profile)
-            leaderboard.is_recommended = is_recommended == 'recommended'
-            leaderboard.save()
-            if request.GET.get('render_html'):
-                return render(request, 'leaderboard.html', {'message': 'Rating added successfully'})
-            return JsonResponse({'message': 'Rating added successfully'})
-        else:
-            if request.GET.get('render_html'):
-                return render(request, 'leaderboard.html', {'message': 'Rating added successfully'})
-            return JsonResponse({'message': 'Invalid rating value'}, status=400)
+        leaderboard, is_created = Leaderboard.objects.update_or_create(book=book, userProfile=user_profile)
+        leaderboard.is_recommended = is_recommended == 'recommended'
+        leaderboard.save()
+        return JsonResponse({'message': 'Rating added successfully'})
     else:
-        if request.GET.get('render_html'):
-                return render(request, 'leaderboard.html', {'message': 'Rating added successfully'})
         return JsonResponse({'message': 'Invalid request'}, status=400)
     
 
@@ -90,16 +76,12 @@ def delete_rating(request, book_id):
         if rating.userProfile.user == request.user:
             # Menghapus penilaian
             rating.delete()
-            if request.GET.get('render_html'):
-                return render(request, 'leaderboard.html', {'message': 'Rating added successfully'})
             return JsonResponse({'message': 'Rating deleted successfully'})
         else:
-            if request.GET.get('render_html'):
-                return render(request, 'leaaderboard.html', {'message': 'Rating added successfully'})
             return JsonResponse({'message': 'You do not have permission to delete this rating'}, status=403)
         
 
-# def leaderboard_view(request):
-#     leaderboard_data = Leaderboard.objects.values('book__title').annotate(recommendation_count=Count('pk')).order_by('-recommendation_count')[:10]
-#     context = {'leaderboard_data': leaderboard_data}
-#     return render(request, 'leaderboard.html', context)
+def leaderboard_view(request):
+    leaderboard_data = Leaderboard.objects.values('book__title').annotate(recommendation_count=Count('pk')).order_by('-recommendation_count')[:10]
+    context = {'leaderboard_data': leaderboard_data}
+    return render(request, 'leaderboard.html', context)

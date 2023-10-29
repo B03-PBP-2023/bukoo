@@ -3,11 +3,11 @@ from user_profile.models import Profile, Bookmark
 from user_profile.forms import ProfileForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from book_collection import Book
+from book_collection.models import Book
 
 def profile_data(request):
     bookmarked_book = Bookmark.objects.filter(user=request.user)
-    user_data = Profile.objects.filter(user=request.user)
+    user_data = Profile.objects.get(user=request.user)
 
     data = {
         'name': user_data.name,

@@ -13,8 +13,10 @@ from django.contrib.auth.decorators import login_required
 
 def get_reviews_by_book(request, book_id):
     book = get_object_or_404(Book, id= book_id)
-    user_has_reviewed = has_reviewed(request, book_id)
-    print(user_has_reviewed)
+    user_has_reviewed = False
+    if request.user.is_authenticated:
+        user_has_reviewed = has_reviewed(request, book_id)
+        print(user_has_reviewed)
     return render(request, "review_book.html", {'book': book, 'has_reviewed': user_has_reviewed})
 
 def get_review_json(request, book_id):
