@@ -5,7 +5,7 @@
     <h1>{{ username }}'s Profile</h1>
     
     <div class="profile-pic">
-        <img src="{{ user_profile.profile_picture.url }}" alt="{{ user_profile.user.username }}'s profile picture" width="200">
+        <img src="{{ profile_picture.url }}" width="200">
     </div>
 
     <div class="profile-detail">
@@ -25,11 +25,16 @@
 
     <div class="profile-detail">
         <strong>Bookmarked Books:</strong> 
-        <ul>
+        <ol>
             {% for book in Bookmarked_books %}
             <li>{{ book.title }} by {{ book.author }}</li>
+            <a href="{% url 'profile:delete_bookmark' %}">
+                <button>
+                    Delete from Bookmark
+                </button>
+            </a>
             {% endfor %}
-        </ul>
+        </ol>
     </div>
         
 {% endblock %}

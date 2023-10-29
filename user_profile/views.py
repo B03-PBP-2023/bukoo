@@ -45,10 +45,6 @@ def bookmarking_books(request, book_id):
         messages.success(request, 'Bookmarked')
 
         return HttpResponse("CREATED", status=201)
-    else:
-        messages.warning(request, 'Already Bookmarked!')
-
-        return HttpResponse()
 
 @login_required
 def delete_bookmark(request, book_id):
