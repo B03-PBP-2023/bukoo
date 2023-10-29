@@ -8,7 +8,9 @@
 <main class="tw-container tw-max-w-screen-xl tw-mx-auto tw-flex tw-gap-8 tw-px-8">
   <aside class="tw-flex tw-flex-col tw-w-[30%] tw-gap-8 tw-sticky tw-top-0">
     <img src="" alt="" id="book-image">
+    {% if user.is_authenticated %}
     <button id="bookmark" class="tw-bg-[#ADC4CE] tw-border-none tw-text-lg tw-p-2 tw-rounded-lg">Bookmark</button>
+    {% endif %}
   </aside>
   <section class="tw-flex tw-flex-col tw-gap-2">
     <h1 id="book-title">Title</h1>

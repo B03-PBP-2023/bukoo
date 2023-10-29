@@ -11,4 +11,5 @@ urlpatterns = [
   path('book-submission/', views.show_book_submission, name='show_book_submission'),
   path('book/<str:slug>/', views.show_book_detail, name='show_book_detail'),
   path('search/', views.show_search, name='show_search'),
+  path('', views.show_landing_page, name='show_landing_page'),
 ]
