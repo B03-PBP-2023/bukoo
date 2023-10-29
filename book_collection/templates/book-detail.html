@@ -8,12 +8,13 @@
 <main class="tw-container tw-max-w-screen-xl tw-mx-auto tw-flex tw-gap-8 tw-px-8">
   <aside class="tw-flex tw-flex-col tw-w-[30%] tw-gap-8 tw-sticky tw-top-0">
     <img src="" alt="" id="book-image">
+    {% if user.is_authenticated %}
     <button id="bookmark" class="tw-bg-[#ADC4CE] tw-border-none tw-text-lg tw-p-2 tw-rounded-lg">Bookmark</button>
+    {% endif %}
   </aside>
   <section class="tw-flex tw-flex-col tw-gap-2">
     <h1 id="book-title">Title</h1>
     <p id="book-author">by Author</p>
-    <div>Rating & Review</div>
     <div>
       <h2>Description</h2>
       <p id="book-description">Description</p>
@@ -67,6 +68,7 @@
 
   const refreshBook = async () => {
     const book = await fetchBook()
+    console.log(book);
     document.getElementById('book-image').src = book.fields.image_url
     document.getElementById('book-title').innerText = book.fields.title
     document.getElementById('book-description').innerText = book.fields.description
@@ -85,8 +87,17 @@
     document.getElementById('book-genres').innerHTML = genres
   }
 
-  
-
   refreshBook()
+
+  const bookmark = document.getElementById('bookmark')
+  bookmark.addEventListener('click', async() => {
+    const response = await fetch(location.origin + "/profile/bookmark-book/", {
+      method: "POST",
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+    })
+    if(response.status === 201){
+      console.log('Bookmarked');
+    }
+  })
 </script>
 {% endblock script %}
