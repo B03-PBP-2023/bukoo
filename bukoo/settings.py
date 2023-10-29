@@ -144,3 +144,6 @@ INTERNAL_IPS = [
 ]
 
 NPM_BIN_PATH = "C:\\Program Files\\nodejs\\npm.cmd"
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
