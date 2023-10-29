@@ -1,55 +1,189 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block meta %}
 <title>Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  main {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .left-container {
+    background-color: #ffffff;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .right-container {
+    background-color: #ADC4CE;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 35px;
+    height: 100%;
+  }
+
+  .login-title {
+    color: #000000;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  label {
+    color: #000000;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    display: block;
+    height: 40px;
+    width: 100%;
+    background-color: #eff0f5;
+    border: none;
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #000000;
+  }
+
+  ::placeholder {
+    color: #000000;
+  }
+
+  button[type="submit"] {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #ADC4CE;
+    color: #000000;
+    padding: 12px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .register-link {
+    color: #ffffff;
+    font-size: 15px;
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .register-link a {
+    color: #96B6C5;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+
+  .image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* top: 20%; */
+}
+
+.image-container img {
+  width: 420px; 
+  height: 420px; 
+  object-fit: cover; 
+  margin-bottom: 10px;
+}
+
+.image-text {
+    text-align: center;
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+
+</style>
 {% endblock meta %}
 
 {% block content%}
 <main>
-  <section class="tw-container tw-max-w-xl tw-mx-auto tw-p-8 tw-shadow-xl tw-rounded-xl">
-    <h1 class="tw-text-center tw-text-5xl tw-font-bold tw-text-[#197278]">LOG IN</h1>
-    <form method="POST" id="login-form">
-      {% csrf_token %}
-      <div class="tw-flex tw-flex-col">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username">
+  <div class="left-container">
+    <div class="logo-img">
+      <img src="{% static 'images/logo.svg' %}" alt="Bukoo Logo" width="130px">
+    </div>
+    <div class="login-container">
+      <div class="login-title">
+        Welcome Back!
       </div>
-      <div class="tw-flex tw-flex-col">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
+      <form method="POST" id="login-form">
+        {% csrf_token %}
+        <div>
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username" placeholder="Enter your username">
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" placeholder="Enter your password">
+        </div>
+        <button type="submit">Submit</button>
+        <div class="register-link">
+          <label>Don't have an account yet? </label>
+          <a href="register">Register</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="right-container">
+    <div class="image-container">
+      <div class="image-text">
+        Delve Deeper with Bukoo: <br>
+        Discover, Share, and Explore
       </div>
-      
-      <p></p>
-      <input type="submit" value="Submit" id="login-button">
-    </form>
-  </section>
+      <br> 
+      <img src="{% static 'images/buku_auth.png' %}" alt="Bukoo Auth" width="200px">
+    </div>   
+  </div>
 </main>
 {% endblock content %}
 
 {% block script %}
   <script type='text/javascript'>
-    const form = document.getElementById('login-form')
-    form.addEventListener('submit', async function(e){
+    const form = document.getElementById('login-form');
+    form.addEventListener('submit', async function(e) {
       console.log('event');
-      e.preventDefault()
+      e.preventDefault();
       let response = await fetch(`${window.location.origin}/auth/login/`, {
         method: "POST",
         body: new FormData(form),
-      })
+      });
       if(response.status === 200) {
-        const urlParams = new URLSearchParams(window.location.search)
-        redirectUrl = urlParams.get('next') ? urlParams.get('next') : ''
-        location.href = window.location.origin + redirectUrl
+        const urlParams = new URLSearchParams(window.location.search);
+        redirectUrl = urlParams.get('next') ? urlParams.get('next') : '';
+        location.href = window.location.origin + redirectUrl;
       }
-    })
-    document.getElementById('logout-button').addEventListener('click', async function () {
-      const response = await fetch(`${window.location.origin}/auth/logout/`, {
-        method: "POST"
-      })
-      if (response.status === 200) {
-        location.href = window.location.origin
-      }
-    })
+    });
   </script>
-
 {% endblock script %}
