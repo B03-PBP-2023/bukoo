@@ -4,3 +4,8 @@ whitenoise
 psycopg2-binary
 requests
 urllib3
+django-environ
+Pillow
+cloudinary
+python-dotenv
+django-tailwind[reload]
