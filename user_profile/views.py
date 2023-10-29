@@ -16,8 +16,9 @@ def profile_data(request):
         'name': user_data.name,
         'gender': user_data.gender,
         'birth_date': user_data.date_of_birth,
-        'prefered_genre': user_data.prefered_genre,
+        'preferred_genre': user_data.prefered_genre,
         'description': user_data.about_user,
+        'profile_picture': user_data.profile_picture,
         'bookmarked_books': bookmarked_book,
     }
 
@@ -31,7 +32,7 @@ def edit_profile(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('profile:user_profile'))
+            return HttpResponseRedirect(reverse('profile:profile_data'))
     
     return render(request, 'edit_profile.html', {'form': form})
 
@@ -47,12 +48,13 @@ def bookmarking_books(request, book_id):
     else:
         messages.warning(request, 'Already Bookmarked!')
 
+        return HttpResponse()
 
 @login_required
 def delete_bookmark(request, book_id):
     bookmarks = Bookmark.objects.get(pk=book_id)
     bookmarks.delete()
 
-    return HttpResponseRedirect(reverse('profile:user_profile'))
+    return HttpResponseRedirect(reverse('profile:profile_data'))
 
 
