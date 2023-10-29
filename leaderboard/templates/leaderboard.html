@@ -16,6 +16,8 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            
         }
 
         /* Mengganti warna teks di tabel */
@@ -26,6 +28,7 @@
 
         /* Mengganti warna latar belakang tombol Recommended */
         .recommended-button {
+            font-family: 'Poppins', sans-serif;
             background-color: #96b6c5; /* Warna biru - ganti sesuai preferensi Anda */
             color: #fff; /* Warna teks putih */
             border-radius: 555px;
@@ -38,8 +41,17 @@
             border-radius: 555px;
         }
 
+        .recommended-button.active {
+            background-color: #84dbaa; 
+        }
+
+        .not-recommended-button.active {
+            background-color: #683535; /* Misalnya warna merah */
+        }
+
         .h1{
           align-items: center;  
+          font-family: 'Poppins', sans-serif;
         }
 
         .navbar{
@@ -49,15 +61,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            
             font-size: 25px;
             color:white ;
+            margin-bottom: 20px;
         }
 
         .navbar a{
             font-family: 'Poppins', sans-serif;
             color: white;
             margin: 0 10px;
+        }
+
+        .tr{
+            background-color: #e2e8ea;
         }
 
     </style>
@@ -73,6 +89,7 @@
                 <tr class="tr">
                     <th>Book Title</th>
                     <th>Rank</th>
+                    <th>Recommendation</th>
                 </tr>
             </thead>
             <tbody>
