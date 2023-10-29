@@ -9,8 +9,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('user_profile', '0001_initial'),
         ('book_collection', '0009_remove_book_average_ratings_and_more'),
-        ('user_profile', '0002_profile_profile_picture_alter_profile_name'),
     ]
 
     operations = [

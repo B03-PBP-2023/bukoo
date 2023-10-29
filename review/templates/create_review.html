@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Create Review</h1>
+    
+    <form id="reviewForm" method="POST" action="{% url 'review:create_review' book_id=book.id %}">   
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="input-group" style="border-radius: 5px; display: flex;">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button" id="emoji-button" style="height: 38px; width: 38px; padding: 0;"><img src="https://iconape.com/wp-content/png_logo_vector/emoji-18.png" alt="Emoji" style="height: 100%; width: 100%; border: none;"></button>
+                </div>
+                <textarea class="form-control" id="review-text" name="review" rows="3" style="border-radius: 0 5px 5px 0">{{ form.review.value }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3" style="height: 38px; background-color: #25D366; border-color: #25D366; border-radius: 5px;">Submit</button>
+        </div>
+        <input type="hidden" id="review-emoji" name="emoji">
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/emoji-mart/dist/emoji-mart.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/emoji-mart/css/emoji-mart.css" />
+{% endblock %}
+
+<script>
+    $(document).ready(function() {
+        $('#reviewForm').submit(function(event) {
+            event.preventDefault();  // Prevent the form from submitting normally.
+
+            const bookId = "{{ book.id }}";  // Ensure this is passed in from your Django view.
+            const reviewText = $('#review-text').val();
+            const reviewEmoji = $('#review-emoji').val();
+
+            $.ajax({
+                url: `${bookId}/create_review/`,  // Adjust this if your URL pattern is different.
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'reviewText': reviewText,
+                    'reviewEmoji': reviewEmoji,
+                },
+                dataType: 'json',
+                success: function(data) {
+                    console.log("Review submitted successfully:", data);
+                    // Reload the page to show the new review.
+                    location.reload();
+                },
+                error: function(error) {
+                    console.error("There was an error submitting the review:", error);
+                }
+            });
+        });
+
+        // Initialize the emoji picker.
+        const emojiPicker = new EmojiMart.EmojiPicker({
+            autoHide: true,
+            showPreview: false,
+            showSkinTones: false,
+            onSelect: function(emoji) {
+                $('#review-emoji').val(emoji.native);
+            }
+        });
+        $('#emoji-button').click(function() {
+            emojiPicker.showPicker();
+        });
+    });
+</script>

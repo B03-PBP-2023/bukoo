@@ -6,7 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from auth.forms import RegisterForm
+from user_profile.models import Profile
 
+@csrf_exempt
 @require_http_methods(["GET", "POST"])
 def login_user(request):
   if request.method == "POST":
@@ -28,7 +30,8 @@ def register(request):
   form = RegisterForm(request.POST or None)
   if request.method == "POST":
     if form.is_valid():
-      form.save()
+      user = form.save()
+      Profile.objects.create(user=user)
       return JsonResponse({'message': 'Registered'}, status=201)
     else:
       return JsonResponse({'message': form.errors}, status=400)

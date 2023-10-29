@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <h1 class="mb-4">Review {{ book.title }}</h1>
+
+    {% if has_reviewed %}
+        <!-- User's Review Section -->
+        <h2>Your Review</h2>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                {{ user_review.review }}
+            </div>
+            <div class="card-footer">
+                {{ user_review.user.username }}
+            </div>
+        </div>
+    {% else %}
+        <!-- Add Review Button -->
+        <button class="btn btn-primary mb-4" onclick="location.href='{% url 'review:create_review' book_id=book.id %}';">Add your review</button>
+    {% endif %}
+
+    <!-- All Reviews Section -->
+    <h2>All Reviews</h2>
+
+    <div class="row" id="reviewsContainer">
+        <!-- Reviews will be added here by jQuery -->
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        const bookId = "{{ book.id }}";  // Ensure this is passed in from your Django view.
+        console.log("Book ID:", bookId);
+        $.ajax({
+            url: `/review/${bookId}/get_review_json/`,  // Adjust this if your URL pattern is different.
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                let reviewsHtml = '';
+                console.log("Reviews:", data);
+                data.forEach(review => {
+                    reviewsHtml += `
+                    <div class="col-md-4">
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <p>${review.fields.review}</p> 
+                            </div>
+                            <div class="card-footer text-left">
+                                <a href="/review_detail/${review.pk}/">${review.fields.userProfile.name}</a>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                
+                $('#reviewsContainer').html(reviewsHtml);
+            },
+            error: function(error) {
+                console.error("There was an error fetching the reviews:", error);
+            }
+        });
+    });
+</script>
+    
+{% endblock %}
