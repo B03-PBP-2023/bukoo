@@ -1,5 +1,35 @@
 {% extends "base.html" %}
 
-{ % block content % }
+{% block content %}
+<div class="profile-container">
+    <h1>{{ username }}'s Profile</h1>
     
-{ % endblock content % } 
+    <div class="profile-pic">
+        <img src="{{ profile_picture.url }}" alt="{{ profile.user.username }}'s profile picture" width="200">
+    </div>
+
+    <div class="profile-detail">
+        <strong>Name:</strong> {{ name }} 
+    </div>
+
+    <div class="profile-detail">
+        <strong>Gender:</strong> {{ gender }}
+    </div>
+
+    <div class="profile-detail">
+        <strong>Date of Birth:</strong> {{ birth_date }}
+    </div>
+
+    <div class="profile-detail">
+        <strong>Preferred Genres:</strong> {{ preferred_genre }}
+
+    <div class="profile-detail">
+        <strong>Written Books:</strong> 
+        <ol>
+            {% for book in written_books %}
+            <li>{{ book.title }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+        
+{% endblock %}
