@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Book Detail</title>
+{% endblock meta %}
+
+{% block content %}
+<main>
+  <aside>
+    <img src="" alt="" id="book-image">
+    <button>Bookmark</button>
+  </aside>
+  <section>
+    <h1 id="book-title">Title</h1>
+    <p id="book-author">by Author</p>
+    <div>Rating & Review</div>
+    <div>
+      <h2>Description</h2>
+      <p id="book-description">Description</p>
+    </div>
+    <div>
+      <p>Genres</p>
+      <div id="book-genres">XXX</div>
+    </div>
+    <div>
+      <h2>Detail</h2>
+      <div>
+        <div>
+          <p>Number of pages</p>
+          <p id="book-num-pages">XXX</p>
+        </div>
+        <div>
+          <p>Publisher</p>
+          <p id="book-publisher">XXX</p>
+        </div>
+        <div>
+          <p>Date Published</p>
+          <p id="book-publish-date">XXX</p>
+        </div>
+        <div>
+          <p>ISBN</p>
+          <p id="book-isbn">XXX</p>
+        </div>
+        <div>
+          <p>Language</p>
+          <p id="book-language">XXX</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock content %}
+
+{% block script %}
+<script type='text/javascript'>
+  const fetchBook = async () => {
+    try {
+      const urlSegment = location.href.split('/')
+      const slug = urlSegment.pop() || urlSegment.pop()
+      const id = slug.split('.')[0]
+      const url = location.origin + '/api/book/' + id + "/"
+      const params = new URLSearchParams(window.location.search)
+      const books = await fetch(url + params.toString())
+      return await books.json()
+    } catch { }
+  }
+
+  const refreshBook = async () => {
+    const book = await fetchBook()
+    document.getElementById('book-image').src = book.fields.image_url
+    document.getElementById('book-title').innerText = book.fields.title
+    document.getElementById('book-description').innerText = book.fields.description
+    document.getElementById('book-description').innerText = book.fields.description
+    document.getElementById('book-num-pages').innerText = book.fields.num_pages
+    document.getElementById('book-publisher').innerText = book.fields.publisher
+    document.getElementById('book-publish-date').innerText = (new Date(book.fields.publish_date)).toLocaleDateString('en-us')
+    document.getElementById('book-isbn').innerText = book.fields.isbn
+    document.getElementById('book-language').innerText = book.fields.language
+    
+    const authors = book.fields.author.maps(author => `<a href="">${author.name}</a>`)
+    document.getElementById('book-author').innerText = authors
+
+    const genres = book.fields.genre.maps(author => `<a href="">${author.name}</a>`)
+    document.getElementById('book-author').innerText = authors
+  }
+
+  refreshBook()
+</script>
+{% endblock script %}

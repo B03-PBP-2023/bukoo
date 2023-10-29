@@ -148,3 +148,6 @@ def get_genres(request):
 
 def show_search(request):
   return render(request, 'search.html', {})
+
+def show_book_detail(request, slug:str):
+  return render(request, 'book-detail.html', {})
