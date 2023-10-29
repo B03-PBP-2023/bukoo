@@ -24,8 +24,8 @@ def get_popular_books(request, book_id):
             'author': author,
             'rating_count': rate.leaderboard_count,
         })
-    # return JsonResponse({'popular': popular_books_data})
-    return render(request, 'leaderboard.html', {'popular_books_data': get_popular_books})
+    return JsonResponse({'popular': popular_books_data})
+    # return render(request, 'leaderboard.html', {'popular_books_data': get_popular_books})
 
 @login_required
 @csrf_exempt
@@ -43,8 +43,8 @@ def get_ratings_by_user(request):
             'created_at': rating.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
     
-    # return JsonResponse({'user_ratings': ratings_data})
-    return render(request, 'leaderboard.html', {'ratings_data': get_ratings_by_user})
+    return JsonResponse({'user_ratings': ratings_data})
+    # return render(request, 'leaderboard.html', {'ratings_data': get_ratings_by_user})
 
 @login_required
 @csrf_exempt
