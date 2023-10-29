@@ -4,7 +4,7 @@ from book_collection.models import Book
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True)
     about_user = models.TextField(null=True)
     date_of_birth = models.CharField(max_length=10, null=True)
     gender = models.CharField(max_length=20, null=True)
