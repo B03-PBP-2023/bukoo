@@ -1,74 +1,7 @@
-<!-- {% load static %}
+{% load static %}
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <style>
-  .tw-fixed {
-    font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    color: black;
-    overflow: hidden;
-    background-color: #96B6C5;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .tw-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #96B6C5;
-    color: white;
-  }
-
-  .tw-container a {
-    text-decoration: none;
-    color: black;
-    margin: 0 10px;
-  }
-
-  .tw-grow {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
-
-  .tw-flex {
-    display: flex;
-  }
-
-  .tw-gap-8 {
-    gap: 8px;
-  }
-
-  .tw-flex div {
-    display: flex;
-    align-items: center;
-  }
-
-  .tw-flex img {
-    margin-right: 10px;
-  }
-
-  .tw-container input[type="text"] {
-    font-family: 'Poppins', sans-serif;
-    width: 100%;
-    padding: 15px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    box-sizing: border-box; 
-  }
-
-  .tw-container input[type="text"]:focus {
-    outline: none;
-    border-color: #719ECE;
-  }
-
   .input-group {
     position: relative;
     display: flex;
@@ -93,43 +26,24 @@
     border-radius: 48%;
     cursor: pointer;
   }
-
-  .tw-flex a {
-    margin: 0 15px;
-  }
-
-  .tw-flex-end {
-    margin-left: auto;
-  }
 </style>
 
-<header class="tw-fixed tw-top-0 tw-inset-x-0 tw-h-[64px]">
-  <div class="tw-container tw-max-w-screen-xl tw-mx-auto tw-px-4 tw-gap-8">
-    <a href="/"><img src="{% static 'images/logo.svg' %}" alt="Bukoo Logo" width="150px"></a> 
-    <div class="tw-flex">
+<header class="tw-fixed tw-top-0 tw-inset-x-0 tw-h-[64px] tw-bg-white tw-flex tw-items-center">
+  <div class="tw-container tw-flex tw-max-w-screen-xl tw-mx-auto tw-px-4 tw-gap-8">
+    <a href="/"><img src="{% static 'images/logo.svg' %}" alt="Bukoo Logo" width="150px"></a>
+    <nav class="tw-flex tw-gap-8 tw-grow tw-justify-end tw-items-center">
       <a href="/">Home</a>
       <a href="/leaderboard">Leaderboard</a>
-      <a href="#">Kategori</a>
-    </div>
-    <div class="tw-grow tw-flex-end">
-      <div class="input-group">
-        <input type="text" name="search" id="search-bar" placeholder="Search by Title, Author, or ISBN" style="width: 100%;">
-        <div class="input-group-append">
-          <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-        </div>
-      </div>
-    </div>
-    <div class="tw-flex tw-gap-8 tw-flex-end">
-      {% if user.is_authenticated %} 
-      <div>
-        <img src="{% static 'images/default-profile.svg'%}" alt="">
-        <a href="/profile">Profile</a>
-        <a href="/auth/logout">Logout</a>
-      </div> 
+    </nav>
+    <div class="tw-flex tw-gap-8 tw-items-center">
+      {% if user.is_authenticated %}
+      <img src="{% static 'images/default-profile.svg'%}" alt="" class="tw-h-10">
+      <a href="/profile">Profile</a>
+      <a href="/auth/logout">Logout</a>
       {% else %}
       <a href="/auth/login">Login</a>
       <a href="/auth/register">Sign Up</a>
       {% endif %}
     </div>
   </div>
-</header> --> -->
+</header>

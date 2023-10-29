@@ -8,6 +8,7 @@ from django.views.decorators.http import require_http_methods
 from auth.forms import RegisterForm
 from user_profile.models import Profile
 
+@csrf_exempt
 @require_http_methods(["GET", "POST"])
 def login_user(request):
   if request.method == "POST":
