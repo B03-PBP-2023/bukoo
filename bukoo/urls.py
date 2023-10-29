@@ -29,4 +29,6 @@ urlpatterns = [
     path('admin_dashboard/', include('admin_dashboard.urls')),
 
     # path('admin-dashboard/', include('admin_dashboard.urls')),
+    path('admin-dashboard/', include('admin_dashboard.urls')),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
