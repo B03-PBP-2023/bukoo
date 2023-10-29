@@ -1,8 +1,9 @@
 from django.urls import path
-from admin_dashboard.views import show_verif
-
-app_name = 'admin_dashboard'
+from admin_dashboard import views
 
 urlpatterns = [
-    path('', show_verif, name='show_verif'),
+    path('admin/api/book_list/', views.get_book_list, name='get_book_list'),
+    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin-dashboard/', views.admin_dashboard, name='admin-dashboard'),
 ]
+

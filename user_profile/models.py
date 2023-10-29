@@ -12,7 +12,7 @@ class Profile(models.Model):
     profile_picture = models.URLField(null=True, blank=True)
 
     def natural_key(self):
-        return {'id':self.pk, 'name':self.name}
+        return {'id':self.pk, 'name':self.user.username | self.name}
 
 class Bookmark(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
