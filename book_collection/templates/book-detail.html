@@ -88,5 +88,16 @@
   }
 
   refreshBook()
+
+  const bookmark = document.getElementById('bookmark')
+  bookmark.addEventListener('click', async() => {
+    const response = await fetch(location.origin + "/profile/bookmark-book/", {
+      method: "POST",
+      'csrfmiddlewaretoken': '{{ csrf_token }}',
+    })
+    if(response.status === 201){
+      console.log('Bookmarked');
+    }
+  })
 </script>
 {% endblock script %}
