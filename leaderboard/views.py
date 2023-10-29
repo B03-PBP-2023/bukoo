@@ -24,6 +24,10 @@ def get_popular_books(request, book_id):
             'author': author,
             'rating_count': rate.leaderboard_count,
         })
+
+    if request.GET.get('render_html'):
+        return render(request, 'leaderboard.html', {'popular_books_data': popular_books_data})
+    
     return JsonResponse({'popular': popular_books_data})
     # return render(request, 'leaderboard.html', {'popular_books_data': get_popular_books})
 
@@ -42,6 +46,9 @@ def get_ratings_by_user(request):
             'userProfile': rating.userProfile.user.username,
             'created_at': rating.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
+
+    if request.GET.get('render_html'):
+        return render(request, 'leaderboard.html', {'ratings_data': ratings_data})
     
     return JsonResponse({'user_ratings': ratings_data})
     # return render(request, 'leaderboard.html', {'ratings_data': get_ratings_by_user})
@@ -59,10 +66,16 @@ def create_rating(request, book_id):
             leaderboard, is_created = Leaderboard.objects.update_or_create(book=book, userProfile=user_profile)
             leaderboard.is_recommended = is_recommended == 'recommended'
             leaderboard.save()
+            if request.GET.get('render_html'):
+                return render(request, 'leaderboard.html', {'message': 'Rating added successfully'})
             return JsonResponse({'message': 'Rating added successfully'})
         else:
+            if request.GET.get('render_html'):
+                return render(request, 'leaderboard.html', {'message': 'Rating added successfully'})
             return JsonResponse({'message': 'Invalid rating value'}, status=400)
     else:
+        if request.GET.get('render_html'):
+                return render(request, 'leaderboard.html', {'message': 'Rating added successfully'})
         return JsonResponse({'message': 'Invalid request'}, status=400)
     
 
@@ -77,8 +90,12 @@ def delete_rating(request, book_id):
         if rating.userProfile.user == request.user:
             # Menghapus penilaian
             rating.delete()
+            if request.GET.get('render_html'):
+                return render(request, 'leaderboard.html', {'message': 'Rating added successfully'})
             return JsonResponse({'message': 'Rating deleted successfully'})
         else:
+            if request.GET.get('render_html'):
+                return render(request, 'leaaderboard.html', {'message': 'Rating added successfully'})
             return JsonResponse({'message': 'You do not have permission to delete this rating'}, status=403)
         
 
