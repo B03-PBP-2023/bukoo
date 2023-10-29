@@ -79,14 +79,7 @@ def delete_rating(request, book_id):
             return JsonResponse({'message': 'You do not have permission to delete this rating'}, status=403)
         
 
-<<<<<<< HEAD
 # def leaderboard_view(request):
 #     leaderboard_data = Leaderboard.objects.values('book__title').annotate(recommendation_count=Count('pk')).order_by('-recommendation_count')[:10]
 #     context = {'leaderboard_data': leaderboard_data}
 #     return render(request, 'leaderboard.html', context)
-=======
-def leaderboard_view(request):
-    leaderboard_data = Leaderboard.objects.values('book__title').annotate(recommendation_count=Count('pk')).order_by('-recommendation_count')[:10]
-    context = {'leaderboard_data': leaderboard_data}
-    return render(request, 'leaderboard.html', context)
->>>>>>> 6d3179d39dafa36610d7da6711b6a605219c8ef5
