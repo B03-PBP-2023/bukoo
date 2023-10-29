@@ -26,13 +26,14 @@
     <div class="profile-detail">
         <strong>Bookmarked Books:</strong> 
         <ol>
-            {% for book in Bookmarked_books %}
-            <li>{{ book.title }} by {{ book.author }}</li>
-            <a href="{% url 'profile:delete_bookmark' %}">
-                <button>
-                    Delete from Bookmark
-                </button>
-            </a>
+            {% for book in bookmarked_books %}
+            <li>{{ book.title }} by {{ book.author }}
+                <a href="{% url 'profile:delete-bookmark' book.pk %}">
+                    <button>
+                        Delete from Bookmark
+                    </button>
+                </a>
+            </li>
             {% endfor %}
         </ol>
     </div>
