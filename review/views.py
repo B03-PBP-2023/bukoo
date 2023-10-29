@@ -22,7 +22,7 @@ def get_review_json(request, book_id):
     
     book = get_object_or_404(Book, pk=book_id)
     review_item = Review.objects.filter(book=book).order_by('-created_at')
-    return HttpResponse(serializers.serialize('json', review_item))
+    return HttpResponse(serializers.serialize('json', review_item, use_natural_foreign_keys=True))
 
 def get_book_json(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
