@@ -175,3 +175,6 @@ def show_book_detail(request, slug:str):
 
 def show_book_submission(request):
   return render(request, 'book-submission.html', {})
+
+def show_landing_page(request):
+  return render(request, 'index.html', {})
