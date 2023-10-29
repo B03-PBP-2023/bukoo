@@ -8,13 +8,13 @@
 <div class="container mt-5">
     <h1 class="mb-4">Review {{ book.title }}</h1>
 
-    {% if has_review %}
+    {% if has_reviewed %}
         <!-- User's Review Section -->
         <h2>Your Review</h2>
 
         <div class="card mb-4">
             <div class="card-body">
-                {{ user_review.text }}
+                {{ user_review.review }}
             </div>
             <div class="card-footer">
                 {{ user_review.user.username }}
@@ -44,7 +44,7 @@
             dataType: 'json',
             success: function(data) {
                 let reviewsHtml = '';
-           
+                console.log("Reviews:", data);
                 data.forEach(review => {
                     reviewsHtml += `
                     <div class="col-md-4">

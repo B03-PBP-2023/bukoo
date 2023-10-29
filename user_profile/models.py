@@ -17,7 +17,7 @@ class Profile(models.Model):
     prefered_genre = models.CharField(max_length=40, null=True)
 
     def natural_key(self):
-        return {'id':self.pk, 'name':self.name}
+        return {'id':self.pk, 'name':self.user.username}
 
 class Bookmark(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
