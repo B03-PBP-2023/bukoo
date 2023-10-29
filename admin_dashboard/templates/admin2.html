@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Verification Books</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background-color: #283593;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .container {
+            margin: auto;
+            margin-top: 20px;
+            width: 50%;
+            border-radius: 15px;
+            overflow: hidden;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            display: inline-block;
+            font-weight: bold;
+            flex: 0 0 30%;
+        }
+
+        .output-span {
+            display: inline-block;
+            width: 70%;
+            margin-left: 5px;
+            word-wrap: break-word;
+        }
+
+        .dropdown select {
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown select:focus {
+            outline: none;
+            border-color: #719ECE;
+        }
+
+        .submit-button {
+            font-family: 'Poppins', sans-serif;
+            background-color: #a37cf1;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .submit-button:hover {
+            background-color: #774ad1;
+        }
+
+        textarea {
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-top: 8px;
+            resize: vertical;
+            height: 80px; /* Atur ketinggian sesuai kebutuhan */
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <span style="font-size: 24px;">Verification Books</span>
+    </div>
+
+    <div class="container">
+        <div class="form-group">
+            <label for="dateAdded">Date Added:</label>
+            <span class="output-span" id="dateAdded">Date Output</span>
+        </div>
+
+        <div class="form-group">
+            <label for="author">Author:</label>
+            <span class="output-span" id="author">Author Output</span>
+        </div>
+
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <span class="output-span" id="title">Title Output</span>
+        </div>
+
+        <div class="form-group">
+            <label for="genre">Genre:</label>
+            <span class="output-span" id="genre">Genre Output</span>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Book Description:</label>
+            <span class="output-span" id="description">Description Output</span>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <div class="dropdown">
+                <select name="status">
+                    <option value="verified">Verified</option>
+                    <option value="process">Process</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="feedback">Feedback:</label>
+            <textarea id="feedback" name="feedback" rows="4"></textarea>
+        </div>
+
+        <button class="submit-button" type="button">Submit</button>
+    </div>
+
+    <script>
+        document.querySelector('.submit-button').addEventListener('click', function() {
+            var selectedStatus = document.querySelector('select[name="status"]').value;
+            fetch('/admin2/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' // Jangan lupa menambahkan CSRF token
+                },
+                body: JSON.stringify({ status: selectedStatus })
+            }).then(response => {
+                // Lakukan tindakan setelah status terkirim
+                // Contoh: redirect ke halaman admin.html
+                window.location.href = '/admin/';
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+    
+
+</body>
+
+</html>

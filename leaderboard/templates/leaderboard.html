@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaderboard Buku</title>
+    <!-- Tambahkan tautan ke Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Ganti warna latar belakang halaman */
+        body {
+            background-color: #d1ccc0;
+        }
+        /* Ganti warna latar belakang header */
+        .my-4 {
+            background-color: #ff793f;
+            color: #f7f1e3;
+            padding: 10px;
+        }
+        /* Ganti warna latar belakang tabel */
+        .table {
+            background-color: #f3a683;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Leaderboard Buku</h1>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Peringkat</th>
+                    <th>Judul Buku</th>
+                    <th>Jumlah Rekomendasi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data leaderboard akan diisi dengan AJAX -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Ketika halaman dimuat, ambil data leaderboard dengan permintaan AJAX
+            $.ajax({
+                url: '{% url "leaderboard_view" %}',  
+                method: 'GET',
+                success: function(response) {
+                    // Update tampilan leaderboard dengan data yang diterima dari server
+                    var leaderboardData = response.leaderboard_data;
+                    var leaderboardTable = $('table tbody');
+
+                    $.each(leaderboardData, function(index, book) {
+                        leaderboardTable.append(
+                            '<tr>' +
+                                '<td>' + (index + 1) + '</td>' +
+                                '<td>' + book.title + '</td>' +
+                                '<td>' + book.recommendation_count + '</td>' +
+                            '</tr>'
+                        );
+                    });
+                },
+                error: function(response) {
+                    alert('Terjadi kesalahan saat mengambil data leaderboard.');
+                }
+            });
+        });
+    </script>
+
+    <!-- Tambahkan tautan ke Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock content %}
