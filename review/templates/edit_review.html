@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Edit Review</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.review.id_for_label }}">Review:</label>
+                <textarea class="form-control" id="{{ form.review.id_for_label }}" name="{{ form.review.name }}" rows="3">{{ form.review.value }}</textarea>
+            </div>
+            <button type="submit">Save changes</button>
+        </form>
+        
+    </div>
+{% endblock %}
