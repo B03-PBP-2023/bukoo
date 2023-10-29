@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('book_collection', '0009_remove_book_average_ratings_and_more'),
-        ('book_collection', '0009_remove_book_average_ratings_and_more'),
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -23,11 +21,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('about_user', models.TextField()),
-                ('date_of_birth', models.CharField(max_length=10)),
-                ('gender', models.CharField(max_length=20)),
-                ('prefered_genre', models.CharField(max_length=40)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('about_user', models.TextField(null=True)),
                 ('date_of_birth', models.CharField(max_length=10, null=True)),
                 ('gender', models.CharField(max_length=20, null=True)),
