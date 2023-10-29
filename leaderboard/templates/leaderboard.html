@@ -1,79 +1,177 @@
 {% extends 'base.html' %}
-
-{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Leaderboard Buku</title>
-    <!-- Tambahkan tautan ke Bootstrap CSS -->
+    <title>Leaderboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Ganti warna latar belakang halaman */
+        /* Gaya CSS kustom */
         body {
-            background-color: #d1ccc0;
+            background-color: #f7f7f7; /* Ganti dengan warna latar belakang yang Anda inginkan */
         }
-        /* Ganti warna latar belakang header */
-        .my-4 {
-            background-color: #f8c291;
-            color: #f7f1e3;
-            padding: 10px;
+
+        /* Mengganti warna latar belakang header */
+        .container {
+            background-color: #fff; /* Ganti dengan warna latar belakang yang Anda inginkan */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        /* Ganti warna latar belakang tabel */
-        .table {
-            background-color: #f3a683;
+
+        /* Mengganti warna teks di tabel */
+        table {
+            margin-top: 10px;
+            color: #333; /* Ganti dengan warna teks yang Anda inginkan */
         }
+
+        /* Mengganti warna latar belakang tombol Recommended */
+        .recommended-button {
+            background-color: #96b6c5; /* Warna biru - ganti sesuai preferensi Anda */
+            color: #fff; /* Warna teks putih */
+            border-radius: 555px;
+        }
+
+        /* Mengganti warna latar belakang tombol Not Recommended */
+        .not-recommended-button {
+            background-color: #ed5665; /* Warna merah - ganti sesuai preferensi Anda */
+            color: #fff; /* Warna teks putih */
+            border-radius: 555px;
+        }
+
+        .h1{
+          align-items: center;  
+        }
+
+
+        .navbar{
+            font-family: 'Poppins', sans-serif;
+            background-color: #96b6c5 ;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+            font-size: 25px;
+            color:white ;
+        }
+
+        .navbar a{
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            margin: 0 10px;
+        }
+
     </style>
 </head>
 <body>
+    
+    <div class= "navbar">
+        <span>Leaderboard</span>
+    </div>
     <div class="container">
-        <h1 class="my-4">Leaderboard Buku</h1>
-        <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Peringkat</th>
-                    <th>Judul Buku</th>
-                    <th>Jumlah Rekomendasi</th>
+        <table class="table">
+            <thead>
+                <tr class="tr">
+                    <th>Book Title</th>
+                    <th>Rank</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Data leaderboard akan diisi dengan AJAX -->
+                {% for book_data in leaderboard_data %}
+                <tr>
+                    <td>{{ book_data.title }}</td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="{% url 'recommend_book' book_data.id 'recommended' %}" class="btn recommended-button">Recommended</a>
+                        <a href="{% url 'recommend_book' book_data.id 'not_recommended' %}" class="btn not-recommended-button">Not Recommended</a>
+                    </td>                    
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 
     <!-- jQuery Library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <script type="text/javascript">
-        $(document).ready(function() {
-            // Ketika halaman dimuat, ambil data leaderboard dengan permintaan AJAX
+        // Fungsi untuk mendapatkan daftar buku populer
+        function getPopularBooks(bookId) {
             $.ajax({
-                url: '{% url "leaderboard_view" %}',  
+                url: 'book/' + bookId + '/popular/',
                 method: 'GET',
                 success: function(response) {
-                    // Update tampilan leaderboard dengan data yang diterima dari server
-                    var leaderboardData = response.leaderboard_data;
-                    var leaderboardTable = $('table tbody');
-
-                    $.each(leaderboardData, function(index, book) {
-                        leaderboardTable.append(
-                            '<tr>' +
-                                '<td>' + (index + 1) + '</td>' +
-                                '<td>' + book.title + '</td>' +
-                                '<td>' + book.recommendation_count + '</td>' +
-                            '</tr>'
-                        );
-                    });
+                    if (response.popular) {
+                        alert('Popular books: ' + JSON.stringify(response.popular));
+                    } else {
+                        alert('Failed to fetch popular books.');
+                    }
                 },
                 error: function(response) {
-                    alert('Terjadi kesalahan saat mengambil data leaderboard.');
+                    alert('An error occurred while fetching popular books.');
                 }
             });
-        });
-    </script>
+        }
+    
+        // Fungsi untuk menampilkan penilaian pengguna
+        function viewUserRatings() {
+            $.ajax({
+                url: 'book/ratings/',
+                method: 'GET',
+                success: function(response) {
+                    if (response.user_ratings) {
+                        alert('User ratings: ' + JSON.stringify(response.user_ratings));
+                    } else {
+                        alert('Failed to fetch user ratings.');
+                    }
+                },
+                error: function(response) {
+                    alert('An error occurred while fetching user ratings.');
+                }
+            });
+        }
+    
+        // Fungsi untuk merekomendasikan atau tidak merekomendasikan buku
+        function recommendBook(bookId, action) {
+            $.ajax({
+                url: 'book/' + bookId + '/create_rating/',
+                method: 'POST',
+                data: {
+                    is_recommended: action
+                },
+                success: function(response) {
+                    if (response.message === 'Rating added successfully') {
+                        alert('Book ' + action + ' successfully!');
+                    } else {
+                        alert('Failed to recommend the book.');
+                    }
+                },
+                error: function(response) {
+                    alert('An error occurred while recommending the book.');
+                }
+            });
+        }
 
-    <!-- Tambahkan tautan ke Bootstrap JavaScript -->
+        function deleteRating(bookId) {
+            $.ajax({
+                url: 'leaderboard/' + bookId + '/delete/',
+                method: 'POST',
+                success: function(response) {
+                    if (response.message === 'Rating deleted successfully') {
+                        // Handle the success response, e.g., update the UI
+                        alert('Rating deleted successfully!');
+                    } else {
+                        alert('Failed to delete the rating.');
+                    }
+                },
+                error: function(response) {
+                    alert('An error occurred while deleting the rating.');
+                }
+            });
+        }
+
+    </script>
+    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-{% endblock content %}
