@@ -154,7 +154,7 @@
 
         function deleteRating(bookId) {
             $.ajax({
-                url: 'leaderboard/<int:book_id>/delete/' + bookId + '/',
+                url: 'leaderboard/' + bookId + '/delete/',
                 method: 'POST',
                 success: function(response) {
                     if (response.message === 'Rating deleted successfully') {
