@@ -13,7 +13,7 @@
         .navbar {
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
-            background-color: #283593;
+            background-color: #96B6C5;
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
@@ -45,17 +45,17 @@
         }
 
         th {
-            background-color: #283593;
+            background-color: #ADC4CE;
             color: #ffffff;
             border-top: 1px solid #fff;
         }
 
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #EEE0C9;
         }
 
         tr:first-child {
-            background-color: #1a237e;
+            background-color: #96B6C5;
             color: #ffffff;
         }
 
@@ -90,9 +90,9 @@
         }
 
         .backbutton {
-            background: #5E5DF0;
+            background: #8ba1ab;
             border-radius: 999px;
-            box-shadow: #5E5DF0 0 3px 8px -3px; 
+            box-shadow: #000000 0 3px 7px -3px; 
             box-sizing: border-box;
             color: #FFFFFF;
             cursor: pointer;
@@ -135,7 +135,7 @@
 <body>
     <div class="navbar">
         <div style="flex: 1;">
-            <span style="color: white; font-size: 24px;">Admin Dashboard</span>
+            <span style="color: white; font-size: 20px;">Admin Dashboard - Book Verification</span>
         </div>
         <div class="backbutton">
             <a href="#" style="margin-right: 20px;">Back to Main</a>
@@ -148,20 +148,25 @@
             <th>No.</th>
             <th>Author</th>
             <th>Title</th>
+            <th>Language</th>
             <th>Genre</th>
+            <th>ISBN</th>
+            <th>Number Pages</th>
             <th>Book Description</th>
-            <th>Cover Image</th>
             <th>Feedback</th>
             <th>Status</th>
         </tr>
+        {% for book in books %}
         <tr>
-            <td>{{ date_added }}</td>
-            <td>1</td>
-            <td>{{ author }}</td>
-            <td>{{ title }}</td>
-            <td>{{ genre }}</td>
-            <td>{{ description }}</td>
-            <td><img src="{{ cover_image_url }}" alt="Cover Image" style="max-width: 100px; max-height: 100px;"></td>
+            <td>{{ book.publish_date }}</td>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ book.publisher }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.num_pages }}</td>
+            <td>{{ book.language }}</td>
+            <td>{{ book.genres }}</td>
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.description }}</td>
             <td>
                 <div style="display: flex; flex-direction: column;">
                     <textarea style="font-family: 'Poppins', sans-serif; border-radius: 10px; background-color: #f2f2f2; padding: 10px; border: 1px solid #ccc;"></textarea>
@@ -176,36 +181,23 @@
                 </select>
             </td>
         </tr>
+        {% endfor %}
     </table>
-    <!-- <form id="bookForm"> -->
-        <!-- Buat formulir untuk memasukkan data buku -->
-        <!-- <input type="text" id="dateAdded" placeholder="Date Added">
-        <input type="text" id="author" placeholder="Author">
-        <input type="text" id="title" placeholder="Title">
-        <input type="text" id="genre" placeholder="Genre">
-        <input type="text" id="description" placeholder="Book Description">
-        <input type="text" id="coverImageUrl" placeholder="Cover Image URL">
-        <button type="button" onclick="addRow()">Add Book</button>
-    </form> -->
 
     <script>
         let rowNum = 1; 
         function addRow() {
-            // Ambil referensi tabel
             var table = document.querySelector('table');
-
-            // Ambil referensi data dari formulir
             var dateAdded = document.getElementById('dateAdded').value;
-            var author = document.getElementById('author').value;
+            var publisher = document.getElementById('publisher').value;
             var title = document.getElementById('title').value;
             var genre = document.getElementById('genre').value;
             var description = document.getElementById('description').value;
-            var coverImageUrl = document.getElementById('coverImageUrl').value;
-
-            // Buat elemen baris baru
+            var isbn = document.getElementById('isbn').value;
+            var num_pages = document.getElementById('num_pages').value;
+            var language = document.getElementById('language').value;
             var row = table.insertRow(-1);
 
-            // Masukkan data ke dalam sel-sel baru
             row.insertCell(0).innerHTML = dateAdded;
             row.insertCell(1).innerHTML = table.rows.length - 1;
             row.insertCell(2).innerHTML = author;
