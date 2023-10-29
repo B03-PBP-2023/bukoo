@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+a {
+  @apply tw-no-underline tw-text-black
+}
+
+a:hover {
+  @apply tw-text-black
+}

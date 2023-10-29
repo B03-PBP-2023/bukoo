@@ -1,13 +1,14 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.db.models import Q
-from django.http import QueryDict, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.core import serializers
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+import json
 
 from book_collection import utils
-from book_collection.models import Book
+from book_collection.models import Book, Genre
 from book_collection.form import BookForm
 
 def __create_query(params:dict):
@@ -15,7 +16,7 @@ def __create_query(params:dict):
     'title': 'title__icontains',
     'genres': 'genres__name__icontains',
     'publisher': 'publisher__icontains',
-    'author': 'author__icontains',
+    'author': 'author__name__icontains',
     'year': 'publish_date__year',
     'year_after': 'publish_date__year__gte',
     'year_before': 'publish_date__year_lte',
@@ -23,9 +24,16 @@ def __create_query(params:dict):
     'isbn': 'isbn__iexact',
   }
   query = Q()
-  for key, value in params.items():
-    if(key in query_dict):
-      query &= Q(**{query_dict[key]:value})
+  # For search
+  if('keyword' in params):
+    keyword = params['keyword']
+    fields = ['title', 'author', 'isbn']
+    for field in fields:
+      query |= Q(**{query_dict[field]:keyword})
+  
+  # for key, value in params.items():
+  #   if(key in query_dict):
+  #     query &= Q(**{query_dict[key]:value})
   return query
 
 
@@ -34,17 +42,26 @@ def get_book_list(request):
   FIELDS = ['title', 'image_url', 'author']
   # Get filtered books
   query = __create_query(request.GET)
-  books = Book.objects.filter(query)
+  books = Book.objects.filter(query).distinct().order_by('id')
   
   # Pagination
   page = request.GET.get('page', 1)
   items_per_page = request.GET.get('items_per_page', 20)
   paginator = Paginator(books, items_per_page)
   books = paginator.get_page(page)
+  data = serializers.serialize('json', books, fields=FIELDS, use_natural_foreign_keys=True)
 
-  return HttpResponse(
-    serializers.serialize('json', books, fields=FIELDS, use_natural_foreign_keys=True), 
-    content_type="application/json"
+  return JsonResponse(
+    {
+      'page': page,
+      'item_per_page': items_per_page,
+      'total_item': paginator.count,
+      'total_page': paginator.num_pages,
+      'start_index': books.start_index(),
+      'end_index': books.end_index(),
+      'data': json.loads(data)
+    }, 
+    safe=False
   )
 
 
@@ -69,8 +86,18 @@ def add_book(request):
   
   new_book = form.save()
 
+  genres = request.POST.get('genres')
+  if genres != None:
+    genres = genres.split(',')
+    for genre in genres:
+      try:
+        genre_obj, created = Genre.objects.update_or_create(name=genre)
+        new_book.genres.add(genre_obj)
+      except:
+        pass
+
   # Author
-  new_book.author.add(request.user.mockauthorprofile) # TODO: integrate with user_profile module
+  new_book.author.add(request.user.profile)
 
   # Image upload
   if('image' in request.FILES):
@@ -99,6 +126,17 @@ def edit_book(request, id):
   
   book = form.save(commit=False)
 
+  genres = request.POST.get('genres')
+  if genres != None:
+    book.genres.clear()
+    genres = genres.split(',')
+    for genre in genres:
+      try:
+        genre_obj, created = Genre.objects.update_or_create(name=genre)
+        book.genres.add(genre_obj)
+      except:
+        pass
+
   # Update image url
   if('image' in request.FILES):
     image_name = utils.get_image_name(book.pk, book.title)
@@ -123,3 +161,17 @@ def delete_book(request, id):
   utils.delete_image(utils.get_image_name(book.pk, book.title))
   book.delete()
   return HttpResponse('Deleted')
+
+def get_genres(request):
+  genres = Genre.objects.all()
+  response = [genre.name for genre in list(genres)]
+  return JsonResponse(response, safe=False)
+
+def show_search(request):
+  return render(request, 'search.html', {})
+
+def show_book_detail(request, slug:str):
+  return render(request, 'book-detail.html', {})
+
+def show_book_submission(request):
+  return render(request, 'book-submission.html', {})
