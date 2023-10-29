@@ -1,5 +1,41 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html>
+{% block content %}
+<div class="profile-container">
+    <h1>{{ username }}'s Profile</h1>
     
-</html>
+    <div class="profile-pic">
+        <img src="{{ profile_picture.url }}" width="200">
+    </div>
+
+    <div class="profile-detail">
+        <strong>Name:</strong> {{ name }} 
+    </div>
+
+    <div class="profile-detail">
+        <strong>Gender:</strong> {{ gender }}
+    </div>
+
+    <div class="profile-detail">
+        <strong>Date of Birth:</strong> {{ birth_date }}
+    </div>
+
+    <div class="profile-detail">
+        <strong>Preferred Genres:</strong> {{ preferred_genre }}
+
+    <div class="profile-detail">
+        <strong>Bookmarked Books:</strong> 
+        <ol>
+            {% for book in bookmarked_books %}
+            <li>{{ book.title }} by {{ book.author }}
+                <a href="{% url 'profile:delete-bookmark' book.pk %}">
+                    <button>
+                        Delete from Bookmark
+                    </button>
+                </a>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+        
+{% endblock %}

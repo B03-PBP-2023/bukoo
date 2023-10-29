@@ -26,5 +26,19 @@
 
 		{% block script %}
 		{% endblock script %}
+		<script type='text/javascript'>
+			const logout = document.getElementById('logout')
+			logout.addEventListener('click', async function() {
+				const response = await fetch(location.origin + '/auth/logout/', {
+					method: "POST",
+					data: {
+						'csrfmiddlewaretoken': '{{ csrf_token }}',
+					}
+				})
+				if (response.status == 200){
+					window.history.pushState({}, null, location.origin+'/auth/login/')
+				}
+			})
+		</script>
 	</body>
 </html>

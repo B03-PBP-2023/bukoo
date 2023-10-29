@@ -10,6 +10,10 @@
     <img src="" alt="" id="book-image">
     {% if user.is_authenticated %}
     <button id="bookmark" class="tw-bg-[#ADC4CE] tw-border-none tw-text-lg tw-p-2 tw-rounded-lg">Bookmark</button>
+    <div>
+      <button id="recommended">Recommended</button>
+      <button id="not-recommended">Not Recommended</button>
+    </div>
     {% endif %}
   </aside>
   <section class="tw-flex tw-flex-col tw-gap-2">
@@ -48,17 +52,22 @@
         </div>
       </div>
     </div>
+    <a id="link-to-reviews" href="/review/">Show Reviews of this book</a>
   </section>
 </main>
 {% endblock content %}
 
 {% block script %}
 <script type='text/javascript'>
+  const getId = () => {
+    const urlSegment = location.href.split('/')
+    const slug = urlSegment.pop() || urlSegment.pop()
+    const id = slug.split('.')[0]
+    return id
+  }
   const fetchBook = async () => {
     try {
-      const urlSegment = location.href.split('/')
-      const slug = urlSegment.pop() || urlSegment.pop()
-      const id = slug.split('.')[0]
+      const id = getId()
       const url = location.origin + '/api/book/' + id + "/"
       const params = new URLSearchParams(window.location.search)
       const books = await fetch(url + params.toString())
@@ -78,25 +87,58 @@
     document.getElementById('book-publish-date').innerText = (new Date(book.fields.publish_date)).toLocaleDateString('en-us')
     document.getElementById('book-isbn').innerText = book.fields.isbn
     document.getElementById('book-language').innerText = book.fields.language
-    
+
     const authors = book.fields.author.map(author => `<a href="">${author.name}</a>`).join(', ')
     console.log(authors);
     document.getElementById('book-author').innerHTML = 'by ' + authors
 
     const genres = book.fields.genres.map(genre => `<a href="">${genre.name}</a>`).join(', ')
     document.getElementById('book-genres').innerHTML = genres
+
+    const review = document.getElementById('link-to-reviews')
+    review.href = `/review/${book.pk}/reviews`
   }
 
   refreshBook()
 
   const bookmark = document.getElementById('bookmark')
-  bookmark.addEventListener('click', async() => {
+  bookmark.addEventListener('click', async () => {
     const response = await fetch(location.origin + "/profile/bookmark-book/", {
       method: "POST",
-      'csrfmiddlewaretoken': '{{ csrf_token }}',
+      data: {
+        'csrfmiddlewaretoken': '{{ csrf_token }}',
+      }
     })
-    if(response.status === 201){
+    if (response.status === 201) {
       console.log('Bookmarked');
+    }
+  })
+
+  const recommended = document.getElementById('recommended')
+  recommended.addEventListener('click', async () => {
+    const formData = new FormData()
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+    formData.append('is_recommended', 'recommended')
+    const response = await fetch(location.origin + `/leaderboard/book/${getId()}/create_rating/`, {
+      method: "POST",
+      data: formData
+    })
+    if (response.status === 200) {
+      console.log('Recommended');
+    }
+  })
+
+  const notRecommended = document.getElementById('not-recommended')
+  notRecommended.addEventListener('click', async () => {
+    const formData = new FormData()
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+    formData.append('is_recommended', 'recommended')
+    const response = await fetch(location.origin + `/leaderboard/book/${getId()}/create_rating/`, {
+      method: "POST",
+      data: formData
+    })
+    if (response.status === 200) {
+      console.log('Not Recommended');
     }
   })
 </script>

@@ -56,14 +56,11 @@ def create_rating(request, book_id):
         user_profile = get_object_or_404(Profile, user=request.user)
         is_recommended = request.POST.get('is_recommended')
 
-        if is_recommended in ['recommended', 'not_recommended']:
             # Membuat objek Leaderboard baru dengan is_recommended yang sesuai
-            leaderboard, is_created = Leaderboard.objects.update_or_create(book=book, userProfile=user_profile)
-            leaderboard.is_recommended = is_recommended == 'recommended'
-            leaderboard.save()
-            return JsonResponse({'message': 'Rating added successfully'})
-        else:
-            return JsonResponse({'message': 'Invalid rating value'}, status=400)
+        leaderboard, is_created = Leaderboard.objects.update_or_create(book=book, userProfile=user_profile)
+        leaderboard.is_recommended = is_recommended == 'recommended'
+        leaderboard.save()
+        return JsonResponse({'message': 'Rating added successfully'})
     else:
         return JsonResponse({'message': 'Invalid request'}, status=400)
     
