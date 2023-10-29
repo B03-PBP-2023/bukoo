@@ -94,6 +94,13 @@ DATABASES = {
     }
 }
 
+# Set database settings automatically using DATABASE_URL.
+if PRODUCTION:
+    DATABASES = {
+        'default': env.db('DATABASE_URL')
+    }
+    DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
 AUTH_USER_MODEL = "bukoo_auth.User"
 
 # Password validation
