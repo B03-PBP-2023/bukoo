@@ -26,7 +26,8 @@ def get_popular_books(request, book_id):
         })
     return JsonResponse({'popular': popular_books_data})
 
-# @login_required
+@login_required
+@csrf_exempt
 def get_ratings_by_user(request):
     user_profile = get_object_or_404(Profile, user=request.user)
     ratings = Leaderboard.objects.filter(userProfile=user_profile)
@@ -44,6 +45,7 @@ def get_ratings_by_user(request):
     return JsonResponse({'user_ratings': ratings_data})
 
 @login_required
+@csrf_exempt
 def create_rating(request, book_id):
     if request.method == 'POST':
         book = get_object_or_404(Book, id=book_id)
@@ -61,7 +63,9 @@ def create_rating(request, book_id):
     else:
         return JsonResponse({'message': 'Invalid request'}, status=400)
 
+
 @login_required
+@csrf_exempt
 def delete_rating(request, book_id):
     if request.method == 'POST':
         rating = get_object_or_404(Leaderboard, book__id=book_id)
@@ -75,7 +79,7 @@ def delete_rating(request, book_id):
             return JsonResponse({'message': 'You do not have permission to delete this rating'}, status=403)
         
 
-def leaderboard_view(request):
-    leaderboard_data = Leaderboard.objects.values('book__title').annotate(recommendation_count=Count('pk')).order_by('-recommendation_count')[:10]
-    context = {'leaderboard_data': leaderboard_data}
-    return render(request, 'leaderboard.html', context)
+# def leaderboard_view(request):
+#     leaderboard_data = Leaderboard.objects.values('book__title').annotate(recommendation_count=Count('pk')).order_by('-recommendation_count')[:10]
+#     context = {'leaderboard_data': leaderboard_data}
+#     return render(request, 'leaderboard.html', context)
