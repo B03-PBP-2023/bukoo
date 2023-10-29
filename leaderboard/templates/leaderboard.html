@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-<!DOCTYPE html>
-<html>
-<head>
+
+    {% block meta %}
+		
     <title>Leaderboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -16,6 +16,8 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            
         }
 
         /* Mengganti warna teks di tabel */
@@ -26,6 +28,7 @@
 
         /* Mengganti warna latar belakang tombol Recommended */
         .recommended-button {
+            font-family: 'Poppins', sans-serif;
             background-color: #96b6c5; /* Warna biru - ganti sesuai preferensi Anda */
             color: #fff; /* Warna teks putih */
             border-radius: 555px;
@@ -38,10 +41,18 @@
             border-radius: 555px;
         }
 
-        .h1{
-          align-items: center;  
+        .recommended-button.active {
+            background-color: #84dbaa; 
         }
 
+        .not-recommended-button.active {
+            background-color: #683535; /* Misalnya warna merah */
+        }
+
+        .h1{
+          align-items: center;  
+          font-family: 'Poppins', sans-serif;
+        }
 
         .navbar{
             font-family: 'Poppins', sans-serif;
@@ -50,9 +61,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            
             font-size: 25px;
             color:white ;
+            margin-bottom: 20px;
         }
 
         .navbar a{
@@ -61,10 +72,14 @@
             margin: 0 10px;
         }
 
+        .tr{
+            background-color: #e2e8ea;
+        }
+
     </style>
-</head>
-<body>
-    
+{% endblock meta %}
+
+{% block content %}
     <div class= "navbar">
         <span>Leaderboard</span>
     </div>
@@ -74,6 +89,7 @@
                 <tr class="tr">
                     <th>Book Title</th>
                     <th>Rank</th>
+                    <th>Recommendation</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,7 +106,9 @@
             </tbody>
         </table>
     </div>
+    {% endblock content %}
 
+    {% block script %}
     <!-- jQuery Library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -173,5 +191,6 @@
     </script>
     
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% endblock script %}
 </body>
 </html>
