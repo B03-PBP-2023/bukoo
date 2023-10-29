@@ -22,6 +22,7 @@ def get_popular_books(request, book_id):
             'id': rate.id,
             'title': rate.title,
             'author': author,
+            'rating_count': rate.leaderboard_count,
         })
     return JsonResponse({'popular': popular_books_data})
 
@@ -51,7 +52,8 @@ def create_rating(request, book_id):
 
         if is_recommended in ['recommended', 'not_recommended']:
             # Membuat objek Leaderboard baru dengan is_recommended yang sesuai
-            leaderboard = Leaderboard(book=book, userProfile=user_profile, is_recommended=is_recommended == 'recommended')
+            leaderboard, is_created = Leaderboard.objects.update_or_create(book=book, userProfile=user_profile)
+            leaderboard.is_recommended = is_recommended == 'recommended'
             leaderboard.save()
             return JsonResponse({'message': 'Rating added successfully'})
         else:
@@ -71,25 +73,6 @@ def delete_rating(request, book_id):
             return JsonResponse({'message': 'Rating deleted successfully'})
         else:
             return JsonResponse({'message': 'You do not have permission to delete this rating'}, status=403)
-        
-@login_required
-def edit_rating(request, rating_id):
-    if request.method == 'POST':
-        rating = get_object_or_404(Leaderboard, id=rating_id)
-
-        # Memeriksa apakah pengguna yang sedang login adalah pemilik rating
-        if rating.userProfile.user == request.user:
-            new_is_recommended = request.POST.get('is_recommended')
-
-            if new_is_recommended in ['recommended', 'not_recommend']:
-                # Mengubah status rekomendasi berdasarkan nilai baru
-                rating.is_recommended = new_is_recommended == 'recommend'
-                rating.save()
-                return JsonResponse({'message': 'Rating edited successfully'})
-            else:
-                return JsonResponse({'message': 'Invalid rating value'}, status=400)
-        else:
-            return JsonResponse({'message': 'You do not have permission to edit this rating'}, status=403)
         
 
 def leaderboard_view(request):
