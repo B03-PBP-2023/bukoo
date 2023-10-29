@@ -1,10 +1,28 @@
 {% extends 'base.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Leaderboard Buku</title>
     <!-- Tambahkan tautan ke Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Ganti warna latar belakang halaman */
+        body {
+            background-color: #d1ccc0;
+        }
+        /* Ganti warna latar belakang header */
+        .my-4 {
+            background-color: #f8c291;
+            color: #f7f1e3;
+            padding: 10px;
+        }
+        /* Ganti warna latar belakang tabel */
+        .table {
+            background-color: #f3a683;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -23,14 +41,14 @@
         </table>
     </div>
 
-    <!-- jQuery Library (Pastikan Anda menyertakan jQuery) -->
+    <!-- jQuery Library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <script type="text/javascript">
         $(document).ready(function() {
             // Ketika halaman dimuat, ambil data leaderboard dengan permintaan AJAX
             $.ajax({
-                url: '{% url "leaderboard_view" %}',  // Ganti dengan URL yang sesuai
+                url: '{% url "leaderboard_view" %}',  
                 method: 'GET',
                 success: function(response) {
                     // Update tampilan leaderboard dengan data yang diterima dari server
@@ -54,9 +72,8 @@
         });
     </script>
 
-    <!-- Tambahkan tautan ke Bootstrap JavaScript (Opsional) -->
+    <!-- Tambahkan tautan ke Bootstrap JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
 {% endblock content %}

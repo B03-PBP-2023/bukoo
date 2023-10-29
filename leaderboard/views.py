@@ -1,56 +1,41 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.core import serializers 
 from .models import Leaderboard
 from book_collection.models import Book
 from user_profile.models import Profile
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
 
 # Create your views here.
 def get_popular_books(request, book_id):
     popular_books = get_object_or_404(Book, id=book_id)
-    popular = Leaderboard.objects.filter(book=popular_books)
+    # popular = Leaderboard.objects.filter(book=popular_books)
+    popular = Book.objects.annotate(leaderboard_count=Count('leaderboard')).order_by('-leaderboard_count')
     popular_books_data = []
 
     for rate in popular:
+        author = [author.name for author in rate.author.all()]
         popular_books_data.append({
             'id': rate.id,
             'title': rate.title,
-            'rating': rate.rating,
-            'userProfile': rate.userProfile.user.username,
-            'created_at': rate.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            'author': author,
         })
-
     return JsonResponse({'popular': popular_books_data})
 
-def get_best_books(request, book_id):
-    best_books = get_object_or_404(Book, id=book_id)
-    best_book = Leaderboard.objects.filter(book=best_books)
-    best_books_data = []
-
-    for best in best_book:
-        best_books_data.append({
-            'id': best.id,
-            'title': best.title,
-            'best': best.best,
-            'userProfile': best.userProfile.user.username,
-            'created_at': best.created_at.strftime("%Y-%m-%d %H:%M:%S")
-        })
-
-    return JsonResponse({'best_book': best_books_data})
-
-@login_required
-def get_ratings_by_user(request, user_id):
-    user_profile = get_object_or_404(Profile, user_id=user_id)
+# @login_required
+def get_ratings_by_user(request):
+    user_profile = get_object_or_404(Profile, user=request.user)
     ratings = Leaderboard.objects.filter(userProfile=user_profile)
     ratings_data = []
 
     for rating in ratings:
         ratings_data.append({
             'id': rating.id,
-            'title': rating.title,
-            'rating': rating.rating,
+            'title': rating.book.title,
+            'rating': rating.is_recommended,
             'userProfile': rating.userProfile.user.username,
             'created_at': rating.created_at.strftime("%Y-%m-%d %H:%M:%S")
         })
@@ -75,9 +60,9 @@ def create_rating(request, book_id):
         return JsonResponse({'message': 'Invalid request'}, status=400)
 
 @login_required
-def delete_rating(request, rating_id):
+def delete_rating(request, book_id):
     if request.method == 'POST':
-        rating = get_object_or_404(Leaderboard, id=rating_id)
+        rating = get_object_or_404(Leaderboard, book__id=book_id)
 
         # Memeriksa apakah pengguna yang sedang login adalah pemilik penilaian
         if rating.userProfile.user == request.user:
@@ -96,7 +81,7 @@ def edit_rating(request, rating_id):
         if rating.userProfile.user == request.user:
             new_is_recommended = request.POST.get('is_recommended')
 
-            if new_is_recommended in ['recommend', 'not_recommend']:
+            if new_is_recommended in ['recommended', 'not_recommend']:
                 # Mengubah status rekomendasi berdasarkan nilai baru
                 rating.is_recommended = new_is_recommended == 'recommend'
                 rating.save()
