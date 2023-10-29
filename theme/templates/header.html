@@ -1,21 +1,45 @@
 {% load static %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<style>
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
 
-<header class="tw-fixed tw-top-0 tw-inset-x-0 tw-h-[64px]">
-  <div class="tw-container tw-max-w-screen-xl tw-mx-auto tw-flex tw-justify-between tw-items-center tw-px-4 tw-py-2 tw-gap-8">
-    <a href="/"><img src="{% static 'images/logo.svg'%}" alt="Bukoo Logo" width="180px"></a>
-    <div>Kategori</div>
-    <div class="tw-grow">
-      <input type="text" name="search" id="search-bar" placeholder="Search by Title, Author, or ISBN" class="tw-w-full">
-    </div>
-    <div class="tw-flex tw-gap-8">
+  .input-group-append {
+    display: flex;
+    align-items: center;
+  }
+
+  .input-group-append button {
+    background-color: #80a4cb;
+    border: none;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px 3px;
+    border-radius: 48%;
+    cursor: pointer;
+  }
+</style>
+
+<header class="tw-fixed tw-top-0 tw-inset-x-0 tw-h-[64px] tw-bg-white tw-flex tw-items-center">
+  <div class="tw-container tw-flex tw-max-w-screen-xl tw-mx-auto tw-px-4 tw-gap-8">
+    <a href="/"><img src="{% static 'images/logo.svg' %}" alt="Bukoo Logo" width="150px"></a>
+    <nav class="tw-flex tw-gap-8 tw-grow tw-justify-end tw-items-center">
       <a href="/">Home</a>
-      <a href="/leaderboard/">Leaderboard</a>
+      <a href="/leaderboard">Leaderboard</a>
+    </nav>
+    <div class="tw-flex tw-gap-8 tw-items-center">
       {% if user.is_authenticated %}
-      <div>
-        <img src="{% static 'images/default-profile.svg'%}" alt="">
-        <a href="/profile">Profile</a>
-        <a href="/auth/logout">Logout</a>
-      </div>
+      <img src="{% static 'images/default-profile.svg'%}" alt="" class="tw-h-10">
+      <a href="/profile">Profile</a>
+      <a href="/auth/logout">Logout</a>
       {% else %}
         <a href="/auth/login">Login</a>
         <a href="/auth/register">Sign Up</a>
