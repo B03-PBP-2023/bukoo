@@ -1,2 +1,2 @@
 release: django-admin migrate --noinput
-# web: gunicorn bukoo.wsgi
+web: gunicorn bukoo.wsgi
