@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('book_collection', '0002_book_author'),
+        ('user_profile', '0002_profile_profile_picture_alter_profile_name'),
     ]
 
     operations = [
