@@ -11,10 +11,10 @@ from auth.models import User
 @login_required
 def profile_data(request):
     bookmarked_book = Bookmark.objects.filter(user=request.user)
-    user_data = Profile.objects.filter(user=request.user)
-    book_by_author = Book_by_author.objects.filter(user=request.user, book = Book.author)
+    user_data = Profile.objects.get(user=request.user)
+    book_by_author = Book.objects.filter(author=user_data)
 
-    if Profile.user.is_author == True:
+    if request.user.is_author == True:
         data = {
             'name': user_data.name,
             'gender': user_data.gender,
