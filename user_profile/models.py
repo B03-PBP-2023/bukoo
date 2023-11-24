@@ -9,6 +9,7 @@ class Profile(models.Model):
     date_of_birth = models.CharField(max_length=10, null=True)
     gender = models.CharField(max_length=20, null=True)
     prefered_genre = models.CharField(max_length=40, null=True)
+    profile_picture = models.URLField(null=True, blank=True)
 
     def natural_key(self):
         name = self.name
@@ -17,5 +18,9 @@ class Profile(models.Model):
         return {'id':self.pk, 'name':name}
 
 class Bookmark(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Book_by_author(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
