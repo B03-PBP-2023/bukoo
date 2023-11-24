@@ -16,8 +16,8 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env() # Tambahkan kode berikut
-
+env = environ.Env()  # Tambahkan kode berikut
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -26,10 +26,11 @@ env = environ.Env() # Tambahkan kode berikut
 SECRET_KEY = 'django-insecure-vdxr!ckv3vk@$e%s5umzdped1uee!50#i6x9)2w3b!dj9(emn#'
 PRODUCTION = env.bool('PRODUCTION', False)
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -68,7 +69,7 @@ ROOT_URLCONF = 'bukoo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], #new edit for base.html (sekar)
+        'DIRS': [BASE_DIR / 'templates'],  # new edit for base.html (sekar)
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,19 +88,25 @@ WSGI_APPLICATION = 'bukoo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# Set database settings automatically using DATABASE_URL.
 if PRODUCTION:
     DATABASES = {
-        'default': env.db('DATABASE_URL')
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('POSTGRES_DATABASE'),
+            'USER': env('POSTGRES_USER'),
+            'PASSWORD': env('POSTGRES_PASSWORD'),
+            'HOST': env('POSTGRES_HOST'),
+            'PORT': env('POSTGRES_PORT'),
+        }
     }
-    DATABASES["default"]["ATOMIC_REQUESTS"] = True
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
 
 AUTH_USER_MODEL = "bukoo_auth.User"
 
@@ -150,7 +157,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-NPM_BIN_PATH = "C:\\Program Files\\nodejs\\npm.cmd"
+# NPM_BIN_PATH = "C:\\Program Files\\nodejs\\npm.cmd"
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
