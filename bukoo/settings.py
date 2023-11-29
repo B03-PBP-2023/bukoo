@@ -28,7 +28,7 @@ PRODUCTION = env.bool('PRODUCTION', False)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if PRODUCTION else True
 
 ALLOWED_HOSTS = ['*']
 
@@ -96,7 +96,7 @@ if PRODUCTION:
             'USER': env('POSTGRES_USER'),
             'PASSWORD': env('POSTGRES_PASSWORD'),
             'HOST': env('POSTGRES_HOST'),
-            # 'PORT': env('POSTGRES_PORT'),
+            'PORT': env('POSTGRES_PORT'),
         }
     }
 else:
@@ -160,3 +160,11 @@ INTERNAL_IPS = [
 # NPM_BIN_PATH = "C:\\Program Files\\nodejs\\npm.cmd"
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
