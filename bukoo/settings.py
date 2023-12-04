@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'user_profile',
     'leaderboard',
     'admin_dashboard',
+    'forum',
 ]
 
 MIDDLEWARE = [
