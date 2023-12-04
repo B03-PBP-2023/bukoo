@@ -22,12 +22,12 @@ from django.urls import path, include
 
 urlpatterns = [  
     path('admin/', admin.site.urls),
-    path('auth/', include('auth.urls')),
+    path('', include('auth.urls')),
     path('', include('book_collection.urls')),
-    path('review/', include('review.urls')),
-    path('profile/', include('user_profile.urls')),
-    path('leaderboard/', include('leaderboard.urls')),
-    path('admin-dashboard/', include('admin_dashboard.urls')),
+    path('', include('review.urls')),
+    path('', include('user_profile.urls')),
+    path('', include('leaderboard.urls')),
+    path('', include('admin_dashboard.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 

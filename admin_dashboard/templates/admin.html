@@ -209,7 +209,7 @@
             console.log(`Item ${itemId} Feedback: ${feedback}, Status: ${status}`);
         }
         async function getProducts() {
-            const response = await fetch('/admin-dashboard/json/');
+            const response = await fetch('/api/admin-dashboard/json/');
             const data = await response.json();
             return data;
         }

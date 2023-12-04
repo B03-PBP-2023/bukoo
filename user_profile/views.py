@@ -16,6 +16,7 @@ def profile_data(request):
 
     if request.user.is_author == True:
         data = {
+            'username': request.user.username,
             'name': user_data.name,
             'gender': user_data.gender,
             'birth_date': user_data.date_of_birth,
@@ -27,6 +28,7 @@ def profile_data(request):
         return render(request, 'author_profile.html', data)
     else:
         data = {
+            'username': request.user.username,
             'name': user_data.name,
             'gender': user_data.gender,
             'birth_date': user_data.date_of_birth,
@@ -40,13 +42,13 @@ def profile_data(request):
 
 @login_required
 def edit_profile(request):
-    profile = Profile.objects.get(pk=id)
+    profile = Profile.objects.get(user=request.user)
     form = ProfileForm(request.POST or None, instance=profile)
 
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('profile:profile_data'))
+            return HttpResponseRedirect('/profile/')
     
     return render(request, 'edit_profile.html', {'form': form})
 
@@ -65,7 +67,7 @@ def delete_bookmark(request, book_id):
     bookmarks = Bookmark.objects.get(pk=book_id)
     bookmarks.delete()
 
-    return HttpResponseRedirect(reverse('profile:profile_data'))
+    return HttpResponseRedirect('/profile/')
 
 
 
