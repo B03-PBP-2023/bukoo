@@ -10,6 +10,7 @@ import json
 from book_collection import utils
 from book_collection.models import Book, Genre
 from book_collection.form import BookForm
+from admin_dashboard.models import BookSubmission
 
 def __create_query(params:dict):
   query_dict = {
@@ -105,6 +106,8 @@ def add_book(request):
     new_book.image_url = utils.upload_image(request.FILES.get('image'), image_name)
 
   new_book.save()
+
+  book_submission = BookSubmission.objects.create(book=new_book, status='pending')
 
   return HttpResponse(
     serializers.serialize('json', [new_book], use_natural_foreign_keys=True)[1:-1],

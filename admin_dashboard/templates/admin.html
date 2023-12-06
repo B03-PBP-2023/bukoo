@@ -174,13 +174,13 @@
                 htmlString += `\n<tr>
                     <td>${currentDate}</td>
                     <td>${rowCount}</td>
-                    <td>${item.fields.publisher}</td>
-                    <td>${item.fields.title}</td>
-                    <td>${item.fields.language}</td>
-                    <td>${item.fields.genre}</td>
-                    <td>${item.fields.isbn}</td>
-                    <td>${item.fields.num_pages}</td>
-                    <td>${item.fields.description}</td>
+                    <td>${item.fields.book.publisher}</td>
+                    <td>${item.fields.book.title}</td>
+                    <td>${item.fields.book.language}</td>
+                    <td>${item.fields.book.genres.join(',')}</td>
+                    <td>${item.fields.book.isbn}</td>
+                    <td>${item.fields.book.num_pages}</td>
+                    <td>${item.fields.book.description}</td>
                     <td>
                         <input type="text" id="feedback_${item.id}" />
                         <button onclick="submitFeedback(${item.id})">Submit</button>
@@ -209,10 +209,12 @@
             console.log(`Item ${itemId} Feedback: ${feedback}, Status: ${status}`);
         }
         async function getProducts() {
-            const response = await fetch('/admin-dashboard/json/');
+            const response = await fetch('/api/admin-dashboard/json/');
             const data = await response.json();
             return data;
         }
+
+        refreshProducts();
 
         
     </script>

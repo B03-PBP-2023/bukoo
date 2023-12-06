@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from admin_dashboard.models import AdminBook
+from admin_dashboard.models import BookSubmission, AdminBook
 from django.http import HttpResponseRedirect, JsonResponse
 from admin_dashboard.form import BookDataForm
 from django.http import HttpResponse, HttpResponseRedirect
@@ -79,21 +79,21 @@ def admin2(request):
     return render(request, 'admin2.html')
 
 def show_xml(request):
-    data = AdminBook.objects.all()
-    xml_data = serializers.serialize("xml", data)
+    data = BookSubmission.objects.all()
+    xml_data = serializers.serialize("xml", data, use_natural_foreign_keys=True)
     return HttpResponse(xml_data, content_type="application/xml")
 
 def show_json(request):
-    data = AdminBook.objects.all()
-    json_data = serializers.serialize("json", data)
+    data = BookSubmission.objects.all()
+    json_data = serializers.serialize("json", data, use_natural_foreign_keys=True)
     return HttpResponse(json_data, content_type="application/json")
 
 def show_xml_id(request, id):
-    data = get_object_or_404(AdminBook, pk=id)
-    xml_data = serializers.serialize("xml", [data])
+    data = get_object_or_404(BookSubmission, pk=id)
+    xml_data = serializers.serialize("xml", [data], use_natural_foreign_keys=True)
     return HttpResponse(xml_data, content_type="application/xml")
 
 def show_json_id(request, id):
-    data = get_object_or_404(AdminBook, pk=id)
-    json_data = serializers.serialize("json", [data])
+    data = get_object_or_404(BookSubmission, pk=id)
+    json_data = serializers.serialize("json", [data], use_natural_foreign_keys=True)
     return HttpResponse(json_data, content_type="application/json")

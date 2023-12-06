@@ -16,21 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls.static import static
-from django.conf import settings
+# from django.conf.urls.static import static
+# from django.conf import settings
 
 
 urlpatterns = [  
     path('admin/', admin.site.urls),
-    path('auth/', include('auth.urls')),
+    path('', include('auth.urls')),
     path('', include('book_collection.urls')),
-    path('review/', include('review.urls')),
-    path('profile/', include('user_profile.urls')),
-    path('leaderboard/', include('leaderboard.urls')),
-    path('admin-dashboard/', include('admin_dashboard.urls')),
-    path('forum/', include('forum.urls')),
+    path('', include('review.urls')),
+    path('', include('user_profile.urls')),
+    path('', include('leaderboard.urls')),
+    path('', include('admin_dashboard.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
