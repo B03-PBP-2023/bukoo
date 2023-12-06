@@ -46,9 +46,8 @@ def get_forum_json(request, id):
 
     return JsonResponse(list(forum_items), safe=False)
 
-def get_reply_json(request, bookid, id):
+def get_reply_json(request, id):
     try:
-        book = Book.objects.get(pk=bookid)
         forum = ForumDiscuss.objects.get(pk=id)
     except (Book.DoesNotExist, ForumDiscuss.DoesNotExist):
         return JsonResponse({'error': 'Book or Forum not found'}, status=404)
@@ -84,7 +83,7 @@ def add_forum_ajax(request, id):
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 @csrf_exempt
-def add_reply_ajax(request, bookid, forum_id):
+def add_reply_ajax(request, forum_id):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'Forbidden'}, status=403)
     if request.method == 'POST':
@@ -92,7 +91,6 @@ def add_reply_ajax(request, bookid, forum_id):
             data = json.loads(request.body.decode('utf-8'))
             message = data.get("message", "").strip()
             user = get_object_or_404(Profile, user=request.user)
-            book = Book.objects.get(pk=bookid)
             forum = ForumDiscuss.objects.get(pk=forum_id)
 
             forum.total_reply += 1

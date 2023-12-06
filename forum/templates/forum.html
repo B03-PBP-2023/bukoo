@@ -4,102 +4,127 @@
 {% block content %}
     {% include "header.html" %}
 
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-8">
-                <!-- Your forum content goes here -->
-                <div id="forum-container" class="mb-4">
-                    <!-- Display forums here -->
-                </div>
+    <!-- Your forum content goes here -->
+<div id="forum-container" class="mb-4">
+    <!-- Display forums here -->
+    <ul id="forum-list" class="list-group">
+        <!-- Forum items will be dynamically added here -->
+    </ul>
+</div>
 
-                <!-- Forum form -->
-                <form id="form" class="mb-4">
-                    <div class="form-group">
-                        <input type="text" id="subject" name="subject" class="form-control" placeholder="Forum Title">
-                    </div>
-                    <div class="form-group">
-                        <textarea id="description" name="description" class="form-control" placeholder="Forum Message"></textarea>
-                    </div>
-                    <button type="button" id="button_add" class="btn btn-primary">Add Forum</button>
-                </form>
-
-                <!-- Replies container -->
-                <div id="replies-container">
-                    <!-- Display replies here -->
-                </div>
-
-                <!-- Reply form -->
-                <form id="reply-form" class="mt-4">
-                    <div class="form-group">
-                        <textarea id="message_input" class="form-control" placeholder="Your Reply"></textarea>
-                    </div>
-                    <button type="button" id="button_reply" class="btn btn-success">Add Reply</button>
-                </form>
-            </div>
-        </div>
+<!-- Forum form -->
+<form id="form" class="mb-4">
+    <div class="form-group">
+        <input type="text" id="subject" name="subject" class="form-control" placeholder="Forum Title">
     </div>
+    <div class="form-group">
+        <textarea id="description" name="description" class="form-control" placeholder="Forum Message"></textarea>
+    </div>
+    <button type="button" id="button_add" class="btn btn-primary">Add Forum</button>
+</form>
 
-    <script>
-        async function getForums() {
-            return fetch("{% url 'forum:get_forum_json' book.pk %}").then((res) => res.json());
+<!-- Replies container -->
+<div id="replies-container" class="mb-4">
+    <!-- Display replies here -->
+    <ul id="reply-list" class="list-group">
+        <!-- Reply items will be dynamically added here -->
+    </ul>
+</div>
+
+<!-- Reply form -->
+<form id="reply-form" class="mt-4">
+    <div class="form-group">
+        <textarea id="message_input" class="form-control" placeholder="Your Reply"></textarea>
+    </div>
+    <button type="button" id="button_reply" class="btn btn-success">Add Reply</button>
+</form>
+
+<script>
+    let hasReplied = false;
+
+    async function getForums() {
+        return fetch("{% url 'forum:get_forum_json' book.pk %}").then((res) => res.json());
+    }
+
+    async function refreshForums() {
+        const forums = await getForums();
+        const forumList = document.getElementById("forum-list");
+        
+        // Update the forum-container with the fetched forums
+        forumList.innerHTML = "";
+        forums.forEach((forum) => {
+            const listItem = document.createElement("li");
+            listItem.className = "list-group-item";
+            listItem.textContent = forum.subject;
+            forumList.appendChild(listItem);
+        });
+    }
+
+    async function addForum() {
+        fetch("{% url 'forum:add_forum_ajax' book.pk %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        })
+        .then(refreshForums)
+        .catch(e => {
+            window.alert('Login first!')
+        });
+
+        document.getElementById("form").reset();
+        return false;
+    }
+
+    document.getElementById("button_add").onclick = addForum;
+
+    async function getReplies(forum_id) {
+        const reply = fetch(`get-reply/${forum_id}/`).then((res) => res.json());
+        return reply;
+    }
+
+    function addReply(forum_id) {
+        if (hasReplied) {
+            window.alert('You can only reply once.');
+            return;
         }
 
-        async function refreshForums() {
-            const forums = await getForums();
-            // Update the forum-container with the fetched forums
-            document.getElementById("forum-container").innerHTML = JSON.stringify(forums);
-        }
+        const message = document.getElementById("message_input").value;
+        fetch(`create-reply-ajax/${forum_id}/`, {
+            method: "POST",
+            body: JSON.stringify({ forum_id: forum_id, message: message }),
+        })
+        .then((response) => {
+            if (response.status === 201) {
+                // If the reply is created successfully, refresh the replies.
+                refreshReplies(forum_id);
+                hasReplied = true;
+                document.getElementById("reply-form").style.display = "none";
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+    }
 
-        async function addForum() {
-            fetch("{% url 'forum:add_forum_ajax' book.pk %}", {
-                method: "POST",
-                body: new FormData(document.querySelector('#form'))
-            })
-            .then(refreshForums)
-            .catch(e => {
-                window.alert('Login first!')
-            });
+    async function refreshReplies(forum_id) {
+        const replies = await getReplies(forum_id);
+        const replyList = document.getElementById("reply-list");
+        
+        // Update the replies-container with the fetched replies
+        replyList.innerHTML = "";
+        replies.forEach((reply) => {
+            const listItem = document.createElement("li");
+            listItem.className = "list-group-item";
+            listItem.textContent = reply.message;
+            replyList.appendChild(listItem);
+        });
+    }
 
-            document.getElementById("form").reset();
-            return false;
-        }
+    document.getElementById("button_reply").onclick = function() {
+        const forumId = 1; // Replace with the actual forum ID
+        addReply(forumId);
+    };
 
-        document.getElementById("button_add").onclick = addForum;
-
-        async function getReplies(forum_id) {
-            const reply = fetch(`get-reply/${forum_id}/`).then((res) => res.json());
-            return reply;
-        }
-
-        function addReply(forum_id) {
-            const message = document.getElementById("message_input").value;
-            fetch(`create-reply-ajax/${forum_id}/`, {
-                method: "POST",
-                body: JSON.stringify({ forum_id: forum_id, message: message }),
-            })
-                .then((response) => {
-                    if (response.status === 201) {
-                        // If the reply is created successfully, refresh the replies.
-                        refreshReplies(forum_id);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                });
-        }
-
-        async function refreshReplies(forum_id) {
-            const replies = await getReplies(forum_id);
-            // Update the replies-container with the fetched replies
-            document.getElementById("replies-container").innerHTML = JSON.stringify(replies);
-        }
-
-        document.getElementById("button_reply").onclick = function() {
-            const forumId = 1; // Replace with the actual forum ID
-            addReply(forumId);
-        };
-
-        // Initial forum load
-        refreshForums();
-    </script>
+    // Initial forum load
+    refreshForums();
+</script>
 {% endblock %}
