@@ -53,7 +53,7 @@ def get_reply_json(request, id):
         return JsonResponse({'error': 'Book or Forum not found'}, status=404)
 
     reply_items = Reply.objects.filter(forum=forum).values(
-        "user", "user__username", "message", "pk"
+        "user", "user__name", "message", "pk"
     )
 
     return JsonResponse(list(reply_items), safe=False)
