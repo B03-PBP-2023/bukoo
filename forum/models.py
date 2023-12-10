@@ -15,5 +15,5 @@ class ForumDiscuss(models.Model):
 
 class Reply(models.Model):
     message = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     forum = models.ForeignKey(ForumDiscuss, on_delete=models.CASCADE)
