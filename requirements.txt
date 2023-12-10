@@ -9,3 +9,4 @@ Pillow
 cloudinary
 python-dotenv
 django-tailwind[reload]
+django-cors-headers
