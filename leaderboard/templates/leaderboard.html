@@ -98,8 +98,8 @@
                     <td>{{ book_data.title }}</td>
                     <td>{{ forloop.counter }}</td>
                     <td>
-                        <a href="{% url 'recommend_book' book_data.id 'recommended' %}" class="btn recommended-button">Recommended</a>
-                        <a href="{% url 'recommend_book' book_data.id 'not_recommended' %}" class="btn not-recommended-button">Not Recommended</a>
+                        <a href="" class="btn recommended-button">Recommended</a>
+                        <a href="" class="btn not-recommended-button">Not Recommended</a>
                     </td>                    
                 </tr>
                 {% endfor %}
@@ -116,7 +116,7 @@
         // Fungsi untuk mendapatkan daftar buku populer
         function getPopularBooks(bookId) {
             $.ajax({
-                url: 'book/' + bookId + '/popular/',
+                url: 'api/leaderboard/book/' + bookId + '/popular/',
                 method: 'GET',
                 success: function(response) {
                     if (response.popular) {
@@ -134,7 +134,7 @@
         // Fungsi untuk menampilkan penilaian pengguna
         function viewUserRatings() {
             $.ajax({
-                url: 'book/ratings/',
+                url: 'api/leaderboard/ratings/',
                 method: 'GET',
                 success: function(response) {
                     if (response.user_ratings) {
@@ -152,7 +152,7 @@
         // Fungsi untuk merekomendasikan atau tidak merekomendasikan buku
         function recommendBook(bookId, action) {
             $.ajax({
-                url: 'book/' + bookId + '/create_rating/',
+                url: 'api/leaderboard/book/' + bookId + '/create_rating/',
                 method: 'POST',
                 data: {
                     is_recommended: action
@@ -172,7 +172,7 @@
 
         function deleteRating(bookId) {
             $.ajax({
-                url: 'leaderboard/' + bookId + '/delete/',
+                url: 'api/leaderboard/' + bookId + '/delete/',
                 method: 'POST',
                 success: function(response) {
                     if (response.message === 'Rating deleted successfully') {
