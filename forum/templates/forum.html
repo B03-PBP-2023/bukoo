@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include "header.html" %}
+
+<!-- Forum form -->
+<form id="form" class="mb-4">
+    <div class="form-group">
+        <input type="text" id="subject" name="subject" class="form-control" placeholder="Forum Title">
+    </div>
+    <div class="form-group">
+        <textarea id="description" name="description" class="form-control" placeholder="Forum Message"></textarea>
+    </div>
+    <button type="button" id="button_add" class="btn btn-primary">Add Forum</button>
+</form>
+
+<!-- Your forum content goes here -->
+<div id="forum-container" class="mb-4">
+    <!-- Display forums here -->
+    <ul id="forum-list" class="list-group">
+        <!-- Forum items will be dynamically added here -->
+    </ul>
+</div>
+
+
+<script>
+    let hasReplied = false;
+
+    async function getForums() {
+        return fetch("{% url 'forum:get_forum_json' book.pk %}").then((res) => res.json());
+    }
+
+    async function refreshForums() {
+        const forums = await getForums();
+        const forumList = document.getElementById("forum-list");
+
+        // Update the forum-container with the fetched forums
+        forumList.innerHTML = "";
+        let forumListHTML = "";
+        forums.forEach((forum) => {
+            forumListHTML += `
+            <li class='list-group-item'> 
+                <div>
+                    <h4><strong>${forum.subject}</strong></h4>
+                    <p>${forum.description}</p>
+                </div>
+                <button class="btn h-auto" type="button" data-bs-toggle="collapse" data-bs-target="#replies-forum-${forum.pk}" aria-expanded="false" aria-controls="replies-forum-${forum.pk}" onclick="refreshReplies(${forum.pk})" id="replies-toggle-forum-${forum.pk}" data-isopened="false">
+                    View Replies
+                </button>
+                <div class="collapse w-100" id="replies-forum-${forum.pk}">
+                    Loading...
+                </div>
+            </li>
+            `
+        });
+        forumList.innerHTML = forumListHTML;
+    }
+
+    async function addForum() {
+        fetch("{% url 'forum:add_forum_ajax' book.pk %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        })
+            .then(refreshForums)
+            .catch(e => {
+                window.alert('Login first!')
+            });
+
+        document.getElementById("form").reset();
+        return false;
+    }
+
+    document.getElementById("button_add").onclick = addForum;
+
+    async function getReplies(forum_id) {
+        const reply = fetch(`/api/forum/get-reply/${forum_id}/`).then((res) => res.json());
+        return reply;
+    }
+
+    function addReply(forum_id) {
+        // if (hasReplied) {
+        //     window.alert('You can only reply once.');
+        //     return;
+        // }
+
+        const message = document.getElementById(`reply-input-forum-${forum_id}`).value;
+        fetch(`/api/forum/create-reply-ajax/${forum_id}/`, {
+            method: "POST",
+            body: JSON.stringify({ forum_id: forum_id, message: message }),
+        })
+            .then((response) => {
+                if (response.status === 201) {
+                    // If the reply is created successfully, refresh the replies.
+                    refreshReplies(forum_id);
+                    // hasReplied = true;
+                    // document.getElementById("reply-form").style.display = "none";
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
+
+    async function refreshReplies(forum_id) {
+        const repliesToggle = document.getElementById(`replies-toggle-forum-${forum_id}`);
+        const isOpened = repliesToggle.getAttribute("data-isopened") === "true";
+        repliesToggle.setAttribute("data-isopened", !isOpened);
+        repliesToggle.innerHTML = isOpened ? "View Replies" : "Hide Replies";
+
+        if(isOpened) return;
+
+        const replies = await getReplies(forum_id);
+        const replyList = document.getElementById("replies-forum-" + forum_id);
+
+        // Update the replies-container with the fetched replies
+        replyList.innerHTML = "";
+        let replyListHTML = "";
+        replies.forEach((reply) => {
+            replyListHTML += `
+            <div class="card card-body">
+                ${reply.message}
+            </div>`
+        });
+        replyList.innerHTML = replyListHTML;
+
+        const replyForm = `
+        <form id="reply-form-forum-${forum_id}" class="mt-4">
+            <div class="form-group">
+                <textarea id="reply-input-forum-${forum_id}" class="form-control" placeholder="Your Reply"></textarea>
+            </div>
+            <button type="button" id="button_reply" class="btn btn-success" onclick="addReply(${forum_id})">Add Reply</button>
+        </form>        
+        `;
+        replyList.innerHTML += replyForm;
+
+    }
+
+    // Initial forum load
+    refreshForums();
+</script>
+{% endblock %}

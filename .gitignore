@@ -52,7 +52,7 @@ atlassian-ide-plugin.xml
 # Distribution / packaging 
 .Python build/ 
 develop-eggs/ 
-dist/ 
+# dist/ 
 downloads/ 
 eggs/ 
 .eggs/ 
@@ -97,7 +97,7 @@ celerybeat-schedule.*
 *.sage.py 
 
 # Environments 
-# .env 
+.env
 .venv 
 env/ 
 venv/ 
@@ -135,3 +135,4 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+.vercel

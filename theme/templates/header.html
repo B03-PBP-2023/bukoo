@@ -39,7 +39,7 @@
       {% if user.is_authenticated %}
       <img src="{% static 'images/default-profile.svg'%}" alt="" class="tw-h-10">
       <a href="/profile">Profile</a>
-      <a href="/auth/logout">Logout</a>
+      <a href="" id="logout">Logout</a>
       {% else %}
       <a href="/auth/login">Login</a>
       <a href="/auth/register">Sign Up</a>

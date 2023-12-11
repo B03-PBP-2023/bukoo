@@ -138,95 +138,85 @@
             <span style="color: white; font-size: 20px;">Admin Dashboard - Book Verification</span>
         </div>
         <div class="backbutton">
-            <a href="#" style="margin-right: 20px;">Back to Main</a>
+            <a href="{% url 'admin_dashboard:admin2' %}" style="margin-right: 20px;">Back to Main</a>
         </div>
     </div>
 
-    <table>
-        <tr>
-            <th>Date Added</th>
-            <th>No.</th>
-            <th>Author</th>
-            <th>Title</th>
-            <th>Language</th>
-            <th>Genre</th>
-            <th>ISBN</th>
-            <th>Number Pages</th>
-            <th>Book Description</th>
-            <th>Feedback</th>
-            <th>Status</th>
-        </tr>
-        {% for book in books %}
-        <tr>
-            <td>{{ book.publish_date }}</td>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ book.publisher }}</td>
-            <td>{{ book.title }}</td>
-            <td>{{ book.num_pages }}</td>
-            <td>{{ book.language }}</td>
-            <td>{{ book.genres }}</td>
-            <td>{{ book.isbn }}</td>
-            <td>{{ book.description }}</td>
-            <td>
-                <div style="display: flex; flex-direction: column;">
-                    <textarea style="font-family: 'Poppins', sans-serif; border-radius: 10px; background-color: #f2f2f2; padding: 10px; border: 1px solid #ccc;"></textarea>
-                    <button onclick="sendFeedback()" style="font-family: 'Poppins', sans-serif; border-radius: 10px; background-color: #5E5DF0; color: #ffffff; padding: 10px; border: 1px solid #ccc; margin-top: 10px;">Send</button>
-                </div>
-            </td>
-            <td class="dropdown">
-                <select>
-                    <option value="verified">Verified</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="pending">Pending</option>
-                </select>
-            </td>
-        </tr>
-        {% endfor %}
+    <table id="book_table">
     </table>
 
     <script>
-        let rowNum = 1; 
-        function addRow() {
-            var table = document.querySelector('table');
-            var dateAdded = document.getElementById('dateAdded').value;
-            var publisher = document.getElementById('publisher').value;
-            var title = document.getElementById('title').value;
-            var genre = document.getElementById('genre').value;
-            var description = document.getElementById('description').value;
-            var isbn = document.getElementById('isbn').value;
-            var num_pages = document.getElementById('num_pages').value;
-            var language = document.getElementById('language').value;
-            var row = table.insertRow(-1);
+        // Fungsi untuk memperbarui produk
+        async function refreshProducts() {
+            // Pengaturan awal tabel
+            document.getElementById("book_table").innerHTML = ""
+            const products = await getProducts()
+            let htmlString = `<tr>
+                <th>Date Added</th>
+                <th>No.</th>
+                <th>Author</th>
+                <th>Title</th>
+                <th>Language</th>
+                <th>Genre</th>
+                <th>ISBN</th>
+                <th>Number Pages</th>
+                <th>Book Description</th>
+                <th>Feedback</th>
+                <th>Status</th>
+            </tr>`
 
-            row.insertCell(0).innerHTML = dateAdded;
-            row.insertCell(1).innerHTML = table.rows.length - 1;
-            row.insertCell(2).innerHTML = author;
-            row.insertCell(3).innerHTML = title;
-            row.insertCell(4).innerHTML = genre;
-            row.insertCell(5).innerHTML = description;
-            row.insertCell(6).innerHTML = `<img src="${coverImageUrl}" alt="Cover Image" style="max-width: 100px; max-height: 100px;">`;
-            row.insertCell(7).innerHTML = `<select>
-                    <option value="verified">Verified</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="pending">Pending</option>
-                </select>`;
-            rowNum++;
+            let rowCount = 1; // Inisialisasi nomor baris
+
+            // Iterasi melalui produk dan menambahkan baris baru ke dalam tabel
+            products.forEach((item) => {
+                let currentDate = new Date().toISOString().slice(0, 10); // Mendapatkan tanggal saat ini
+
+                htmlString += `\n<tr>
+                    <td>${currentDate}</td>
+                    <td>${rowCount}</td>
+                    <td>${item.fields.book.publisher}</td>
+                    <td>${item.fields.book.title}</td>
+                    <td>${item.fields.book.language}</td>
+                    <td>${item.fields.book.genres.join(',')}</td>
+                    <td>${item.fields.book.isbn}</td>
+                    <td>${item.fields.book.num_pages}</td>
+                    <td>${item.fields.book.description}</td>
+                    <td>
+                        <input type="text" id="feedback_${item.id}" />
+                        <button onclick="submitFeedback(${item.id})">Submit</button>
+                    </td>
+                    <td class="dropdown">
+                        <select id="status_${item.id}">
+                            <option value="verified">Verified</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </td>
+                </tr>`
+
+                rowCount++; // Increment nomor baris
+            })
+
+            // Menetapkan nilai htmlString ke dalam tabel
+            document.getElementById("book_table").innerHTML = htmlString
+        }
+        
+        // Fungsi untuk mengirimkan umpan balik
+        function submitFeedback(itemId) {
+            const feedback = document.getElementById(`feedback_${itemId}`).value;
+            const status = document.getElementById(`status_${itemId}`).value;
+            // Lakukan permintaan HTTP atau tindakan lain yang diperlukan di sini
+            console.log(`Item ${itemId} Feedback: ${feedback}, Status: ${status}`);
+        }
+        async function getProducts() {
+            const response = await fetch('/api/admin-dashboard/json/');
+            const data = await response.json();
+            return data;
         }
 
-        function sendFeedback() {
-            var feedback = document.querySelector('textarea').value; // Mendapatkan isi textarea
-            var xhttp = new XMLHttpRequest(); // Membuat objek XMLHttpRequest
+        refreshProducts();
 
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    console.log("Feedback terkirim: " + feedback); // Tindakan setelah feedback terkirim
-                }
-            };
-
-            xhttp.open("POST", "url_anda_di_sini", true); // Ganti "url_anda_di_sini" dengan URL target Anda
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.send("feedback=" + feedback); // Mengirim feedback ke server
-        }
+        
     </script>
 
 </body>
