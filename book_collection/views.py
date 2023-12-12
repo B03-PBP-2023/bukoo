@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 from book_collection import utils
@@ -40,6 +41,7 @@ def __create_query(params: dict):
     return query
 
 
+@csrf_exempt
 @cache_page(60 * 60)
 @require_http_methods(['GET'])
 def get_book_list(request):
@@ -69,7 +71,7 @@ def get_book_list(request):
         safe=False
     )
 
-
+@csrf_exempt
 @require_http_methods(['GET'])
 def get_book_home(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -94,31 +96,7 @@ def get_book_home(request):
     return JsonResponse(data, safe=False)
 
 
-@cache_page(60 * 60)
-@require_http_methods(['GET'])
-def get_book_home(request):
-    FIELDS = ['title', 'image_url', 'author']
-    recommendation = Book.objects.order_by('id')[:15]
-    new_releases = Book.objects.exclude(
-        id__in=recommendation).order_by('-publish_date')[:15]
-    indonesian = Book.objects.exclude(id__in=recommendation | new_releases).filter(
-        language__icontains='indonesia').order_by('id')[:15]
-    english = Book.objects.exclude(id__in=recommendation | new_releases | indonesian).filter(
-        language__icontains='english').order_by('id')[:15]
-    fiction = Book.objects.exclude(id__in=recommendation | new_releases | indonesian | english).filter(
-        genres__name='Fiction').order_by('id')[:15]
-
-    data = {
-        'recommendation': json.loads(serializers.serialize('json', recommendation, fields=FIELDS, use_natural_foreign_keys=True)),
-        'new_releases': json.loads(serializers.serialize('json', new_releases, fields=FIELDS, use_natural_foreign_keys=True)),
-        'indonesian': json.loads(serializers.serialize('json', indonesian, fields=FIELDS, use_natural_foreign_keys=True)),
-        'english': json.loads(serializers.serialize('json', english, fields=FIELDS, use_natural_foreign_keys=True)),
-        'fiction': json.loads(serializers.serialize('json', fiction, fields=FIELDS, use_natural_foreign_keys=True)),
-    }
-
-    return JsonResponse(data, safe=False)
-
-
+@csrf_exempt
 @require_http_methods(['GET'])
 def get_book_detail(request, id):
     book = get_list_or_404(Book, pk=id)
@@ -129,6 +107,7 @@ def get_book_detail(request, id):
     )
 
 
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['POST'])
 def add_book(request):
@@ -172,7 +151,7 @@ def add_book(request):
         status=201
     )
 
-
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['POST'])
 def edit_book(request, id):
@@ -213,7 +192,7 @@ def edit_book(request, id):
         content_type="application/json"
     )
 
-
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['DELETE'])
 def delete_book(request, id):
@@ -227,7 +206,7 @@ def delete_book(request, id):
     return HttpResponse('Deleted')
 
 
-
+@csrf_exempt
 @cache_page(60 * 60)
 def get_genres(request):
     genres = Genre.objects.all()
