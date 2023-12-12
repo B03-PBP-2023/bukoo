@@ -33,7 +33,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 if PRODUCTION:
-    ALLOWED_HOSTS = ['https://bukoo.azurewebsites.net']
+    ALLOWED_HOSTS = ['bukoo.azurewebsites.net']
 
 
 # Application definition
