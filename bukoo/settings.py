@@ -173,5 +173,8 @@ CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 
 CORS_ORIGIN_WHITELIST = [
-    "bukoo.azurewebsites.net",
+    "https://bukoo.azurewebsites.net",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://bukoo.azurewebsites.net",
 ]
