@@ -5,8 +5,11 @@ from django.core import serializers
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+<<<<<<< HEAD
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
+=======
+>>>>>>> parent of 0413030 (Merge pull request #58 from B03-PBP-2023/feat/book_collection)
 import json
 
 from book_collection import utils
@@ -41,8 +44,11 @@ def __create_query(params: dict):
     return query
 
 
+<<<<<<< HEAD
 @csrf_exempt
 @cache_page(60 * 60)
+=======
+>>>>>>> parent of 0413030 (Merge pull request #58 from B03-PBP-2023/feat/book_collection)
 @require_http_methods(['GET'])
 def get_book_list(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -71,7 +77,11 @@ def get_book_list(request):
         safe=False
     )
 
+<<<<<<< HEAD
 @csrf_exempt
+=======
+
+>>>>>>> parent of 0413030 (Merge pull request #58 from B03-PBP-2023/feat/book_collection)
 @require_http_methods(['GET'])
 def get_book_home(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -96,7 +106,10 @@ def get_book_home(request):
     return JsonResponse(data, safe=False)
 
 
+<<<<<<< HEAD
 @csrf_exempt
+=======
+>>>>>>> parent of 0413030 (Merge pull request #58 from B03-PBP-2023/feat/book_collection)
 @require_http_methods(['GET'])
 def get_book_detail(request, id):
     book = get_list_or_404(Book, pk=id)
@@ -206,8 +219,11 @@ def delete_book(request, id):
     return HttpResponse('Deleted')
 
 
+<<<<<<< HEAD
 @csrf_exempt
 @cache_page(60 * 60)
+=======
+>>>>>>> parent of 0413030 (Merge pull request #58 from B03-PBP-2023/feat/book_collection)
 def get_genres(request):
     genres = Genre.objects.all()
     response = [genre.name for genre in list(genres)]
