@@ -18,11 +18,13 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            profile = Profile.objects.get(user=user)
             return JsonResponse({'status': 'success', 'message': 'Logged In', 'data': {
                 'username': user.username,
                 'email': user.email,
                 'is_author': user.is_author,
                 'is_admin': user.is_admin,
+                'name': profile.name,
             }}, status=200)
         else:
             return JsonResponse({'status': 'failed', 'message': 'Invalid username or password'}, status=401)
