@@ -5,6 +5,7 @@ from django.core import serializers
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 import json
 
 from book_collection import utils
@@ -39,6 +40,7 @@ def __create_query(params: dict):
     return query
 
 
+@cache_page(60 * 60)
 @require_http_methods(['GET'])
 def get_book_list(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -68,6 +70,31 @@ def get_book_list(request):
     )
 
 
+@require_http_methods(['GET'])
+def get_book_home(request):
+    FIELDS = ['title', 'image_url', 'author']
+    recommendation = Book.objects.order_by('id')[:15]
+    new_releases = Book.objects.exclude(
+        id__in=recommendation).order_by('-publish_date')[:15]
+    indonesian = Book.objects.exclude(id__in=recommendation | new_releases).filter(
+        language__icontains='indonesia').order_by('id')[:15]
+    english = Book.objects.exclude(id__in=recommendation | new_releases | indonesian).filter(
+        language__icontains='english').order_by('id')[:15]
+    fiction = Book.objects.exclude(id__in=recommendation | new_releases | indonesian | english).filter(
+        genres__name='Fiction').order_by('id')[:15]
+
+    data = {
+        'recommendation': json.loads(serializers.serialize('json', recommendation, fields=FIELDS, use_natural_foreign_keys=True)),
+        'new_releases': json.loads(serializers.serialize('json', new_releases, fields=FIELDS, use_natural_foreign_keys=True)),
+        'indonesian': json.loads(serializers.serialize('json', indonesian, fields=FIELDS, use_natural_foreign_keys=True)),
+        'english': json.loads(serializers.serialize('json', english, fields=FIELDS, use_natural_foreign_keys=True)),
+        'fiction': json.loads(serializers.serialize('json', fiction, fields=FIELDS, use_natural_foreign_keys=True)),
+    }
+
+    return JsonResponse(data, safe=False)
+
+
+@cache_page(60 * 60)
 @require_http_methods(['GET'])
 def get_book_home(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -200,6 +227,8 @@ def delete_book(request, id):
     return HttpResponse('Deleted')
 
 
+
+@cache_page(60 * 60)
 def get_genres(request):
     genres = Genre.objects.all()
     response = [genre.name for genre in list(genres)]
