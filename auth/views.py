@@ -37,6 +37,8 @@ def register(request):
         if form.is_valid():
             user = form.save()
             Profile.objects.create(user=user)
+            user.is_staff = user.is_admin
+            user.save()
             return JsonResponse({'status': 'success', 'message': 'Registered'}, status=201)
         else:
             return JsonResponse({'status': 'failed', 'message': form.errors}, status=400)
