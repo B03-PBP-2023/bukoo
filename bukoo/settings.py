@@ -32,10 +32,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-if PRODUCTION:
-    ALLOWED_HOSTS = ['bukoo.azurewebsites.net']
-
-
 # Application definition
 
 INSTALLED_APPS = [
