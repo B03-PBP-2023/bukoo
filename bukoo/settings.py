@@ -28,7 +28,7 @@ PRODUCTION = env.bool('PRODUCTION', False)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if PRODUCTION else True
 
 ALLOWED_HOSTS = ['*']
 
