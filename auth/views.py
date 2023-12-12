@@ -30,6 +30,7 @@ def login_user(request):
     return render(request, 'login.html')
 
 
+@csrf_exempt
 @require_http_methods(["GET", "POST"])
 def register(request):
     form = RegisterForm(request.POST or None)
