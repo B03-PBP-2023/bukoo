@@ -7,12 +7,14 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Count
 import json
 
 from book_collection import utils
 from book_collection.models import Book, Genre
 from book_collection.form import BookForm
 from admin_dashboard.models import BookSubmission
+from user_profile.models import Profile
 
 
 def __create_query(params: dict):
@@ -131,7 +133,15 @@ def add_book(request):
                 pass
 
     # Author
-    new_book.author.add(request.user.profile)
+    authors = request.POST.get('author')
+    if authors != None:
+        authors = json.loads(authors)
+        for author in authors:
+            try:
+                author_obj, created = Profile.objects.update_or_create(name=author)
+                new_book.author.add(author_obj)
+            except:
+                pass
 
     # Image upload
     if ('image' in request.FILES):
@@ -211,6 +221,15 @@ def delete_book(request, id):
 def get_genres(request):
     genres = Genre.objects.all()
     response = [genre.name for genre in list(genres)]
+    return JsonResponse(response, safe=False)
+
+
+@csrf_exempt
+@cache_page(60 * 60)
+def get_authors(request):
+    # filter only author
+    authors = Profile.objects.annotate(num_books=Count('book')).filter(num_books__gt=0)
+    response = [author.name for author in list(authors)]
     return JsonResponse(response, safe=False)
 
 
