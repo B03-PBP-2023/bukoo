@@ -18,11 +18,13 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            profile = Profile.objects.get(user=user)
             return JsonResponse({'status': 'success', 'message': 'Logged In', 'data': {
                 'username': user.username,
                 'email': user.email,
                 'is_author': user.is_author,
                 'is_admin': user.is_admin,
+                'name': profile.name,
             }}, status=200)
         else:
             return JsonResponse({'status': 'failed', 'message': 'Invalid username or password'}, status=401)
@@ -30,6 +32,7 @@ def login_user(request):
     return render(request, 'login.html')
 
 
+@csrf_exempt
 @require_http_methods(["GET", "POST"])
 def register(request):
     form = RegisterForm(request.POST or None)
@@ -37,6 +40,8 @@ def register(request):
         if form.is_valid():
             user = form.save()
             Profile.objects.create(user=user)
+            user.is_staff = user.is_admin
+            user.save()
             return JsonResponse({'status': 'success', 'message': 'Registered'}, status=201)
         else:
             return JsonResponse({'status': 'failed', 'message': form.errors}, status=400)

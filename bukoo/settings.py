@@ -28,10 +28,9 @@ PRODUCTION = env.bool('PRODUCTION', False)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if PRODUCTION else True
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['*', 'bukoo.azurewebsites.net']
 
 # Application definition
 
@@ -45,7 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'tailwind',
     'theme',
-    'django_browser_reload',
+    # 'django_browser_reload',
     'auth',
     'book_collection',
     'review',
@@ -61,11 +60,11 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
+    # "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'bukoo.urls'
@@ -118,15 +117,15 @@ AUTH_USER_MODEL = "bukoo_auth.User"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
@@ -172,3 +171,10 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
+
+CORS_ORIGIN_WHITELIST = [
+    "https://bukoo.azurewebsites.net",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://bukoo.azurewebsites.net",
+]

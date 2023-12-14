@@ -5,12 +5,16 @@ from django.core import serializers
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Count
 import json
 
 from book_collection import utils
 from book_collection.models import Book, Genre
 from book_collection.form import BookForm
 from admin_dashboard.models import BookSubmission
+from user_profile.models import Profile
 
 
 def __create_query(params: dict):
@@ -39,6 +43,8 @@ def __create_query(params: dict):
     return query
 
 
+@csrf_exempt
+@cache_page(60 * 60)
 @require_http_methods(['GET'])
 def get_book_list(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -67,7 +73,7 @@ def get_book_list(request):
         safe=False
     )
 
-
+@csrf_exempt
 @require_http_methods(['GET'])
 def get_book_home(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -92,6 +98,7 @@ def get_book_home(request):
     return JsonResponse(data, safe=False)
 
 
+@csrf_exempt
 @require_http_methods(['GET'])
 def get_book_detail(request, id):
     book = get_list_or_404(Book, pk=id)
@@ -102,6 +109,7 @@ def get_book_detail(request, id):
     )
 
 
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['POST'])
 def add_book(request):
@@ -125,7 +133,15 @@ def add_book(request):
                 pass
 
     # Author
-    new_book.author.add(request.user.profile)
+    authors = request.POST.get('author')
+    if authors != None:
+        authors = json.loads(authors)
+        for author in authors:
+            try:
+                author_obj, created = Profile.objects.update_or_create(name=author)
+                new_book.author.add(author_obj)
+            except:
+                pass
 
     # Image upload
     if ('image' in request.FILES):
@@ -145,7 +161,7 @@ def add_book(request):
         status=201
     )
 
-
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['POST'])
 def edit_book(request, id):
@@ -186,7 +202,7 @@ def edit_book(request, id):
         content_type="application/json"
     )
 
-
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['DELETE'])
 def delete_book(request, id):
@@ -200,9 +216,20 @@ def delete_book(request, id):
     return HttpResponse('Deleted')
 
 
+@csrf_exempt
+@cache_page(60 * 60)
 def get_genres(request):
     genres = Genre.objects.all()
     response = [genre.name for genre in list(genres)]
+    return JsonResponse(response, safe=False)
+
+
+@csrf_exempt
+@cache_page(60 * 60)
+def get_authors(request):
+    # filter only author
+    authors = Profile.objects.annotate(num_books=Count('book')).filter(num_books__gt=0)
+    response = [author.name for author in list(authors)]
     return JsonResponse(response, safe=False)
 
 
