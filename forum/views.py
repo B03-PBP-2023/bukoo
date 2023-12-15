@@ -8,6 +8,60 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core import serializers
+
+
+#update
+@csrf_exempt
+def create_forum_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_data = ForumDiscuss.objects.create(
+            user = request.user,
+            subject=data["subject"],
+            description=data["description"],
+        )
+
+        new_data.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+#update
+@csrf_exempt
+def create_reply_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+        forum = ForumDiscuss.objects.get(pk=data["forum_id"])
+
+        reply = Reply.objects.create(
+                user = request.user,
+                message=data["message"],
+                forum=forum
+            )
+
+        reply.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+
+#update
+def show_json_by_userForum(request):
+    data = ForumDiscuss.objects.filter(user = request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+
+#update
+def show_json_by_userReply(request):
+    data = Reply.objects.filter(user = request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
 
 def show_forum(request, id):
     # Menggunakan get_object_or_404 untuk mendapatkan objek Book atau memberikan 404 jika tidak ditemukan
