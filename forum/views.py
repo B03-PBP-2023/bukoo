@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core import serializers
+import datetime
 
 
 # update
@@ -197,5 +198,41 @@ def add_reply_ajax(request, forum_id):
 
         except (Book.DoesNotExist, ForumDiscuss.DoesNotExist):
             return JsonResponse({'status': 'error', 'message': 'Book or Forum are not found'}, status=404)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def edit_reply(request, reply_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'Forbidden'}, status=403)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            message = data.get("message", "").strip()
+            if message:
+                reply = Reply.objects.get(pk=reply_id)
+                reply.message = message
+                reply.created_at = datetime.datetime.now()
+                reply.save()
+                return JsonResponse({'status': 'success', 'message': f'Reply with id {reply_id} has been modified.'}, status=200)
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Message are required'}, status=400)
+
+        except (Reply.DoesNotExist):
+            return JsonResponse({'status': 'error', 'message': 'Reply is not found'}, status=404)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def delete_reply(request, reply_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'Forbidden'}, status=403)
+    if request.method == 'POST':
+        try:
+            reply = Reply.objects.get(pk=reply_id)
+            reply.delete()
+            return JsonResponse({'status': 'success', 'message': f'Reply with id {reply_id} has been deleted.'}, status=200)
+        except (Reply.DoesNotExist):
+            return JsonResponse({'status': 'error', 'message': 'Reply is not found'}, status=404)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
