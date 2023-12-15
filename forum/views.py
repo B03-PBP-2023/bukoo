@@ -110,11 +110,18 @@ def get_forum_json(request, id):
             "subject": forum.subject,
             "description": forum.description,
             "date_added": forum.date_added,
-            "pk": forum.pk,
+            "id": forum.pk,
             "total_reply": forum.total_reply,
         })
+    
+    book_json = {
+        "id": book.pk,
+        "title": book.title,
+        "image_url": book.image_url,
+        "author": [author.name for author in book.author.all()],
+    }
 
-    return JsonResponse(forum_json, safe=False)
+    return JsonResponse({'book': book_json, 'forums':forum_json}, safe=False)
 
 
 def get_reply_json(request, id):
@@ -134,7 +141,7 @@ def get_reply_json(request, id):
             },
             "created_at": reply.created_at,
             "message": reply.message,
-            "pk": reply.pk,
+            "id": reply.pk,
         })
 
     return JsonResponse(replies_json, safe=False)
