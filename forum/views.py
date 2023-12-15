@@ -40,11 +40,23 @@ def get_forum_json(request, id):
     except Book.DoesNotExist:
         return JsonResponse({'error': 'Book not found'}, status=404)
 
-    forum_items = ForumDiscuss.objects.filter(book=book).values(
-        "user", "user__name", "date_added", "subject", "description", "pk"
-    )
+    forums = ForumDiscuss.objects.filter(book=book)
+    forum_json = []
+    for forum in forums:
+        forum_json.append({
+            "user": {
+                "id": forum.user.pk,
+                "name": forum.user.name,
+                "profile_picture": forum.user.profile_picture.url if forum.user.profile_picture else "",
+            },
+            "subject": forum.subject,
+            "description": forum.description,
+            "date_added": forum.date_added,
+            "pk": forum.pk,
+            "total_reply": forum.total_reply,
+        })
 
-    return JsonResponse(list(forum_items), safe=False)
+    return JsonResponse(forum_json, safe=False)
 
 def get_reply_json(request, id):
     try:
@@ -52,11 +64,21 @@ def get_reply_json(request, id):
     except (Book.DoesNotExist, ForumDiscuss.DoesNotExist):
         return JsonResponse({'error': 'Book or Forum not found'}, status=404)
 
-    reply_items = Reply.objects.filter(forum=forum).values(
-        "user", "user__name", "message", "pk"
-    )
+    replies = Reply.objects.filter(forum=forum)
+    replies_json = []
+    for reply in replies:
+        replies_json.append({
+            "user": {
+                "id": reply.user.pk,
+                "name": reply.user.name,
+                "profile_picture": reply.user.profile_picture.url if reply.user.profile_picture else "",
+            },
+            "created_at": reply.created_at,
+            "message": reply.message,
+            "pk": reply.pk,
+        })
 
-    return JsonResponse(list(reply_items), safe=False)
+    return JsonResponse(replies_json, safe=False)
 
 @csrf_exempt
 def add_forum_ajax(request, id):
