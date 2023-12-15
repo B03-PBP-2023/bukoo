@@ -191,11 +191,11 @@ def add_reply_ajax(request, forum_id):
             if message:
                 new_reply = Reply(message=message, user=user, forum=forum)
                 new_reply.save()
-                return JsonResponse({'status': 'CREATED'}, status=201)
+                return JsonResponse({'status': 'success', 'message': f'Reply to forum ${forum_id} has been created.'}, status=201)
             else:
-                return JsonResponse({'error': 'Message is required'}, status=400)
+                return JsonResponse({'status': 'error', 'message': 'Message are required'}, status=400)
 
         except (Book.DoesNotExist, ForumDiscuss.DoesNotExist):
-            return JsonResponse({'error': 'Book or Forum not found'}, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Book or Forum are not found'}, status=404)
 
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
