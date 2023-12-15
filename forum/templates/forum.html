@@ -60,7 +60,13 @@
     async function addForum() {
         fetch("{% url 'forum:add_forum_ajax' book.pk %}", {
             method: "POST",
-            body: new FormData(document.querySelector('#form'))
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'subject': document.getElementById("subject").value,
+                'description': document.getElementById("description").value,
+            })
         })
             .then(refreshForums)
             .catch(e => {
@@ -108,7 +114,7 @@
         repliesToggle.setAttribute("data-isopened", !isOpened);
         repliesToggle.innerHTML = isOpened ? "View Replies" : "Hide Replies";
 
-        if(isOpened) return;
+        if (isOpened) return;
 
         const replies = await getReplies(forum_id);
         const replyList = document.getElementById("replies-forum-" + forum_id);

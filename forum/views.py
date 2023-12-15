@@ -8,6 +8,62 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core import serializers
+
+
+# update
+@csrf_exempt
+def create_forum_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+
+        new_data = ForumDiscuss.objects.create(
+            user=request.user,
+            subject=data["subject"],
+            description=data["description"],
+        )
+
+        new_data.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+# update
+
+
+@csrf_exempt
+def create_reply_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        forum = ForumDiscuss.objects.get(pk=data["forum_id"])
+
+        reply = Reply.objects.create(
+            user=request.user,
+            message=data["message"],
+            forum=forum
+        )
+
+        reply.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+
+# update
+def show_json_by_userForum(request):
+    data = ForumDiscuss.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+
+# update
+def show_json_by_userReply(request):
+    data = Reply.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
 
 def show_forum(request, id):
     # Menggunakan get_object_or_404 untuk mendapatkan objek Book atau memberikan 404 jika tidak ditemukan
@@ -27,12 +83,14 @@ def show_forum(request, id):
     context = {
         'forums': forums,
         'book':  book,
-        'last_login': request.COOKIES.get('last_login', ''),  # Menggunakan get untuk menghindari KeyError
+        # Menggunakan get untuk menghindari KeyError
+        'last_login': request.COOKIES.get('last_login', ''),
         # 'username': request.user.username,
         # 'pk': request.user.pk,
         'form': form,
     }
     return render(request, "forum.html", context)
+
 
 def get_forum_json(request, id):
     try:
@@ -58,6 +116,7 @@ def get_forum_json(request, id):
 
     return JsonResponse(forum_json, safe=False)
 
+
 def get_reply_json(request, id):
     try:
         forum = ForumDiscuss.objects.get(pk=id)
@@ -80,29 +139,33 @@ def get_reply_json(request, id):
 
     return JsonResponse(replies_json, safe=False)
 
+
 @csrf_exempt
 def add_forum_ajax(request, id):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'Forbidden'}, status=403)
     if request.method == 'POST':
-        subject = request.POST.get("subject", "").strip()
-        description = request.POST.get("description", "").strip()
+        json_data = json.loads(request.body)
+        subject = json_data.get("subject", "").strip()
+        description = json_data.get("description", "").strip()
         user = get_object_or_404(Profile, user=request.user)
         book_id = id
 
         try:
             book = Book.objects.get(pk=book_id)
         except Book.DoesNotExist:
-            return JsonResponse({'error': 'Book not found'}, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Book not found'}, status=404)
 
         if subject and description:
-            new_forum = ForumDiscuss(subject=subject, description=description, user=user, book=book)
+            new_forum = ForumDiscuss(
+                subject=subject, description=description, user=user, book=book)
             new_forum.save()
-            return JsonResponse({'status': 'CREATED'}, status=201)
+            return JsonResponse({'status': 'success', 'message': 'Forum has been created.'}, status=201)
         else:
-            return JsonResponse({'error': 'Subject and description are required'}, status=400)
+            return JsonResponse({'status': 'error', 'message': 'Subject and description are required'}, status=400)
 
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
 
 @csrf_exempt
 def add_reply_ajax(request, forum_id):
@@ -129,5 +192,3 @@ def add_reply_ajax(request, forum_id):
             return JsonResponse({'error': 'Book or Forum not found'}, status=404)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
-
-
