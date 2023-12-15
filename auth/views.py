@@ -7,6 +7,7 @@ from django.views.decorators.http import require_http_methods
 
 from auth.forms import RegisterForm
 from user_profile.models import Profile
+from user_profile.forms import ProfileForm
 
 
 @csrf_exempt
@@ -25,6 +26,7 @@ def login_user(request):
                 'is_author': user.is_author,
                 'is_admin': user.is_admin,
                 'name': profile.name,
+                'profile_id': profile.pk,
             }}, status=200)
         else:
             return JsonResponse({'status': 'failed', 'message': 'Invalid username or password'}, status=401)
@@ -36,15 +38,18 @@ def login_user(request):
 @require_http_methods(["GET", "POST"])
 def register(request):
     form = RegisterForm(request.POST or None)
+    profile_form = ProfileForm(request.POST or None)
     if request.method == "POST":
-        if form.is_valid():
+        if form.is_valid() and profile_form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user)
             user.is_staff = user.is_admin
             user.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
             return JsonResponse({'status': 'success', 'message': 'Registered'}, status=201)
         else:
-            return JsonResponse({'status': 'failed', 'message': form.errors}, status=400)
+            return JsonResponse({'status': 'failed', 'message': {**form.errors, **profile_form.errors}}, status=400)
 
     context = {'form': form}
     return render(request, 'register.html', context)
