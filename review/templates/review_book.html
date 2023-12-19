@@ -9,20 +9,14 @@
     <h1 class="mb-4">Review {{ book.title }}</h1>
 
     {% if has_reviewed %}
-        <!-- User's Review Section -->
-        <h2>Your Review</h2>
+    <!-- User's Review Section -->
+    <h2>Your Review</h2>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                {{ user_review.review }}
-            </div>
-            <div class="card-footer">
-                {{ user_review.user.username }}
-            </div>
-        </div>
+    <div id="currentUserReview"></div>
     {% else %}
-        <!-- Add Review Button -->
-        <button class="btn btn-primary mb-4" onclick="location.href='{% url 'review:create_review' book_id=book.id %}';">Add your review</button>
+    <!-- Add Review Button -->
+    <button class="btn btn-primary mb-4" onclick="location.href='{% url 'review:create_review' book_id=book.id %}';">Add
+        your review</button>
     {% endif %}
 
     <!-- All Reviews Section -->
@@ -35,37 +29,51 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         const bookId = "{{ book.id }}";  // Ensure this is passed in from your Django view.
         console.log("Book ID:", bookId);
         $.ajax({
             url: `/review/${bookId}/get_review_json/`,  // Adjust this if your URL pattern is different.
             type: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 let reviewsHtml = '';
                 console.log("Reviews:", data);
-                data.forEach(review => {
+                data['reviews'].forEach(review => {
                     reviewsHtml += `
                     <div class="col-md-4">
                         <div class="card mt-2">
                             <div class="card-body">
-                                <p>${review.fields.review}</p> 
+                                <p>${review.review}</p> 
                             </div>
                             <div class="card-footer text-left">
-                                <a href="/review_detail/${review.pk}/">${review.fields.userProfile.name}</a>
+                                <a href="/review_detail/${review.id}/">${review.user.name}</a>
                             </div>
                         </div>
                     </div>`;
                 });
-                
                 $('#reviewsContainer').html(reviewsHtml);
+
+                if (data['current_user_review']) {
+                    let currentUserReviewHtml = `
+                    <div class="col-md-4">
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <p>${data['current_user_review'].review}</p> 
+                            </div>
+                            <div class="card-footer text-left">
+                                <a href="/review_detail/${data['current_user_review'].id}/">${data['current_user_review'].user.name}</a>
+                            </div>
+                        </div>
+                    </div>`;
+                    $('#currentUserReview').html(currentUserReviewHtml);
+                }
             },
-            error: function(error) {
+            error: function (error) {
                 console.error("There was an error fetching the reviews:", error);
             }
         });
     });
 </script>
-    
+
 {% endblock %}

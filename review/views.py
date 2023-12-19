@@ -9,6 +9,7 @@ from book_collection.models import Book
 from user_profile.models import Profile
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+import json
 
 
 def get_reviews_by_book(request, book_id):
@@ -23,8 +24,46 @@ def get_review_json(request, book_id):
     print("masuk json")
     
     book = get_object_or_404(Book, pk=book_id)
-    review_item = Review.objects.filter(book=book).order_by('-created_at')
-    return HttpResponse(serializers.serialize('json', review_item, use_natural_foreign_keys=True))
+    if request.user.is_authenticated:
+        current_user = Profile.objects.get(user=request.user)
+        reviews = Review.objects.filter(book=book).order_by('-created_at').exclude(userProfile=current_user)
+        current_user_review = list(Review.objects.filter(book=book, userProfile=current_user))
+    else:
+        reviews = Review.objects.filter(book=book).order_by('-created_at')
+        current_user_review = None
+    review_list = []
+    for review in reviews:
+        review_list.append({
+            'id': review.id,
+            'user': {
+                'name': review.userProfile.name,
+                'profile_picture': review.userProfile.profile_picture
+            },
+            'review': review.review,
+            'created_at': review.created_at.strftime("%B %d, %Y, %I:%M %p")
+        })
+    if current_user_review:
+        current_user_review = {
+            'id': current_user_review[0].id,
+            'user': {
+                'name': current_user_review[0].userProfile.name,
+                'profile_picture': current_user_review[0].userProfile.profile_picture
+            },
+            'review': current_user_review[0].review,
+            'created_at': current_user_review[0].created_at.strftime("%B %d, %Y, %I:%M %p")
+        }
+
+    response_json = {
+        'book': {
+            'id': book.id,
+            'title': book.title,
+            'image_url': book.image_url,
+            'author': list(author.name for author in book.author.all())
+        },
+        'reviews': review_list,
+        'current_user_review': current_user_review
+    }
+    return JsonResponse(response_json, safe=False)
 
 def get_book_json(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
