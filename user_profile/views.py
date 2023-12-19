@@ -8,8 +8,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from auth.models import User
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
 
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 def profile_data(request):
     bookmarked_book = Bookmark.objects.filter(user=request.user)
@@ -43,6 +45,7 @@ def profile_data(request):
         return render(request, 'profile.html', data)
 
 
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 def edit_profile(request):
     profile = Profile.objects.get(user=request.user)
@@ -56,6 +59,7 @@ def edit_profile(request):
     return render(request, 'edit_profile.html', {'form': form})
 
 
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 def get_bookmark_status(request, book_id):
     bookmark_exist = Bookmark.objects.filter(
@@ -63,6 +67,7 @@ def get_bookmark_status(request, book_id):
     return JsonResponse({'status': 'success', 'message': 'Bookmark status', 'data': bookmark_exist}, status=200)
 
 
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['POST'])
 def bookmarking_books(request, book_id):
@@ -76,6 +81,7 @@ def bookmarking_books(request, book_id):
         return JsonResponse({'status': 'failed', 'message': 'Book not found'}, status=404)
 
 
+@csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['POST'])
 def delete_bookmark(request, book_id):
