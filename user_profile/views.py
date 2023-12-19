@@ -86,8 +86,11 @@ def bookmarking_books(request, book_id):
 @require_http_methods(['POST'])
 def delete_bookmark(request, book_id):
     try:
-        bookmarks = Bookmark.objects.get(pk=book_id)
+        book = Book.objects.get(pk=book_id)
+        bookmarks = Bookmark.objects.get(user=request.user, book=book)
         bookmarks.delete()
         return JsonResponse({'status': 'success', 'message': 'Bookmark deleted'}, status=200)
+    except Book.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Book not found'}, status=404)
     except Bookmark.DoesNotExist:
         return JsonResponse({'status': 'failed', 'message': 'Bookmark not found'}, status=404)
