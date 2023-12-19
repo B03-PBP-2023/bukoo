@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 import json
 
 
+@csrf_exempt
 def get_reviews_by_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     user_has_reviewed = False
@@ -21,6 +22,7 @@ def get_reviews_by_book(request, book_id):
     return render(request, "review_book.html", {'book': book, 'has_reviewed': user_has_reviewed})
 
 
+@csrf_exempt
 def get_review_json(request, book_id):
     print("masuk json")
 
@@ -41,7 +43,7 @@ def get_review_json(request, book_id):
     else:
         reviews = Review.objects.filter(book=book).order_by('-created_at')
         current_user_review = None
-        
+
     review_list = []
     for review in reviews:
         review_list.append({
@@ -77,11 +79,13 @@ def get_review_json(request, book_id):
     return JsonResponse({'status': 'success', 'data': response_json}, safe=False)
 
 
+@csrf_exempt
 def get_book_json(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     return HttpResponse(serializers.serialize('json', [book]))
 
 
+@csrf_exempt
 @login_required
 def create_review(request, book_id):
     book = get_object_or_404(Book, id=book_id)
@@ -105,6 +109,7 @@ def create_review(request, book_id):
     return render(request, 'create_review.html', {'form': form, 'book': book})
 
 
+@csrf_exempt
 @login_required
 def delete_review(request, review_id):
     if request.method == 'POST':
@@ -116,6 +121,7 @@ def delete_review(request, review_id):
             return JsonResponse({'status': 'failed','message': 'You do not have permission to delete this review'}, status=403)
 
 
+@csrf_exempt
 @login_required
 def edit_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
