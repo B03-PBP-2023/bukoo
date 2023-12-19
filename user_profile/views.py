@@ -7,8 +7,12 @@ from book_collection.models import Book
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from auth.models import User
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
-@login_required
+
+@csrf_exempt
+@login_required(login_url='/auth/login/')
 def profile_data(request):
     bookmarked_book = Bookmark.objects.filter(user=request.user)
     user_data = Profile.objects.get(user=request.user)
@@ -40,7 +44,9 @@ def profile_data(request):
 
         return render(request, 'profile.html', data)
 
-@login_required
+
+@csrf_exempt
+@login_required(login_url='/auth/login/')
 def edit_profile(request):
     profile = Profile.objects.get(user=request.user)
     form = ProfileForm(request.POST or None, instance=profile)
@@ -52,7 +58,18 @@ def edit_profile(request):
     
     return render(request, 'edit_profile.html', {'form': form})
 
-@login_required
+
+@csrf_exempt
+@login_required(login_url='/auth/login/')
+def get_bookmark_status(request, book_id):
+    bookmark_exist = Bookmark.objects.filter(
+        user=request.user, book=book_id).exists()
+    return JsonResponse({'status': 'success', 'message': 'Bookmark status', 'data': bookmark_exist}, status=200)
+
+
+@csrf_exempt
+@login_required(login_url='/auth/login/')
+@require_http_methods(['POST'])
 def bookmarking_books(request, book_id):
     books = Book.objects.get(pk=book_id)
     bookmark, created = Bookmark.objects.get_or_create(user=request.user, book=books)
@@ -62,7 +79,9 @@ def bookmarking_books(request, book_id):
 
         return HttpResponse("CREATED", status=201)
 
-@login_required
+@csrf_exempt
+@login_required(login_url='/auth/login/')
+@require_http_methods(['POST'])
 def delete_bookmark(request, book_id):
     bookmarks = Bookmark.objects.get(pk=book_id)
     bookmarks.delete()
