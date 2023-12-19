@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from user_profile.models import Profile, Bookmark, Book_by_author
 from user_profile.forms import ProfileForm
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from book_collection.models import Book
 from django.contrib.auth.decorators import login_required
@@ -55,7 +55,7 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/profile/')
-    
+
     return render(request, 'edit_profile.html', {'form': form})
 
 
@@ -71,24 +71,23 @@ def get_bookmark_status(request, book_id):
 @login_required(login_url='/auth/login/')
 @require_http_methods(['POST'])
 def bookmarking_books(request, book_id):
-    books = Book.objects.get(pk=book_id)
-    bookmark, created = Bookmark.objects.get_or_create(user=request.user, book=books)
-
-    if created:
+    try:
+        books = Book.objects.get(pk=book_id)
+        bookmark, created = Bookmark.objects.get_or_create(
+            user=request.user, book=books)
         messages.success(request, 'Bookmarked')
+        return JsonResponse({'status': 'success', 'message': 'Bookmarked'}, status=201)
+    except Book.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Book not found'}, status=404)
 
-        return HttpResponse("CREATED", status=201)
 
 @csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['POST'])
 def delete_bookmark(request, book_id):
-    bookmarks = Bookmark.objects.get(pk=book_id)
-    bookmarks.delete()
-
-    return HttpResponseRedirect('/profile/')
-
-
-
-
-
+    try:
+        bookmarks = Bookmark.objects.get(pk=book_id)
+        bookmarks.delete()
+        return JsonResponse({'status': 'success', 'message': 'Bookmark deleted'}, status=200)
+    except Bookmark.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Bookmark not found'}, status=404)
