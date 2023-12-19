@@ -49,7 +49,7 @@ def _query_verified_only():
 
 
 @csrf_exempt
-# @cache_page(60 * 60)
+@cache_page(60)
 @require_http_methods(['GET'])
 def get_book_list(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -86,6 +86,7 @@ def get_book_list(request):
 
 
 @csrf_exempt
+@cache_page(60)
 @require_http_methods(['GET'])
 def get_book_home(request):
     FIELDS = ['title', 'image_url', 'author']
@@ -233,7 +234,7 @@ def delete_book(request, id):
 
 
 @csrf_exempt
-@cache_page(60 * 60)
+@cache_page(60)
 def get_genres(request):
     genres = Genre.objects.all()
     response = [genre.name for genre in list(genres)]
@@ -241,7 +242,7 @@ def get_genres(request):
 
 
 @csrf_exempt
-@cache_page(60 * 60)
+@cache_page(60)
 def get_authors(request):
     # filter only author
     authors = Profile.objects.annotate(
