@@ -13,28 +13,34 @@ import json
 
 
 def get_reviews_by_book(request, book_id):
-    book = get_object_or_404(Book, id= book_id)
+    book = get_object_or_404(Book, id=book_id)
     user_has_reviewed = False
     if request.user.is_authenticated:
         user_has_reviewed = has_reviewed(request, book_id)
         print(user_has_reviewed)
     return render(request, "review_book.html", {'book': book, 'has_reviewed': user_has_reviewed})
 
+
 def get_review_json(request, book_id):
     print("masuk json")
-    
+
     book = get_object_or_404(Book, pk=book_id)
     if request.user.is_authenticated:
         current_user = Profile.objects.get(user=request.user)
-        reviews = Review.objects.filter(book=book).order_by('-created_at').exclude(userProfile=current_user)
-        current_user_review = list(Review.objects.filter(book=book, userProfile=current_user))
+        reviews = Review.objects.filter(book=book).order_by(
+            '-created_at').exclude(userProfile=current_user)
+        try:
+            current_user_review = Review.objects.get(
+                book=book, userProfile=current_user)
+        except Review.DoesNotExist:
+            current_user_review = None
     else:
         reviews = Review.objects.filter(book=book).order_by('-created_at')
         current_user_review = None
     review_list = []
     for review in reviews:
         review_list.append({
-            'id': review.id,
+            'id': review.pk,
             'user': {
                 'name': review.userProfile.name,
                 'profile_picture': review.userProfile.profile_picture
@@ -44,13 +50,13 @@ def get_review_json(request, book_id):
         })
     if current_user_review:
         current_user_review = {
-            'id': current_user_review[0].id,
+            'id': current_user_review.pk,
             'user': {
-                'name': current_user_review[0].userProfile.name,
-                'profile_picture': current_user_review[0].userProfile.profile_picture
+                'name': current_user_review.userProfile.name,
+                'profile_picture': current_user_review.userProfile.profile_picture
             },
-            'review': current_user_review[0].review,
-            'created_at': current_user_review[0].created_at.strftime("%B %d, %Y, %I:%M %p")
+            'review': current_user_review.review,
+            'created_at': current_user_review.created_at.strftime("%B %d, %Y, %I:%M %p")
         }
 
     response_json = {
@@ -65,6 +71,7 @@ def get_review_json(request, book_id):
     }
     return JsonResponse(response_json, safe=False)
 
+
 def get_book_json(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     return HttpResponse(serializers.serialize('json', [book]))
@@ -74,7 +81,7 @@ def get_book_json(request, book_id):
 def create_review(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     type(book)
-   
+
     if request.method == 'POST':
         print("masuk post")
         form = ReviewForm(request.POST)
@@ -90,6 +97,7 @@ def create_review(request, book_id):
     form = ReviewForm()
     return render(request, 'create_review.html', {'form': form, 'book': book})
 
+
 @login_required
 def delete_review(request, review_id):
     if request.method == 'POST':
@@ -99,6 +107,7 @@ def delete_review(request, review_id):
             return JsonResponse({'message': 'Review deleted successfully'})
         else:
             return JsonResponse({'message': 'You do not have permission to delete this review'}, status=403)
+
 
 @login_required
 def edit_review(request, review_id):
@@ -116,7 +125,8 @@ def edit_review(request, review_id):
         else:
             return JsonResponse({'message': 'You do not have permission to edit this review'}, status=403)
     form = ReviewForm(instance=review)
-    return render(request, 'edit_review.html', {'form': form, 'review' : review})
+    return render(request, 'edit_review.html', {'form': form, 'review': review})
+
 
 def has_reviewed(request, book_id):
     book = get_object_or_404(Book, id=book_id)
