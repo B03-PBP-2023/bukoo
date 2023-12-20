@@ -23,11 +23,10 @@ class Profile(models.Model):
         gender = self.gender
         preferred_genre = self.prefered_genre
         profile_picture = self.profile_picture
-
+        
         if self.user:
             self.user.username
-        return {'id': self.pk, 'name': name, 'about_user': about_user, 'date_of_birth': date_of_birth, 'gender': gender, 'prefered_genre': preferred_genre, 'profile_picture': profile_picture}
-
+        return {'id':self.pk, 'name':name, 'about_user': about_user, 'date_of_birth': date_of_birth, 'gender': gender, 'prefered_genre': preferred_genre, 'profile_picture': profile_picture}
 
 class Bookmark(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)

@@ -15,4 +15,5 @@ urlpatterns = [
     path('create-reply-flutter/', views.create_reply_flutter, name='create_reply_flutter'), #update
     path('json-by-user-forum/',views.show_json_by_userForum, name='show_json_by_userForum'), #update
     path('json-by-user-reply/',views.show_json_by_userReply, name='show_json_by_userReply'), #update
+    path('delete-forum-flutter/<int:forum_id>/', views.delete_forum_flutter, name='delete_forum_flutter'),
 ]
