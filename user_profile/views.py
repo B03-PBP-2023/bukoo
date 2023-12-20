@@ -12,6 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.core import serializers
 from admin_dashboard.models import BookSubmission
+from review.models import Review
+from forum.models import ForumDiscuss
+from forum.models import Reply
 
 
 @csrf_exempt
@@ -110,18 +113,27 @@ def show_json(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'failed', 'message': 'Authentication required'}, status=401)
     try:
-        data = Profile.objects.get(user=request.user)
+        profile = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
         return JsonResponse({'status': 'failed', 'message': 'Profile not found'}, status=404)
+    statistics = {
+        'total_bookmarked': Bookmark.objects.filter(user=request.user).count(),
+        'total_review': Review.objects.filter(userProfile=profile).count(),
+        'total_forum_discussion': ForumDiscuss.objects.filter(user=profile).count(),
+        'total_replies': Reply.objects.filter(user=profile).count(),
+    }
+    if request.user.is_author:
+        statistics['total_book_submitted'] = Book.objects.filter(author=profile).count()
 
     data = {
-        'id': data.pk,
-        'name': data.name,
-        'about_user': data.about_user,
-        'date_of_birth': data.date_of_birth,
-        'gender': data.gender,
-        'prefered_genre': data.prefered_genre,
-        'profile_picture': data.profile_picture,
+        'id': profile.pk,
+        'name': profile.name,
+        'about_user': profile.about_user,
+        'date_of_birth': profile.date_of_birth,
+        'gender': profile.gender,
+        'prefered_genre': profile.prefered_genre,
+        'profile_picture': profile.profile_picture,
+        'statistics': statistics
     }
     return JsonResponse({'status': 'success', 'message': 'Profile data', 'data': data}, status=200)
 
