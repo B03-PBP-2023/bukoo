@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core import serializers
+import datetime
 
 @csrf_exempt
 def delete_forum_flutter(request, forum_id=None):
@@ -20,15 +21,15 @@ def delete_forum_flutter(request, forum_id=None):
     else:
         return JsonResponse({"status": "error", 'message': 'Invalid request method'}, status=401)
 
-#update
+# update
 @csrf_exempt
 def create_forum_flutter(request):
     if request.method == 'POST':
-        
+
         data = json.loads(request.body)
 
         new_data = ForumDiscuss.objects.create(
-            user = request.user,
+            user=request.user,
             subject=data["subject"],
             description=data["description"],
         )
@@ -38,37 +39,39 @@ def create_forum_flutter(request):
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
-    
-#update
+
+# update
+
+
 @csrf_exempt
 def create_reply_flutter(request):
     if request.method == 'POST':
-        
+
         data = json.loads(request.body)
         forum = ForumDiscuss.objects.get(pk=data["forum_id"])
 
         reply = Reply.objects.create(
-                user = request.user,
-                message=data["message"],
-                forum=forum
-            )
+            user=request.user,
+            message=data["message"],
+            forum=forum
+        )
 
         reply.save()
 
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
-    
 
-#update
+
+# update
 def show_json_by_userForum(request):
-    data = ForumDiscuss.objects.filter(user = request.user)
+    data = ForumDiscuss.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 
-#update
+# update
 def show_json_by_userReply(request):
-    data = Reply.objects.filter(user = request.user)
+    data = Reply.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 
@@ -90,12 +93,14 @@ def show_forum(request, id):
     context = {
         'forums': forums,
         'book':  book,
-        'last_login': request.COOKIES.get('last_login', ''),  # Menggunakan get untuk menghindari KeyError
+        # Menggunakan get untuk menghindari KeyError
+        'last_login': request.COOKIES.get('last_login', ''),
         # 'username': request.user.username,
         # 'pk': request.user.pk,
         'form': form,
     }
     return render(request, "forum.html", context)
+
 
 def get_forum_json(request, id):
     try:
@@ -103,11 +108,31 @@ def get_forum_json(request, id):
     except Book.DoesNotExist:
         return JsonResponse({'error': 'Book not found'}, status=404)
 
-    forum_items = ForumDiscuss.objects.filter(book=book).values(
-        "user", "user__name", "date_added", "subject", "description", "pk"
-    )
+    forums = ForumDiscuss.objects.filter(book=book)
+    forum_json = []
+    for forum in forums:
+        forum_json.append({
+            "user": {
+                "id": forum.user.pk,
+                "name": forum.user.name,
+                "profile_picture": forum.user.profile_picture.url if forum.user.profile_picture else "",
+            },
+            "subject": forum.subject,
+            "description": forum.description,
+            "date_added": forum.date_added,
+            "id": forum.pk,
+            "total_reply": forum.total_reply,
+        })
+    
+    book_json = {
+        "id": book.pk,
+        "title": book.title,
+        "image_url": book.image_url,
+        "author": [author.name for author in book.author.all()],
+    }
 
-    return JsonResponse(list(forum_items), safe=False)
+    return JsonResponse({'book': book_json, 'forums':forum_json}, safe=False)
+
 
 def get_reply_json(request, id):
     try:
@@ -115,35 +140,49 @@ def get_reply_json(request, id):
     except (Book.DoesNotExist, ForumDiscuss.DoesNotExist):
         return JsonResponse({'error': 'Book or Forum not found'}, status=404)
 
-    reply_items = Reply.objects.filter(forum=forum).values(
-        "user", "user__name", "message", "pk"
-    )
+    replies = Reply.objects.filter(forum=forum)
+    replies_json = []
+    for reply in replies:
+        replies_json.append({
+            "user": {
+                "id": reply.user.pk,
+                "name": reply.user.name,
+                "profile_picture": reply.user.profile_picture.url if reply.user.profile_picture else "",
+            },
+            "created_at": reply.created_at,
+            "message": reply.message,
+            "id": reply.pk,
+        })
 
-    return JsonResponse(list(reply_items), safe=False)
+    return JsonResponse(replies_json, safe=False)
+
 
 @csrf_exempt
 def add_forum_ajax(request, id):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'Forbidden'}, status=403)
     if request.method == 'POST':
-        subject = request.POST.get("subject", "").strip()
-        description = request.POST.get("description", "").strip()
+        json_data = json.loads(request.body)
+        subject = json_data.get("subject", "").strip()
+        description = json_data.get("description", "").strip()
         user = get_object_or_404(Profile, user=request.user)
         book_id = id
 
         try:
             book = Book.objects.get(pk=book_id)
         except Book.DoesNotExist:
-            return JsonResponse({'error': 'Book not found'}, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Book not found'}, status=404)
 
         if subject and description:
-            new_forum = ForumDiscuss(subject=subject, description=description, user=user, book=book)
+            new_forum = ForumDiscuss(
+                subject=subject, description=description, user=user, book=book)
             new_forum.save()
-            return JsonResponse({'status': 'CREATED'}, status=201)
+            return JsonResponse({'status': 'success', 'message': 'Forum has been created.'}, status=201)
         else:
-            return JsonResponse({'error': 'Subject and description are required'}, status=400)
+            return JsonResponse({'status': 'error', 'message': 'Subject and description are required'}, status=400)
 
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
 
 @csrf_exempt
 def add_reply_ajax(request, forum_id):
@@ -162,13 +201,47 @@ def add_reply_ajax(request, forum_id):
             if message:
                 new_reply = Reply(message=message, user=user, forum=forum)
                 new_reply.save()
-                return JsonResponse({'status': 'CREATED'}, status=201)
+                return JsonResponse({'status': 'success', 'message': f'Reply to forum ${forum_id} has been created.'}, status=201)
             else:
-                return JsonResponse({'error': 'Message is required'}, status=400)
+                return JsonResponse({'status': 'error', 'message': 'Message are required'}, status=400)
 
         except (Book.DoesNotExist, ForumDiscuss.DoesNotExist):
-            return JsonResponse({'error': 'Book or Forum not found'}, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Book or Forum are not found'}, status=404)
 
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
+@csrf_exempt
+def edit_reply(request, reply_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'Forbidden'}, status=403)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            message = data.get("message", "").strip()
+            if message:
+                reply = Reply.objects.get(pk=reply_id)
+                reply.message = message
+                reply.created_at = datetime.datetime.now()
+                reply.save()
+                return JsonResponse({'status': 'success', 'message': f'Reply with id {reply_id} has been modified.'}, status=200)
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Message are required'}, status=400)
 
+        except (Reply.DoesNotExist):
+            return JsonResponse({'status': 'error', 'message': 'Reply is not found'}, status=404)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def delete_reply(request, reply_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'Forbidden'}, status=403)
+    if request.method == 'POST':
+        try:
+            reply = Reply.objects.get(pk=reply_id)
+            reply.delete()
+            return JsonResponse({'status': 'success', 'message': f'Reply with id {reply_id} has been deleted.'}, status=200)
+        except (Reply.DoesNotExist):
+            return JsonResponse({'status': 'error', 'message': 'Reply is not found'}, status=404)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)

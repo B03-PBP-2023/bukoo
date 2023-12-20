@@ -37,54 +37,68 @@ def __create_query(params: dict):
         for field in fields:
             query |= Q(**{query_dict[field]: keyword})
 
-    # for key, value in params.items():
-    #   if(key in query_dict):
-    #     query &= Q(**{query_dict[key]:value})
+    for key, value in params.items():
+        if (key in query_dict):
+            query &= Q(**{query_dict[key]: value})
+
     return query
 
 
+def _query_verified_only():
+    return (Q(booksubmission__status='verified') | Q(booksubmission__isnull=True))
+
+
 @csrf_exempt
-@cache_page(60 * 60)
+@cache_page(60)
 @require_http_methods(['GET'])
 def get_book_list(request):
     FIELDS = ['title', 'image_url', 'author']
     # Get filtered books
-    query = __create_query(request.GET)
+    query = __create_query(request.GET) & _query_verified_only()
     books = Book.objects.filter(query).distinct().order_by('id')
 
     # Pagination
     page = request.GET.get('page', 1)
     items_per_page = request.GET.get('items_per_page', 20)
     paginator = Paginator(books, items_per_page)
-    books = paginator.get_page(page)
-    data = serializers.serialize(
-        'json', books, fields=FIELDS, use_natural_foreign_keys=True)
+
+    # Check if the requested page exceeds the total number of pages
+    if int(page) > paginator.num_pages:
+        data = []
+    else:
+        books = paginator.get_page(page)
+        data = serializers.serialize(
+            'json', books, fields=FIELDS, use_natural_foreign_keys=True)
+        data = json.loads(data)
 
     return JsonResponse(
         {
-            'page': page,
+            'page': int(page),
             'item_per_page': items_per_page,
             'total_item': paginator.count,
             'total_page': paginator.num_pages,
-            'start_index': books.start_index(),
-            'end_index': books.end_index(),
-            'data': json.loads(data)
+            'start_index': books.start_index() if len(data) > 0 else 0,
+            'end_index': books.end_index() if len(data) > 0 else 0,
+            'data': data
         },
         safe=False
     )
 
+
 @csrf_exempt
+@cache_page(60)
 @require_http_methods(['GET'])
 def get_book_home(request):
     FIELDS = ['title', 'image_url', 'author']
-    recommendation = Book.objects.order_by('id')[:15]
-    new_releases = Book.objects.exclude(
+    recommendation = Book.objects.filter(
+        _query_verified_only()).order_by('id')[:15]
+    new_releases = Book.objects.filter(_query_verified_only()).exclude(
         id__in=recommendation).order_by('-publish_date')[:15]
-    indonesian = Book.objects.exclude(id__in=recommendation | new_releases).filter(
+    indonesian = Book.objects.filter(_query_verified_only()).exclude(id__in=recommendation | new_releases).filter(
         language__icontains='indonesia').order_by('id')[:15]
-    english = Book.objects.exclude(id__in=recommendation | new_releases | indonesian).filter(
+    english = Book.objects.filter(_query_verified_only()).exclude(id__in=recommendation | new_releases | indonesian).filter(
         language__icontains='english').order_by('id')[:15]
-    fiction = Book.objects.exclude(id__in=recommendation | new_releases | indonesian | english).filter(
+    fiction = Book.objects.filter(_query_verified_only()).exclude(id__in=recommendation | new_releases | indonesian | english).filter(
         genres__name='Fiction').order_by('id')[:15]
 
     data = {
@@ -138,7 +152,8 @@ def add_book(request):
         authors = json.loads(authors)
         for author in authors:
             try:
-                author_obj, created = Profile.objects.update_or_create(name=author)
+                author_obj, created = Profile.objects.update_or_create(
+                    name=author)
                 new_book.author.add(author_obj)
             except:
                 pass
@@ -160,6 +175,7 @@ def add_book(request):
         content_type="application/json",
         status=201
     )
+
 
 @csrf_exempt
 @login_required(login_url='/auth/login/')
@@ -202,6 +218,7 @@ def edit_book(request, id):
         content_type="application/json"
     )
 
+
 @csrf_exempt
 @login_required(login_url='/auth/login/')
 @require_http_methods(['DELETE'])
@@ -217,7 +234,7 @@ def delete_book(request, id):
 
 
 @csrf_exempt
-@cache_page(60 * 60)
+@cache_page(60)
 def get_genres(request):
     genres = Genre.objects.all()
     response = [genre.name for genre in list(genres)]
@@ -225,10 +242,11 @@ def get_genres(request):
 
 
 @csrf_exempt
-@cache_page(60 * 60)
+@cache_page(60)
 def get_authors(request):
     # filter only author
-    authors = Profile.objects.annotate(num_books=Count('book')).filter(num_books__gt=0)
+    authors = Profile.objects.annotate(
+        num_books=Count('book')).filter(num_books__gt=0)
     response = [author.name for author in list(authors)]
     return JsonResponse(response, safe=False)
 

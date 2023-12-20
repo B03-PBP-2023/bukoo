@@ -5,7 +5,11 @@ from django.http import HttpResponseRedirect, JsonResponse
 from admin_dashboard.form import BookDataForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from datetime import datetime
+import json
+
 
 def get_book_list(request):
     if request.method == 'POST':
@@ -36,11 +40,14 @@ def get_book_list(request):
 
     return render(request, 'admin.html', {'books': AdminBook.objects.all()})
 
+
 def admin_dashboard(request):
     return render(request, 'admin.html')
 
+
 def book_status(request):
     return render(request, '')
+
 
 def create_book(request):
     form = BookDataForm(request.POST or None)
@@ -51,6 +58,7 @@ def create_book(request):
 
     context = {'form': form}
     return render(request, "admin2.html", context)
+
 
 def admin2(request):
     if request.method == 'POST':
@@ -78,22 +86,51 @@ def admin2(request):
 
     return render(request, 'admin2.html')
 
+
 def show_xml(request):
     data = BookSubmission.objects.all()
-    xml_data = serializers.serialize("xml", data, use_natural_foreign_keys=True)
+    xml_data = serializers.serialize(
+        "xml", data, use_natural_foreign_keys=True)
     return HttpResponse(xml_data, content_type="application/xml")
+
 
 def show_json(request):
     data = BookSubmission.objects.all()
-    json_data = serializers.serialize("json", data, use_natural_foreign_keys=True)
+    json_data = serializers.serialize(
+        "json", data, use_natural_foreign_keys=True)
     return HttpResponse(json_data, content_type="application/json")
+
 
 def show_xml_id(request, id):
     data = get_object_or_404(BookSubmission, pk=id)
-    xml_data = serializers.serialize("xml", [data], use_natural_foreign_keys=True)
+    xml_data = serializers.serialize(
+        "xml", [data], use_natural_foreign_keys=True)
     return HttpResponse(xml_data, content_type="application/xml")
+
 
 def show_json_id(request, id):
     data = get_object_or_404(BookSubmission, pk=id)
-    json_data = serializers.serialize("json", [data], use_natural_foreign_keys=True)
+    json_data = serializers.serialize(
+        "json", [data], use_natural_foreign_keys=True)
     return HttpResponse(json_data, content_type="application/json")
+
+
+@csrf_exempt
+def edit_book_submission(request, id):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'failed', 'message': 'Invalid request method'}, status=400)
+    if (not request.user.is_authenticated):
+        return JsonResponse({'status': 'failed', 'message': 'Authentication required'}, status=401)
+    if (not request.user.is_admin):
+        return JsonResponse({'status': 'failed', 'message': 'Admin role is required'}, status=403)
+    try:
+        book_submission = BookSubmission.objects.get(pk=id)
+    except BookSubmission.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'The book submission does not exist'}, status=404)
+    
+    data = json.loads(request.body)
+    book_submission.status = data.get('status', book_submission.status)
+    book_submission.feedback = data.get('feedback', book_submission.feedback)
+    book_submission.timestamp = datetime.now()
+    book_submission.save()
+    return JsonResponse({'status': 'success', 'message': 'Book submission successfully updated'}, status=200)

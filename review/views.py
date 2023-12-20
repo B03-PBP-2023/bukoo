@@ -9,33 +9,88 @@ from book_collection.models import Book
 from user_profile.models import Profile
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+import json
 
 
+@csrf_exempt
 def get_reviews_by_book(request, book_id):
-    book = get_object_or_404(Book, id= book_id)
+    book = get_object_or_404(Book, id=book_id)
     user_has_reviewed = False
     if request.user.is_authenticated:
         user_has_reviewed = has_reviewed(request, book_id)
         print(user_has_reviewed)
     return render(request, "review_book.html", {'book': book, 'has_reviewed': user_has_reviewed})
 
+
+@csrf_exempt
 def get_review_json(request, book_id):
     print("masuk json")
-    
-    book = get_object_or_404(Book, pk=book_id)
-    review_item = Review.objects.filter(book=book).order_by('-created_at')
-    return HttpResponse(serializers.serialize('json', review_item, use_natural_foreign_keys=True))
 
+    try:
+        book = Book.objects.get(id=book_id)
+    except Book.DoesNotExist:
+        return JsonResponse({'status': 'failed','message': 'Book not found'}, status=404)
+    
+    if request.user.is_authenticated:
+        current_user = Profile.objects.get(user=request.user)
+        reviews = Review.objects.filter(book=book).order_by(
+            '-created_at').exclude(userProfile=current_user)
+        try:
+            current_user_review = Review.objects.get(
+                book=book, userProfile=current_user)
+        except Review.DoesNotExist:
+            current_user_review = None
+    else:
+        reviews = Review.objects.filter(book=book).order_by('-created_at')
+        current_user_review = None
+
+    review_list = []
+    for review in reviews:
+        review_list.append({
+            'id': review.pk,
+            'user': {
+                'name': review.userProfile.name,
+                'profile_picture': review.userProfile.profile_picture
+            },
+            'review': review.review,
+            'created_at': review.created_at.strftime("%B %d, %Y, %I:%M %p")
+        })
+    if current_user_review:
+        current_user_review = {
+            'id': current_user_review.pk,
+            'user': {
+                'name': current_user_review.userProfile.name,
+                'profile_picture': current_user_review.userProfile.profile_picture
+            },
+            'review': current_user_review.review,
+            'created_at': current_user_review.created_at.strftime("%B %d, %Y, %I:%M %p")
+        }
+
+    response_json = {
+        'book': {
+            'id': book.id,
+            'title': book.title,
+            'image_url': book.image_url,
+            'author': list(author.name for author in book.author.all())
+        },
+        'reviews': review_list,
+        'current_user_review': current_user_review
+    }
+    return JsonResponse({'status': 'success', 'data': response_json}, safe=False)
+
+
+@csrf_exempt
 def get_book_json(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     return HttpResponse(serializers.serialize('json', [book]))
 
 
+@csrf_exempt
 @login_required
 def create_review(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     type(book)
-   
+
     if request.method == 'POST':
         print("masuk post")
         form = ReviewForm(request.POST)
@@ -46,21 +101,27 @@ def create_review(request, book_id):
             review.userProfile = profile
             review.save()
             print("masuk valid gasi")
-            return JsonResponse({'message': 'Review added successfully'})
+            return JsonResponse({'status': 'success','message': 'Review added successfully'})
+        else:
+            return JsonResponse({'status': 'failed','message': 'Review text cannot be empty'}, status=400)
 
     form = ReviewForm()
     return render(request, 'create_review.html', {'form': form, 'book': book})
 
+
+@csrf_exempt
 @login_required
 def delete_review(request, review_id):
     if request.method == 'POST':
         review = get_object_or_404(Review, id=review_id)
         if review.userProfile.user == request.user:
             review.delete()
-            return JsonResponse({'message': 'Review deleted successfully'})
+            return JsonResponse({'status': 'success','message': 'Review deleted successfully'})
         else:
-            return JsonResponse({'message': 'You do not have permission to delete this review'}, status=403)
+            return JsonResponse({'status': 'failed','message': 'You do not have permission to delete this review'}, status=403)
 
+
+@csrf_exempt
 @login_required
 def edit_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
@@ -77,7 +138,8 @@ def edit_review(request, review_id):
         else:
             return JsonResponse({'message': 'You do not have permission to edit this review'}, status=403)
     form = ReviewForm(instance=review)
-    return render(request, 'edit_review.html', {'form': form, 'review' : review})
+    return render(request, 'edit_review.html', {'form': form, 'review': review})
+
 
 def has_reviewed(request, book_id):
     book = get_object_or_404(Book, id=book_id)

@@ -1,14 +1,20 @@
 from django.shortcuts import render
 from user_profile.models import Profile, Bookmark, Book_by_author
 from user_profile.forms import ProfileForm
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from book_collection.models import Book
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from auth.models import User
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
+from django.core import serializers
 
-@login_required
+
+@csrf_exempt
+@login_required(login_url='/auth/login/')
 def profile_data(request):
     bookmarked_book = Bookmark.objects.filter(user=request.user)
     user_data = Profile.objects.get(user=request.user)
@@ -40,7 +46,9 @@ def profile_data(request):
 
         return render(request, 'profile.html', data)
 
-@login_required
+
+@csrf_exempt
+@login_required(login_url='/auth/login/')
 def edit_profile(request):
     profile = Profile.objects.get(user=request.user)
     form = ProfileForm(request.POST or None, instance=profile)
@@ -48,28 +56,80 @@ def edit_profile(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/profile/')
-    
+            return JsonResponse({'status': 'success', 'message': 'Profile updated'}, status=200)
+        else:
+            return JsonResponse({'status': 'failed', 'message': 'Invalid form'}, status=400)
+
     return render(request, 'edit_profile.html', {'form': form})
 
-@login_required
+
+@csrf_exempt
+@login_required(login_url='/auth/login/')
+def get_bookmark_status(request, book_id):
+    bookmark_exist = Bookmark.objects.filter(
+        user=request.user, book=book_id).exists()
+    return JsonResponse({'status': 'success', 'message': 'Bookmark status', 'data': bookmark_exist}, status=200)
+
+
+@csrf_exempt
+@login_required(login_url='/auth/login/')
+@require_http_methods(['POST'])
 def bookmarking_books(request, book_id):
-    books = Book.objects.get(pk=book_id)
-    bookmark, created = Bookmark.objects.get_or_create(user=request.user, book=books)
-
-    if created:
+    try:
+        books = Book.objects.get(pk=book_id)
+        bookmark, created = Bookmark.objects.get_or_create(
+            user=request.user, book=books)
         messages.success(request, 'Bookmarked')
+        return JsonResponse({'status': 'success', 'message': 'Bookmarked'}, status=201)
+    except Book.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Book not found'}, status=404)
 
-        return HttpResponse("CREATED", status=201)
 
-@login_required
+@csrf_exempt
+@login_required(login_url='/auth/login/')
+@require_http_methods(['POST'])
 def delete_bookmark(request, book_id):
-    bookmarks = Bookmark.objects.get(pk=book_id)
-    bookmarks.delete()
+    try:
+        book = Book.objects.get(pk=book_id)
+        bookmarks = Bookmark.objects.get(user=request.user, book=book)
+        bookmarks.delete()
+        return JsonResponse({'status': 'success', 'message': 'Bookmark deleted'}, status=200)
+    except Book.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Book not found'}, status=404)
+    except Bookmark.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Bookmark not found'}, status=404)
 
-    return HttpResponseRedirect('/profile/')
+
+def show_xml(request):
+    data = Profile.objects.all()
+    return HttpResponse(serializers.serialize("xml", data, use_natural_foreign_keys=True), content_type="application/xml")
 
 
+def show_json(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'failed', 'message': 'Authentication required'}, status=401)
+    try:
+        data = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Profile not found'}, status=404)
+    
+    data = {
+        'id': data.pk,
+        'name': data.name,
+        'about_user': data.about_user,
+        'date_of_birth': data.date_of_birth,
+        'gender': data.gender,
+        'prefered_genre': data.prefered_genre,
+        'profile_picture': data.profile_picture,
+    }
+    return JsonResponse({'status': 'success', 'message': 'Profile data', 'data': data}, status=200)
 
 
+def show_xml_id(request, id):
+    data = get_object_or_404(Profile, pk=id)
+    return HttpResponse(serializers.serialize("xml", [data], use_natural_foreign_keys=True), content_type="application/xml")
 
+
+def show_json_id(request, id):
+    data = get_object_or_404(Profile, pk=id)
+    return HttpResponse(serializers.serialize("json", [data], use_natural_foreign_keys=True), content_type="application/json")
