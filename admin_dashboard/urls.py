@@ -13,4 +13,5 @@ urlpatterns = [
     path('api/admin-dashboard/json/', views.show_json, name='show_json'), 
     path('api/admin-dashboard/xml/<int:id>/', views.show_xml_id, name='show_xml_id'),
     path('api/admin-dashboard/json/<int:id>/', views.show_json_id, name='show_json_id'),
+    path('api/admin-dashboard/edit/<int:id>/', views.edit_book_submission, name='edit_book_submission'),
 ]
