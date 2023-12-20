@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import show_forum, get_forum_json, get_reply_json, add_forum_ajax, add_reply_ajax, create_forum_flutter, create_reply_flutter, show_json_by_userForum, show_json_by_userReply
+from .views import show_forum, get_forum_json, get_reply_json, add_forum_ajax, add_reply_ajax, create_forum_flutter, create_reply_flutter, show_json_by_userForum, show_json_by_userReply, delete_forum_flutter
 
 app_name = 'forum'
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path('create-reply-flutter/', create_reply_flutter, name='create_reply_flutter'), #update
     path('json-by-user-forum/',show_json_by_userForum, name='show_json_by_userForum'), #update
     path('json-by-user-reply/',show_json_by_userReply, name='show_json_by_userReply'), #update
+    path('delete-forum-flutter/<int:forum_id>', delete_forum_flutter, name='delete_forum_flutter'),
 ]
