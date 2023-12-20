@@ -11,6 +11,7 @@ import json
 from django.core import serializers
 import datetime
 
+
 @csrf_exempt
 def delete_forum_flutter(request, forum_id):
     if request.method == 'POST':
@@ -22,6 +23,8 @@ def delete_forum_flutter(request, forum_id):
         return JsonResponse({"status": "error", 'message': 'Invalid request method'}, status=401)
 
 # update
+
+
 @csrf_exempt
 def create_forum_flutter(request):
     if request.method == 'POST':
@@ -65,14 +68,50 @@ def create_reply_flutter(request):
 
 # update
 def show_json_by_userForum(request):
-    data = ForumDiscuss.objects.filter(user=request.user)
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    user_profile = Profile.objects.get(user=request.user)
+    forums = ForumDiscuss.objects.filter(user=user_profile)
+    data = []
+    for forum in forums:
+        data.append({
+            "id": forum.pk,
+            "subject": forum.subject,
+            "description": forum.description,
+            "date_added": forum.date_added,
+            "total_reply": forum.total_reply,
+            "book": {
+                "id": forum.book.pk,
+                "title": forum.book.title,
+                "image_url": forum.book.image_url,
+                "author": list(author.name for author in forum.book.author.all()),
+            },
+        })
+    return JsonResponse({"status": "success", "data": data}, status=200)
 
 
 # update
 def show_json_by_userReply(request):
-    data = Reply.objects.filter(user=request.user)
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    user_profile = Profile.objects.get(user=request.user)
+    replies = Reply.objects.filter(user=user_profile)
+    data = []
+    for reply in replies:
+        data.append({
+            "created_at": reply.created_at,
+            "message": reply.message,
+            "id": reply.pk,
+            "forum": {
+                "id": reply.forum.pk,
+                "subject": reply.forum.subject,
+                "description": reply.forum.description,
+                "date_added": reply.forum.date_added,
+            },
+            "book": {
+                "id": reply.forum.book.pk,
+                "title": reply.forum.book.title,
+                "image_url": reply.forum.book.image_url,
+                "author": list(author.name for author in reply.forum.book.author.all()),
+            },
+        })
+    return JsonResponse({"status": "success", "data": data}, status=200)
 
 
 def show_forum(request, id):
@@ -123,7 +162,7 @@ def get_forum_json(request, id):
             "id": forum.pk,
             "total_reply": forum.total_reply,
         })
-    
+
     book_json = {
         "id": book.pk,
         "title": book.title,
@@ -131,7 +170,7 @@ def get_forum_json(request, id):
         "author": [author.name for author in book.author.all()],
     }
 
-    return JsonResponse({'book': book_json, 'forums':forum_json}, safe=False)
+    return JsonResponse({'book': book_json, 'forums': forum_json}, safe=False)
 
 
 def get_reply_json(request, id):
@@ -210,6 +249,7 @@ def add_reply_ajax(request, forum_id):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
+
 @csrf_exempt
 def edit_reply(request, reply_id):
     if not request.user.is_authenticated:
@@ -231,6 +271,7 @@ def edit_reply(request, reply_id):
             return JsonResponse({'status': 'error', 'message': 'Reply is not found'}, status=404)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
 
 @csrf_exempt
 def delete_reply(request, reply_id):
