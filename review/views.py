@@ -29,8 +29,8 @@ def get_review_json(request, book_id):
     try:
         book = Book.objects.get(id=book_id)
     except Book.DoesNotExist:
-        return JsonResponse({'status': 'failed','message': 'Book not found'}, status=404)
-    
+        return JsonResponse({'status': 'failed', 'message': 'Book not found'}, status=404)
+
     if request.user.is_authenticated:
         current_user = Profile.objects.get(user=request.user)
         reviews = Review.objects.filter(book=book).order_by(
@@ -101,9 +101,9 @@ def create_review(request, book_id):
             review.userProfile = profile
             review.save()
             print("masuk valid gasi")
-            return JsonResponse({'status': 'success','message': 'Review added successfully'})
+            return JsonResponse({'status': 'success', 'message': 'Review added successfully'})
         else:
-            return JsonResponse({'status': 'failed','message': 'Review text cannot be empty'}, status=400)
+            return JsonResponse({'status': 'failed', 'message': 'Review text cannot be empty'}, status=400)
 
     form = ReviewForm()
     return render(request, 'create_review.html', {'form': form, 'book': book})
@@ -116,9 +116,9 @@ def delete_review(request, review_id):
         review = get_object_or_404(Review, id=review_id)
         if review.userProfile.user == request.user:
             review.delete()
-            return JsonResponse({'status': 'success','message': 'Review deleted successfully'})
+            return JsonResponse({'status': 'success', 'message': 'Review deleted successfully'})
         else:
-            return JsonResponse({'status': 'failed','message': 'You do not have permission to delete this review'}, status=403)
+            return JsonResponse({'status': 'failed', 'message': 'You do not have permission to delete this review'}, status=403)
 
 
 @csrf_exempt
@@ -150,3 +150,29 @@ def has_reviewed(request, book_id):
     else:
         return False
 # Create your views here.
+
+
+@csrf_exempt
+def get_all_user_reviews(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'failed', 'message': 'Authentication required'}, status=401)
+    try:
+        user_profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        return JsonResponse({'status': 'failed', 'message': 'Profile not found'}, status=404)
+    reviews = Review.objects.filter(
+        userProfile=user_profile).order_by('-created_at')
+    data = []
+    for review in reviews:
+        data.append({
+            'id': review.pk,
+            'book': {
+                'id': review.book.pk,
+                'title': review.book.title,
+                'image_url': review.book.image_url,
+                'author': list(author.name for author in review.book.author.all())
+            },
+            'review': review.review,
+            'created_at': review.created_at.strftime("%B %d, %Y, %I:%M %p")
+        })
+    return JsonResponse({'status': 'success', 'data': data}, safe=False)

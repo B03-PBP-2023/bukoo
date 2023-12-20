@@ -13,4 +13,6 @@ urlpatterns = [
     path('profile/xml/', views.show_xml, name = 'show_profile_xml'),
     path('profile/xml/<int:id>/', views.show_xml_id, name = 'profile_xml_id'),
     path('profile/json/<int:id>/', views.show_json_id, name = 'profile_json_id'),
+    path('api/profile/get-user-bookmark/', views.get_bookmarks_by_user, name = 'get-user-bookmark'),
+    path('api/profile/get-booksubmission-by-author/', views.get_booksubmission_by_author, name = 'get-booksubmission-by-author'),
 ]

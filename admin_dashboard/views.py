@@ -8,6 +8,7 @@ from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from datetime import datetime
+from user_profile.models import Profile
 import json
 
 
@@ -127,10 +128,11 @@ def edit_book_submission(request, id):
         book_submission = BookSubmission.objects.get(pk=id)
     except BookSubmission.DoesNotExist:
         return JsonResponse({'status': 'failed', 'message': 'The book submission does not exist'}, status=404)
-    
+
     data = json.loads(request.body)
     book_submission.status = data.get('status', book_submission.status)
     book_submission.feedback = data.get('feedback', book_submission.feedback)
     book_submission.timestamp = datetime.now()
     book_submission.save()
     return JsonResponse({'status': 'success', 'message': 'Book submission successfully updated'}, status=200)
+

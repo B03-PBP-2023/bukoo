@@ -11,6 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.core import serializers
+from admin_dashboard.models import BookSubmission
 
 
 @csrf_exempt
@@ -112,7 +113,7 @@ def show_json(request):
         data = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
         return JsonResponse({'status': 'failed', 'message': 'Profile not found'}, status=404)
-    
+
     data = {
         'id': data.pk,
         'name': data.name,
@@ -133,3 +134,34 @@ def show_xml_id(request, id):
 def show_json_id(request, id):
     data = get_object_or_404(Profile, pk=id)
     return HttpResponse(serializers.serialize("json", [data], use_natural_foreign_keys=True), content_type="application/json")
+
+
+@csrf_exempt
+def get_bookmarks_by_user(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'failed', 'message': 'Authentication required'}, status=401)
+
+    bookmarks = Bookmark.objects.filter(user=request.user)
+    bookmarked_books = []
+    for bookmark in bookmarks:
+        bookmarked_books.append({
+            'id': bookmark.pk,
+            'book': {
+                'id': bookmark.book.pk,
+                'title': bookmark.book.title,
+                'image_url': bookmark.book.image_url,
+                'author': bookmark.book.author.name,
+            }})
+    return JsonResponse({'status': 'success', 'data': bookmarked_books}, status=200)
+
+
+@csrf_exempt
+def get_booksubmission_by_author(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'failed', 'message': 'Authentication required'}, status=401)
+    user_profile = Profile.objects.get(user=request.user)
+    book_submissions = BookSubmission.objects.filter(
+        book__author__id=user_profile.id)
+    data = serializers.serialize(
+        'json', book_submissions, use_natural_foreign_keys=True)
+    return HttpResponse(data, content_type="application/json")
