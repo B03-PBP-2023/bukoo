@@ -11,6 +11,15 @@ import json
 from django.core import serializers
 import datetime
 
+@csrf_exempt
+def delete_forum_flutter(request, forum_id=None):
+    if request.method == 'POST':
+        # Deleting an existing forum
+        forum = get_object_or_404(ForumDiscuss, id=forum_id)
+        forum.delete()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error", 'message': 'Invalid request method'}, status=401)
 
 # update
 @csrf_exempt
