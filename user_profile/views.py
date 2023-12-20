@@ -112,7 +112,17 @@ def show_json(request):
         data = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
         return JsonResponse({'status': 'failed', 'message': 'Profile not found'}, status=404)
-    return HttpResponse(serializers.serialize("json", [data], use_natural_foreign_keys=True)[1:-1], content_type="application/json")
+    
+    data = {
+        'id': data.pk,
+        'name': data.name,
+        'about_user': data.about_user,
+        'date_of_birth': data.date_of_birth,
+        'gender': data.gender,
+        'prefered_genre': data.prefered_genre,
+        'profile_picture': data.profile_picture,
+    }
+    return JsonResponse({'status': 'success', 'message': 'Profile data', 'data': data}, status=200)
 
 
 def show_xml_id(request, id):
