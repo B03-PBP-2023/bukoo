@@ -12,7 +12,7 @@ from django.core import serializers
 import datetime
 
 @csrf_exempt
-def delete_forum_flutter(request, forum_id=None):
+def delete_forum_flutter(request, forum_id):
     if request.method == 'POST':
         # Deleting an existing forum
         forum = get_object_or_404(ForumDiscuss, id=forum_id)
