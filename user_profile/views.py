@@ -9,7 +9,8 @@ from django.contrib import messages
 from auth.models import User
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-
+from django.shortcuts import get_object_or_404
+from django.core import serializers
 
 @csrf_exempt
 @login_required(login_url='/auth/login/')
@@ -94,3 +95,19 @@ def delete_bookmark(request, book_id):
         return JsonResponse({'status': 'failed', 'message': 'Book not found'}, status=404)
     except Bookmark.DoesNotExist:
         return JsonResponse({'status': 'failed', 'message': 'Bookmark not found'}, status=404)
+    
+def show_xml(request):
+    data = Profile.objects.all()
+    return HttpResponse(serializers.serialize("xml", data, use_natural_foreign_keys=True), content_type="application/xml")
+
+def show_json(request):
+    data = Profile.objects.all()
+    return HttpResponse(serializers.serialize("json", data, use_natural_foreign_keys=True), content_type="application/json")
+
+def show_xml_id(request, id):
+    data = get_object_or_404(Profile, pk=id)
+    return HttpResponse(serializers.serialize("xml", [data], use_natural_foreign_keys=True), content_type="application/xml")
+
+def show_json_id(request, id):
+    data = get_object_or_404(Profile, pk=id)
+    return HttpResponse(serializers.serialize("json", [data], use_natural_foreign_keys=True), content_type="application/json")
