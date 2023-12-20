@@ -203,6 +203,19 @@ def edit_book(request, id):
             except:
                 pass
 
+    # Author
+    authors = request.POST.get('author')
+    if authors != None:
+        authors = json.loads(authors)
+        book.author.clear()
+        for author in authors:
+            try:
+                author_obj, created = Profile.objects.update_or_create(
+                    name=author)
+                book.author.add(author_obj)
+            except:
+                pass
+
     # Update image url
     if ('image' in request.FILES):
         image_name = utils.get_image_name(book.pk, book.title)
